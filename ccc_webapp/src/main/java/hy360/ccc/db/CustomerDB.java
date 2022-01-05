@@ -37,17 +37,15 @@ public class CustomerDB {
         try{
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement("INSERT INTO customer (USERNAME, "+ 
-                    "PASSWORD, EMAIL, ADDRESS, AMOUNT_DUE, ACCOUNT_DUE_DATE, CREDIT_LIMIT,"+
-                    " CREDIT_BALANCE, ACCOUNT_NUMBER) "+"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    "PASSWORD, EMAIL, ADDRESS, ACCOUNT_DUE_DATE,"+
+                    " CREDIT_BALANCE, ACCOUNT_NUMBER ) "+"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
             
             setValues(preparedStatement,
                     customer.getUserName(),
                     customer.getPassword(),
                     customer.getEmail(),
                     customer.getAddress(),
-                    customer.getAmount_due(),
                     customer.getAccount_due_date(),
-                    customer.getCredit_limit(),
                     customer.getCredit_balance(),
                     customer.getAccount_number());
             
@@ -81,6 +79,7 @@ public class CustomerDB {
                     " CREDIT_BALANCE, ACCOUNT_NUMBER "+"FROM customer WHERE "+
                     "ACCOUNT_NUMBER = (SELECT ACCOUNT_NUMBER FROM CUSTOMER WHERE CUSTOMER_ID = ? ";
             preparedStatement = con.prepareStatement(sql);
+            setValues(preparedStatement, customer_id);
             ResultSet res = preparedStatement.executeQuery();
             customer = new Customer();
             if(res.next() == true){

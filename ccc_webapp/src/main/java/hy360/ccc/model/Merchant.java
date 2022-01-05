@@ -48,6 +48,7 @@ public class Merchant extends User {
     
     
         
+    @Override
     public void checkFields() throws Exception{
         
         super.checkFields();

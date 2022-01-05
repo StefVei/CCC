@@ -59,19 +59,16 @@ public class MerchantDB {
         try{
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement("INSERT INTO merchant (USERNAME, "+ 
-                    "PASSWORD, EMAIL, ADDRESS, AMOUNT_DUE, FIRST_NAME, LAST_NAME,"+
-                    " SYPPLY, GAIN) "+"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    "PASSWORD, EMAIL, ADDRESS, FIRST_NAME, LAST_NAME,"+
+                    " GAIN) "+"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
             
             setValues(preparedStatement,
                     merchant.getUserName(),
                     merchant.getPassword(),
                     merchant.getEmail(),
                     merchant.getAddress(),
-                    merchant.getAmount_due(),
                     merchant.getFirst_name(),
-                    merchant.getLast_name(),
-                    merchant.getSupply(),
-                    merchant.getGain());
+                    merchant.getLast_name());
             
             preparedStatement.executeUpdate();
             ResultSet res = preparedStatement.getGeneratedKeys();
