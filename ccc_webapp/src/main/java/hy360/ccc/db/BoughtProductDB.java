@@ -10,7 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,24 +48,26 @@ public class BoughtProductDB {
     
     /**
      * 
-     * @param prod the product that was bought 
+     * @param products_str "transaction_id, product_id1, product_id2"
      */
-    public static void addBoughtProduct(BoughtProduct prod){
+    public static void addBoughtProducts(String products_str){
             
-        try{
-            prod.checkFields();
-        }catch(Exception ex){
-            Logger.getLogger(BoughtProductDB.class.getName()).log(Level.SEVERE,null, ex);
-        }
+        List<String> products = Arrays.asList(products_str.split(",[ ]*"));
+        String transaction_id = products.get(0);
+        products.remove(0);
+        
         PreparedStatement preparedStatement = null;
         Connection con = null;
     
         try{
             con = CccDB.getConnection();
-            preparedStatement = con.prepareStatement("INSERT INTO bought_product"+
+            ListIterator<String> it = products.listIterator();
+            while(it.hasNext()){
+                preparedStatement = con.prepareStatement("INSERT INTO bought_product"+
                     " TRANSACTION_ID, BOUGHT_PRODUCT_ID ) "+"VALUES (?, ?)");
-            setValues(preparedStatement, prod.getTransaction_id(), prod.getBought_product_id());
-            preparedStatement.executeUpdate();
+                setValues(preparedStatement, transaction_id, it.next());
+                preparedStatement.executeUpdate();
+            }
         }catch(Exception ex){
             Logger.getLogger(BoughtProductDB.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
