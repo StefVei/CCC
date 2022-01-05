@@ -35,14 +35,12 @@ public class User implements Serializable{
     public User(String userName,
             String password,
             String email,
-            String phone,
             String address,
             String amount_due,
             String account_number){
         
         this.userName = userName;
         this.email = email;
-        this.phone = phone;
         this.address = address;
         this.amount_due = amount_due;
         this.account_number = account_number;
