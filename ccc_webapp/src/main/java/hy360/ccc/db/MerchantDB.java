@@ -140,6 +140,47 @@ public class MerchantDB {
         }
     }
     
+    public static Merchant getMerchant(int merchant_id){
+        Merchant mer = new Merchant();
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+        try{
+            String sql_getMerchant = "SELECT * FROM merchant WHERE MERCHANT_ID = ?";
+            con = CccDB.getConnection();
+            
+            preparedStatement = con.prepareStatement(sql_getMerchant);
+            setValues(preparedStatement, merchant_id);
+            preparedStatement.executeUpdate();
+            ResultSet res = preparedStatement.getResultSet();
+            
+            if(res.next() == true){
+                mer.setUserName(res.getString("USERNAME"));
+                mer.setEmail(res.getString("EMAIL"));
+                mer.setPhone(res.getString("PHONE"));
+                mer.setAddress(res.getString("ADDRESS"));
+                mer.setAccount_number(res.getString("ACCOUNT_NUMBER"));
+                mer.setAmount_due(res.getString("AMOUNT_DUE"));
+                mer.setPassword(res.getString("PASSWORD"));
+                mer.setFirst_name(res.getString("FIRST_NAME"));
+                mer.setLast_name(res.getString("LAST_NAME"));
+                mer.setGain(res.getString("GAIN"));
+                mer.setSupply(res.getString("SUPPLY"));
+                mer.setMerchant_id(res.getString("MERCHANT_ID"));
+            }
+                   
+        }catch(Exception ex){
+            Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            closeConnection(preparedStatement, con);
+        }
+
+        return mer;
+        
+    
+
+        
+    }
+    
     public static List<Merchant> getMerchants(){
         List<Merchant> merchants = new ArrayList<>();
         PreparedStatement preparedStatement = null;
