@@ -10,7 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,6 +44,38 @@ public class CustomerPhoneDB {
                 Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE,null, sql_ex);
             }
         }
+    }
+    /**
+     * 
+     * @param customer_phones comma separated string eg "customer_id, phone1, phone2"
+     */
+    public static void addCustomerPhones(String customer_phones){
+        
+        List<String> phones = Arrays.asList(customer_phones.split(",[ ]*"));
+        String customer_id = phones.get(0);
+        phones.remove(0);
+        
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+        try{
+            con = CccDB.getConnection();
+            ListIterator<String> it = phones.listIterator();
+            while(it.hasNext()){
+                preparedStatement = con.prepareStatement("INSERT INTO customer_phone"+
+                    " CUSTOMER_ID, CUSTOMER_PHONE ) "+"VALUES (?, ?)");
+                setValues(preparedStatement, customer_id, it.next());
+                preparedStatement.executeUpdate();
+            }
+        }catch(Exception ex){
+            Logger.getLogger(CustomerPhoneDB.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            closeConnection(preparedStatement, con);
+        }
+    
+        
+        
+        
+        
     }
     
     /**
