@@ -22,6 +22,21 @@ public class Customer extends User{
         credit_balance = "";
     }
     
+    public Customer(String customer_id,
+            String credit_limit,
+            String account_due_date,
+            String credit_balance){
+        
+        this.credit_balance = credit_balance;
+        this.credit_limit = credit_limit;
+        this.customer_id = customer_id;
+        this.account_due_date = account_due_date;
+
+        
+        
+    }
+
+    
     public Customer(String userName,
             String password,
             String email,
