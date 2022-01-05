@@ -4,6 +4,7 @@
  */
 package hy360.ccc.db;
 
+import hy360.ccc.model.CustomerPhone;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -45,26 +46,26 @@ public class CustomerPhoneDB {
     
     /**
      * 
-     * @param prod the product that was bought 
+     * @param phone the phone number that was added 
      */
-    public static void addBoughtProduct(BoughtProduct prod){
+    public static void addCustomerPhone(CustomerPhone phone){
             
         try{
-            prod.checkFields();
+            phone.checkFields();
         }catch(Exception ex){
-            Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE,null, ex);
+            Logger.getLogger(CustomerPhoneDB.class.getName()).log(Level.SEVERE,null, ex);
         }
         PreparedStatement preparedStatement = null;
         Connection con = null;
     
         try{
             con = CccDB.getConnection();
-            preparedStatement = con.prepareStatement("INSERT INTO bought_product"+
-                    " TRANSACTION_ID, BOUGHT_PRODUCT_ID ) "+"VALUES (?, ?)");
-            setValues(preparedStatement, prod.getTransaction_id(), prod.getBought_product_id());
+            preparedStatement = con.prepareStatement("INSERT INTO customer_phone"+
+                    " CUSTOMER_ID, CUSTOMER_PHONE ) "+"VALUES (?, ?)");
+            setValues(preparedStatement, phone.getCustomer_id(), phone.getPhone());
             preparedStatement.executeUpdate();
         }catch(Exception ex){
-            Logger.getLogger(BoughtProductDB.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CustomerPhoneDB.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
             closeConnection(preparedStatement, con);
         }
@@ -73,33 +74,33 @@ public class CustomerPhoneDB {
     /**
      * 
      * 
-     * @param transaction_id
-     * @return a list of all the products in the current transaction 
+     * @param customer_id
+     * @return a list of all the phone_numbers in the current customer 
      */
-    public static List<BoughtProduct> getBoughtProduct(int transaction_id){
+    public static List<CustomerPhone> getCustomerPhone(int customer_id){
         PreparedStatement preparedStatement = null;
         Connection con = null;
-        List<BoughtProduct> products = new ArrayList<>();
+        List<CustomerPhone> phones = new ArrayList<>();
         try{
             con = CccDB.getConnection();
-            String sql_select = "SELECT * FROM BOUGHT_PRODUCT WHERE TRANSACTION_ID = ?";
+            String sql_select = "SELECT * FROM customer_phone WHERE CUSTOMER_ID = ?";
             preparedStatement = con.prepareStatement(sql_select);
-            setValues(preparedStatement, transaction_id);
+            setValues(preparedStatement, customer_id);
             preparedStatement.executeUpdate();
             ResultSet res = preparedStatement.getResultSet();
             while(res.next() == true){
-                BoughtProduct prod = new BoughtProduct();
-                prod.setBought_product_id(res.getString("BOUGHT_PRODUCT_ID"));
-                prod.setTransaction_id(res.getString("TRANSACTION_ID"));
-                products.add(prod);
+                CustomerPhone phone = new CustomerPhone();
+                phone.setPhone(res.getString("PHONE_NUMBER"));
+                phone.setCustomer_id(res.getString("CUSTOMER_ID"));
+                phones.add(phone);
             }
         }catch(Exception ex){
-            Logger.getLogger(BoughtProductDB.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CustomerPhoneDB.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
             closeConnection(preparedStatement, con);
         }
 
-        return products;
+        return phones;
                 
     }
 
