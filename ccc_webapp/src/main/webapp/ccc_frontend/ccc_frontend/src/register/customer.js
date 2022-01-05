@@ -33,7 +33,7 @@ function CustomerRegister() {
 
   return (
     <div className={styles.container}>
-      <form className={styles.textFieldContainer}>
+      <div className={styles.textFieldContainer}>
         <TextField
           label="Username:"
           variant="filled"
@@ -81,7 +81,7 @@ function CustomerRegister() {
             Signup
           </Button>
         </div>
-      </form>
+      </div>
     </div>
   );
 }
