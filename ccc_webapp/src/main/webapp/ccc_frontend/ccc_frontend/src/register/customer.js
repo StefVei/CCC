@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button } from '@mui/material';
 import useStyles from './styles';
+import { cccClient } from '../network';
 
 function CustomerRegister() {
   const styles = useStyles();
@@ -11,7 +12,24 @@ function CustomerRegister() {
   const [Address, setAddress] = useState('');
   const [CompanyName, setCompanyName] = useState('');
 
-  // const handleSubmit = (e) => {};
+  const handleSubmit = async () => {
+    const response = await cccClient
+      .post('OpenCompanyAcccount', {
+        Username: Username,
+        Password: Password,
+        Phone: Phone,
+        Email: Email,
+        Address: Address,
+        CompanyName: CompanyName
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    console.log(response);
+  };
 
   return (
     <div className={styles.container}>
@@ -59,7 +77,7 @@ function CustomerRegister() {
           required
         />
         <div className={styles.buttonContainer}>
-          <Button type="submit" variant="contained" color="primary">
+          <Button type="submit" variant="contained" color="primary" onClick={() => handleSubmit()}>
             Signup
           </Button>
         </div>
