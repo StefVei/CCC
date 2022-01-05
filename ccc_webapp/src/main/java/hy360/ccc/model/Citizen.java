@@ -40,12 +40,15 @@ public class Citizen extends Customer{
 
     }
     
-    public Citizen(String CustomerId, String account_due, 
+    public Citizen(String username, String password, 
+            String email, String address, String amount_due, String account_number, 
+            String CustomerId, String account_due, 
             String amka, String vat, String first_name, 
             String last_name, String credit_limit, String credit_balance,
             String birth_date, Gender gender){
         
-        super(CustomerId, credit_limit, account_due, credit_balance);
+        super(username, password, email, address, amount_due, account_number, 
+                CustomerId, credit_limit, account_due, credit_balance);
         
         this.amka = amka;
         this.vat = vat;
