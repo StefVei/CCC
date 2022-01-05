@@ -27,7 +27,6 @@ public class Merchant extends User {
     public Merchant(String userName,
             String password,
             String email,
-            String phone,
             String address,
             String amount_due,
             String account_number, 
@@ -37,7 +36,7 @@ public class Merchant extends User {
             String supply, 
             String gain){
         
-        super(userName, password, email, phone, address, amount_due, account_number);
+        super(userName, password, email, address, amount_due, account_number);
 
         merchant_id = id;
         last_name = lastname;
