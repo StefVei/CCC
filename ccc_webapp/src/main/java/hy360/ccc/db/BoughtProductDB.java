@@ -5,7 +5,6 @@
 package hy360.ccc.db;
 
 import hy360.ccc.model.BoughtProduct;
-import hy360.ccc.model.Product;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -54,7 +53,7 @@ public class BoughtProductDB {
         try{
             prod.checkFields();
         }catch(Exception ex){
-            Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE,null, ex);
+            Logger.getLogger(BoughtProductDB.class.getName()).log(Level.SEVERE,null, ex);
         }
         PreparedStatement preparedStatement = null;
         Connection con = null;
