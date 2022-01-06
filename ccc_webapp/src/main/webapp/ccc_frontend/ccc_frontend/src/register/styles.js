@@ -8,6 +8,7 @@ const useStyles = makeStyles({
   },
   textFieldContainer: {
     display: 'flex',
+    padding: '2.5%',
     flexDirection: 'column'
   },
   buttonContainer: {
