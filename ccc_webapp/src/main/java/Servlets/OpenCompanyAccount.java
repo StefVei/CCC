@@ -65,6 +65,7 @@ public class OpenCompanyAccount extends HttpServlet {
             throws ServletException, IOException {
 
         Gson gson = new Gson();
+        String str;
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         
@@ -73,8 +74,13 @@ public class OpenCompanyAccount extends HttpServlet {
         comp.setUserName(request.getParameter("Username"));
         
         
+        //CompanyDB.addCompany(comp);
+        response.setStatus(200);
+        str = gson.toJson(comp);
+        response.getWriter().print(str);
+
+
         
-        response.setContentType("text/html;charset=UTF-8");
 
 
 
