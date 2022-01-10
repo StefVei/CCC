@@ -78,13 +78,6 @@ public class OpenCompanyAccount extends HttpServlet {
         response.setStatus(200);
         str = gson.toJson(comp);
         response.getWriter().print(str);
-
-
-        
-
-
-
-
     }
 
     /**
