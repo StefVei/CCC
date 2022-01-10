@@ -5,6 +5,7 @@
 package Servlets;
 
 import com.google.gson.Gson;
+import java.util.*;
 import hy360.ccc.model.Company;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -66,27 +67,64 @@ public class OpenCompanyAccount extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        Gson gson = new Gson();
-        String str;
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
         
         
-        Company comp = new Company();
-        comp.setUserName(request.getParameter("Username"));
-        comp.setPassword(request.getParameter("Password"));
-//        comp.setPhone(request.getParameter("Phone"));
-        comp.setEmail(request.getParameter("Email"));
-        comp.setAddress(request.getParameter("Address"));
-        comp.setName(request.getParameter("CompanyName"));
+        PrintWriter out = response.getWriter();
+        response.setContentType("text/plain");
+ 
+        Enumeration<String> parameterNames = request.getParameterNames();
+ 
+        while (parameterNames.hasMoreElements()) {
+ 
+            String paramName = parameterNames.nextElement();
+            out.write(paramName);
+            out.write("n");
+ 
+            String[] paramValues = request.getParameterValues(paramName);
+            for (int i = 0; i < paramValues.length; i++) {
+                String paramValue = paramValues[i];
+                out.write("t" + paramValue);
+                out.write("n");
+            }
+ 
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
+//        Gson gson = new Gson();
+//        String str;
+//        
+//        response.setContentType("application/json");
+//        response.setCharacterEncoding("UTF-8");
+//        response.setStatus(200);
+//        str = gson.toJson(resp);
+//        response.getWriter().print(str);
 
-        
-        
-//        CompanyDB.addCompany(comp);
-        response.setStatus(200);
-        str = gson.toJson(comp);
-        response.getWriter().print(str);
+//        
+//                String str;
+//
+//        Company comp = new Company();
+//        comp.setUserName(request.getParameter("Username"));
+//        comp.setPassword(request.getParameter("Password"));
+////        comp.setPhone(request.getParameter("Phone"));
+//        comp.setEmail(request.getParameter("Email"));
+//        comp.setAddress(request.getParameter("Address"));
+//        comp.setName(request.getParameter("CompanyName"));
+//
+//
+//        
+//        
+////        CompanyDB.addCompany(comp);
+//        response.setStatus(200);
+//        str = gson.toJson(comp);
+//        response.getWriter().print(str);
     }
 
     /**
