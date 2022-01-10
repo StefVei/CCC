@@ -15,10 +15,10 @@ import java.sql.Statement;
  * @author panagiotisk
  */
 public class CccDB {
-    static final String url = "jdbc:mysql://localhost:3306/ccc";
+    static final String url = "jdbc:mysql://localhost:3307/ccc";
     static final String user = "root";
     static final String password = "";
-    static final int port = 3306;
+    static final int port = 3307;
     static final String db_name = "ccc";
     private Connection con;
 

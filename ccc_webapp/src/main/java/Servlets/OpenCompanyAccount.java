@@ -4,6 +4,7 @@
  */
 package Servlets;
 
+import com.google.gson.Gson;
 import hy360.ccc.model.Company;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -31,21 +32,10 @@ public class OpenCompanyAccount extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        
-        String username = request.getParameter("Username");
-        
-        
-        Company comp = new Company();
-        comp.setUserName(username);
-        
-        
-        
-        response.setContentType("text/html;charset=UTF-8");
-        
+                
         
         try (PrintWriter out = response.getWriter()) {
-            out.println("username is : " + username);
+
         }
     }
 
@@ -75,7 +65,28 @@ public class OpenCompanyAccount extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
+        Gson gson = new Gson();
+        String str;
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        
+        
+        Company comp = new Company();
+        comp.setUserName(request.getParameter("Username"));
+        comp.setPassword(request.getParameter("Password"));
+//        comp.setPhone(request.getParameter("Phone"));
+        comp.setEmail(request.getParameter("Email"));
+        comp.setAddress(request.getParameter("Address"));
+        comp.setName(request.getParameter("CompanyName"));
+
+
+        
+        
+//        CompanyDB.addCompany(comp);
+        response.setStatus(200);
+        str = gson.toJson(comp);
+        response.getWriter().print(str);
     }
 
     /**
