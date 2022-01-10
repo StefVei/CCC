@@ -72,9 +72,16 @@ public class OpenCompanyAccount extends HttpServlet {
         
         Company comp = new Company();
         comp.setUserName(request.getParameter("Username"));
+        comp.setPassword(request.getParameter("Password"));
+//        comp.setPhone(request.getParameter("Phone"));
+        comp.setEmail(request.getParameter("Email"));
+        comp.setAddress(request.getParameter("Address"));
+        comp.setName(request.getParameter("CompanyName"));
+
+
         
         
-        //CompanyDB.addCompany(comp);
+//        CompanyDB.addCompany(comp);
         response.setStatus(200);
         str = gson.toJson(comp);
         response.getWriter().print(str);

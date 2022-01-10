@@ -14,7 +14,7 @@ function CustomerRegister() {
 
   const handleSubmit = async () => {
     const response = await cccClient
-      .post('OpenAccount', {
+      .post('OpenCompanyAccount', {
         Username: Username,
         Password: Password,
         Phone: Phone,
