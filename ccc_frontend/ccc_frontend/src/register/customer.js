@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button } from '@mui/material';
 import useStyles from './styles';
-import { cccClient } from '../network';
+// import { cccClient } from '../network';
 
 function CustomerRegister() {
   const styles = useStyles();
@@ -13,8 +13,13 @@ function CustomerRegister() {
   const [CompanyName, setCompanyName] = useState('');
 
   const handleSubmit = async () => {
-    const response = await cccClient
-      .post('OpenCompanyAccount', {
+    fetch('http://localhost:8080/ccc_webapp/OpenCompanyAccount', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
         Username: Username,
         Password: Password,
         Phone: Phone,
@@ -22,13 +27,13 @@ function CustomerRegister() {
         Address: Address,
         CompanyName: CompanyName
       })
+    })
       .then(function (response) {
         console.log(response);
       })
       .catch(function (error) {
         console.log(error);
       });
-    console.log(response);
   };
 
   return (
