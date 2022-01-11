@@ -7,7 +7,6 @@ package hy360.ccc.db;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 
 /**
@@ -16,17 +15,26 @@ import java.sql.Statement;
  */
 public class CccDB {
     static final String url = "jdbc:mysql://localhost:3307/ccc";
-    static final String user = "root";
-    static final String password = "";
+    static final String user = "admin";
+    static final String password = "password123";
     static final int port = 3307;
     static final String db_name = "ccc";
     private Connection con;
 
     
     public static Connection getConnection() throws SQLException, ClassNotFoundException{
-        
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        return DriverManager.getConnection(url + ":" + port +"/" + db_name, user, password);
+
+        System.out.println("Loading driver...");
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            System.out.println("Driver loaded!");
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException("Cannot find the driver in the classpath!", e);
+        }
+
+        return DriverManager.getConnection(url, user, password);
+
     }
     
     
