@@ -4,9 +4,17 @@
         <servlet-name>OpenCompanyAccount</servlet-name>
         <servlet-class>Servlets.OpenCompanyAccount</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>OpenCitizenAccount</servlet-name>
+        <servlet-class>Servlets.OpenCitizenAccount</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>OpenCompanyAccount</servlet-name>
         <url-pattern>/OpenCompanyAccount</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OpenCitizenAccount</servlet-name>
+        <url-pattern>/OpenCitizenAccount</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
