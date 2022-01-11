@@ -5,6 +5,7 @@
 package Servlets;
 
 import com.google.gson.Gson;
+import hy360.ccc.db.CompanyDB;
 import hy360.ccc.model.Company;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -92,7 +93,7 @@ public class OpenCompanyAccount extends HttpServlet {
         comp.setEstablishment_date(request.getParameter("establishmentDate"));
         comp.setUserName(request.getParameter("username"));
         
-//        CompanyDB.addCompany(comp);
+        CompanyDB.addCompany(comp);
         response.setStatus(200);
         str = gson.toJson(comp);
         response.getWriter().print(str);
