@@ -3,7 +3,7 @@ import { TextField, Button } from '@mui/material';
 import useStyles from './styles';
 import { cccClient } from '../network';
 
-function CustomerRegister() {
+function CompanyRegister() {
   const styles = useStyles();
   const [Username, setUsername] = useState('');
   const [Password, setPassword] = useState('');
@@ -11,24 +11,22 @@ function CustomerRegister() {
   const [Email, setEmail] = useState('');
   const [Address, setAddress] = useState('');
   const [CompanyName, setCompanyName] = useState('');
+  const [CreditBalance, setCreditBalance] = useState('');
 
   const handleSubmit = async () => {
-    const response = await cccClient
-      .post('OpenCompanyAccount', {
-        Username: Username,
-        Password: Password,
-        Phone: Phone,
-        Email: Email,
-        Address: Address,
-        CompanyName: CompanyName
-      })
+    await cccClient
+      .post(
+        'OpenCompanyAccount',
+        `username=${Username}&password=${Password}&email=${Email}}&address=${Address}&name=${CompanyName}&phone=${Phone}&creditBalance=${
+          CreditBalance ? CreditBalance : 0
+        }`
+      )
       .then(function (response) {
         console.log(response);
       })
       .catch(function (error) {
         console.log(error);
       });
-    console.log(response);
   };
 
   return (
@@ -76,6 +74,13 @@ function CustomerRegister() {
           onChange={(e) => setCompanyName(e.target.value)}
           required
         />
+        <TextField
+          label="Credit Balance:"
+          variant="filled"
+          value={CreditBalance}
+          onChange={(e) => setCreditBalance(e.target.value)}
+          required
+        />
         <div className={styles.buttonContainer}>
           <Button type="submit" variant="contained" color="primary" onClick={() => handleSubmit()}>
             Signup
@@ -86,4 +91,4 @@ function CustomerRegister() {
   );
 }
 
-export default CustomerRegister;
+export default CompanyRegister;

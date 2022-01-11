@@ -8,7 +8,9 @@ import com.google.gson.Gson;
 import hy360.ccc.model.Company;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author panos
  */
+@WebServlet(name = "OpenCompanyAccount", urlPatterns = {"/OpenCompanyAccount"})
 public class OpenCompanyAccount extends HttpServlet {
 
     /**
@@ -64,22 +67,30 @@ public class OpenCompanyAccount extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+
         Gson gson = new Gson();
         String str;
+        
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        
-        
+
         Company comp = new Company();
-        comp.setUserName(request.getParameter("Username"));
-        comp.setPassword(request.getParameter("Password"));
-//        comp.setPhone(request.getParameter("Phone"));
-        comp.setEmail(request.getParameter("Email"));
-        comp.setAddress(request.getParameter("Address"));
-        comp.setName(request.getParameter("CompanyName"));
-
-
         
+        LocalDate date = java.time.LocalDate.now();
+        date = date.plusYears(5);
+
+        comp.setAccount_due_date(date.toString());
+        comp.setUserName(request.getParameter("username"));
+        comp.setPassword(request.getParameter("password"));
+        comp.setPhone(request.getParameter("phone"));
+        comp.setEmail(request.getParameter("email"));
+        comp.setAddress(request.getParameter("address"));
+        comp.setName(request.getParameter("name"));
+        comp.setAmount_due("0");
+        comp.setCredit_balance(request.getParameter("creditBalance"));
+        comp.setCredit_limit("5000");
+        comp.setEstablishment_date(request.getParameter("establishmentDate"));
+        comp.setUserName(request.getParameter("username"));
         
 //        CompanyDB.addCompany(comp);
         response.setStatus(200);
