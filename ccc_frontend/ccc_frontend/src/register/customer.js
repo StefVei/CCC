@@ -13,22 +13,17 @@ function CustomerRegister() {
   const [CompanyName, setCompanyName] = useState('');
 
   const handleSubmit = async () => {
-    const response = await cccClient
-      .post('OpenCompanyAccount', {
-        Username: Username,
-        Password: Password,
-        Phone: Phone,
-        Email: Email,
-        Address: Address,
-        CompanyName: CompanyName
-      })
+    await cccClient
+      .post(
+        'OpenCompanyAccount',
+        `username=${Username}&password=${Password}&email=${Email}}&address=${Address}&name=${CompanyName}&phone=${Phone}`
+      )
       .then(function (response) {
         console.log(response);
       })
       .catch(function (error) {
         console.log(error);
       });
-    console.log(response);
   };
 
   return (
