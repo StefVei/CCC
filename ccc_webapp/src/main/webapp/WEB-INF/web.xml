@@ -8,6 +8,10 @@
         <servlet-name>OpenCitizenAccount</servlet-name>
         <servlet-class>Servlets.OpenCitizenAccount</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>OpenMerchantAccount</servlet-name>
+        <servlet-class>Servlets.OpenMerchantAccount</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>OpenCompanyAccount</servlet-name>
         <url-pattern>/OpenCompanyAccount</url-pattern>
@@ -15,6 +19,10 @@
     <servlet-mapping>
         <servlet-name>OpenCitizenAccount</servlet-name>
         <url-pattern>/OpenCitizenAccount</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OpenMerchantAccount</servlet-name>
+        <url-pattern>/OpenMerchantAccount</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
