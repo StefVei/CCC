@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { TextField, Button } from '@mui/material';
+import {
+  TextField,
+  Button,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio
+} from '@mui/material';
 import useStyles from './styles';
 import { cccClient } from '../network';
 
@@ -16,14 +24,19 @@ function CitizenRegister() {
   const [Amka, setAmka] = useState('');
   const [Vat, setVat] = useState('');
   const [BirthDate, setBirthDate] = useState('');
+  const [Gender, setGender] = useState('female');
+
+  const handleChange = (event) => {
+    setGender(event.target.value);
+  };
 
   const handleSubmit = async () => {
     await cccClient
       .post(
         'OpenCitizenAccount',
-        `username=${Username}&password=${Password}&email=${Email}}&address=${Address}&firstname=${Firstname}&phone=${Phone}&creditBalance=${
+        `username=${Username}&password=${Password}&email=${Email}&address=${Address}&firstname=${Firstname}&phone=${Phone}&creditBalance=${
           CreditBalance ? CreditBalance : 0
-        }&lastname=${Lastname}&amka=${Amka}&vat=${Vat}&birthDate=${BirthDate}`
+        }&lastname=${Lastname}&amka=${Amka}&vat=${Vat}&birthDate=${BirthDate}&gender=${Gender}`
       )
       .then(function (response) {
         console.log(response);
@@ -72,35 +85,35 @@ function CitizenRegister() {
           required
         />
         <TextField
-          label="Company Name:"
+          label="First Name:"
           variant="filled"
           value={Firstname}
           onChange={(e) => setFirstname(e.target.value)}
           required
         />
         <TextField
-          label="Company Name:"
+          label="Last Name:"
           variant="filled"
           value={Lastname}
           onChange={(e) => setLastname(e.target.value)}
           required
         />
         <TextField
-          label="Company Name:"
+          label="AMKA:"
           variant="filled"
           value={Amka}
           onChange={(e) => setAmka(e.target.value)}
           required
         />
         <TextField
-          label="Company Name:"
+          label="VAT:"
           variant="filled"
           value={Vat}
           onChange={(e) => setVat(e.target.value)}
           required
         />
         <TextField
-          label="Company Name:"
+          label="Birth Date:"
           variant="filled"
           value={BirthDate}
           onChange={(e) => setBirthDate(e.target.value)}
@@ -113,6 +126,19 @@ function CitizenRegister() {
           onChange={(e) => setCreditBalance(e.target.value)}
           required
         />
+        <FormControl component="fieldset">
+          <FormLabel component="legend">Gender</FormLabel>
+          <RadioGroup
+            value={Gender}
+            aria-label="gender"
+            defaultValue="female"
+            name="radio-buttons-group"
+            onChange={handleChange}>
+            <FormControlLabel value="female" control={<Radio />} label="Female" />
+            <FormControlLabel value="male" control={<Radio />} label="Male" />
+            <FormControlLabel value="unknown" control={<Radio />} label="Other" />
+          </RadioGroup>
+        </FormControl>
         <div className={styles.buttonContainer}>
           <Button type="submit" variant="contained" color="primary" onClick={() => handleSubmit()}>
             Signup
