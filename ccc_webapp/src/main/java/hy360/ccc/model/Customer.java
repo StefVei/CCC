@@ -61,10 +61,8 @@ public class Customer extends User{
         
         super.checkFields();
         
-        if(credit_balance == null || credit_balance.trim().isEmpty()
-            || credit_limit == null || credit_limit.trim().isEmpty()
-            || customer_id == null || customer_id.trim().isEmpty()
-            || account_due_date == null || account_due_date.trim().isEmpty()){
+        if (credit_limit == null || credit_limit.trim().isEmpty()
+                || account_due_date == null || account_due_date.trim().isEmpty()) {
             
             throw new Exception("Missing Fields");
         }
