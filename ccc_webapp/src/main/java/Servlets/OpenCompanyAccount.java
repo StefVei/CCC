@@ -9,6 +9,7 @@ import java.util.*;
 import hy360.ccc.model.Company;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -67,64 +68,30 @@ public class OpenCompanyAccount extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        
-        
-        PrintWriter out = response.getWriter();
-        response.setContentType("text/plain");
- 
-        Enumeration<String> parameterNames = request.getParameterNames();
- 
-        while (parameterNames.hasMoreElements()) {
- 
-            String paramName = parameterNames.nextElement();
-            out.write(paramName);
-            out.write("n");
- 
-            String[] paramValues = request.getParameterValues(paramName);
-            for (int i = 0; i < paramValues.length; i++) {
-                String paramValue = paramValues[i];
-                out.write("t" + paramValue);
-                out.write("n");
-            }
- 
-        }
-        
-        
-        
-        
-        
-        
-        
-        
-        
 
-//        Gson gson = new Gson();
-//        String str;
-//        
-//        response.setContentType("application/json");
-//        response.setCharacterEncoding("UTF-8");
-//        response.setStatus(200);
-//        str = gson.toJson(resp);
-//        response.getWriter().print(str);
+        Gson gson = new Gson();
+        String str;
+        
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
-//        
-//                String str;
-//
-//        Company comp = new Company();
-//        comp.setUserName(request.getParameter("Username"));
-//        comp.setPassword(request.getParameter("Password"));
-////        comp.setPhone(request.getParameter("Phone"));
-//        comp.setEmail(request.getParameter("Email"));
-//        comp.setAddress(request.getParameter("Address"));
-//        comp.setName(request.getParameter("CompanyName"));
-//
-//
-//        
-//        
-////        CompanyDB.addCompany(comp);
-//        response.setStatus(200);
-//        str = gson.toJson(comp);
-//        response.getWriter().print(str);
+        Company comp = new Company();
+        
+        LocalDate date = java.time.LocalDate.now();
+        date = date.plusYears(5);
+        comp.setAccount_due_date(date.toString());
+        
+        comp.setUserName(request.getParameter("username"));
+        comp.setPassword(request.getParameter("password"));
+//        comp.setPhone(request.getParameter("phone"));
+        comp.setEmail(request.getParameter("email"));
+        comp.setAddress(request.getParameter("address"));
+        comp.setName(request.getParameter("name"));
+        
+//        CompanyDB.addCompany(comp);
+        response.setStatus(200);
+        str = gson.toJson(comp);
+        response.getWriter().print(str);
     }
 
     /**
