@@ -5,7 +5,6 @@
 package Servlets;
 
 import com.google.gson.Gson;
-import java.util.*;
 import hy360.ccc.model.Company;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -79,14 +78,19 @@ public class OpenCompanyAccount extends HttpServlet {
         
         LocalDate date = java.time.LocalDate.now();
         date = date.plusYears(5);
+
         comp.setAccount_due_date(date.toString());
-        
         comp.setUserName(request.getParameter("username"));
         comp.setPassword(request.getParameter("password"));
-//        comp.setPhone(request.getParameter("phone"));
+        comp.setPhone(request.getParameter("phone"));
         comp.setEmail(request.getParameter("email"));
         comp.setAddress(request.getParameter("address"));
         comp.setName(request.getParameter("name"));
+        comp.setAmount_due("0");
+        comp.setCredit_balance(request.getParameter("creditBalance"));
+        comp.setCredit_limit("5000");
+        comp.setEstablishment_date(request.getParameter("establishmentDate"));
+        comp.setUserName(request.getParameter("username"));
         
 //        CompanyDB.addCompany(comp);
         response.setStatus(200);
