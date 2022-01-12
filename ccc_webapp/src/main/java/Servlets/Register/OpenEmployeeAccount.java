@@ -5,7 +5,6 @@
 package Servlets.Register;
 
 import com.google.gson.Gson;
-import hy360.ccc.db.EmployeeDB;
 import hy360.ccc.model.Employee;
 import hy360.ccc.model.Employee.Gender;
 import java.io.IOException;
@@ -100,7 +99,7 @@ public class OpenEmployeeAccount extends HttpServlet {
 
         employee.setGender(gender);
 
-        EmployeeDB.addEmployee(employee);
+        //     EmployeeDB.addEmployee(employee);
         response.setStatus(200);
         str = gson.toJson(employee);
         response.getWriter().print(str);
