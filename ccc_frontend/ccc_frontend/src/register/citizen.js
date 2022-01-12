@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   TextField,
   Button,
@@ -6,12 +7,14 @@ import {
   FormLabel,
   RadioGroup,
   FormControlLabel,
-  Radio
+  Radio,
+  Typography
 } from '@mui/material';
 import useStyles from './styles';
 import { cccClient } from '../network';
 
 function CitizenRegister() {
+  const navigate = useNavigate();
   const styles = useStyles();
   const [Username, setUsername] = useState('');
   const [Password, setPassword] = useState('');
@@ -49,6 +52,9 @@ function CitizenRegister() {
   return (
     <div className={styles.container}>
       <div className={styles.textFieldContainer}>
+        <Typography alignSelf={'center'} variant="h4">
+          Register Citizen
+        </Typography>
         <TextField
           label="Username:"
           variant="filled"
@@ -142,6 +148,9 @@ function CitizenRegister() {
         <div className={styles.buttonContainer}>
           <Button type="submit" variant="contained" color="primary" onClick={() => handleSubmit()}>
             Signup
+          </Button>
+          <Button variant="outlined" color="primary" onClick={() => navigate('/')}>
+            Cancel
           </Button>
         </div>
       </div>
