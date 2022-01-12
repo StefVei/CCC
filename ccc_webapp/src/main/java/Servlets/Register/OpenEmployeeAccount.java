@@ -5,7 +5,9 @@
 package Servlets.Register;
 
 import com.google.gson.Gson;
+import hy360.ccc.db.EmployeeDB;
 import hy360.ccc.model.Employee;
+import hy360.ccc.model.Employee.Gender;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
@@ -89,14 +91,16 @@ public class OpenEmployeeAccount extends HttpServlet {
         employee.setAddress(request.getParameter("address"));
         employee.setBirth_date("birthDate");
         employee.setEmail("email");
+        employee.setFirst_name("firstName");
+        employee.setLast_name("lastName");
 
-        //employeeizen.Gender gender = "male".equals(request.getParameter("gender")) ? employeeizen.Gender.MALE
-        //      : "female".equals(request.getParameter("gender")) ? employeeizen.Gender.FEMALE
-        //    : employeeizen.Gender.UNKNOWN;
+        Gender gender = "male".equals(request.getParameter("gender")) ? Gender.MALE
+                : "female".equals(request.getParameter("gender")) ? Gender.FEMALE
+                : Gender.UNKNOWN;
 
-        //employee.setGender(gender);
+        employee.setGender(gender);
 
-//        employeeizenDB.addemployeeizen(employee);
+        EmployeeDB.addEmployee(employee);
         response.setStatus(200);
         str = gson.toJson(employee);
         response.getWriter().print(str);
