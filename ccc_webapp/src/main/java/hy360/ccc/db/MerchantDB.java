@@ -90,7 +90,7 @@ public class MerchantDB {
     }
     
     
-        public static void deleteMerchant(Merchant merchant){
+    public static void deleteMerchant(Merchant merchant) {
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try{

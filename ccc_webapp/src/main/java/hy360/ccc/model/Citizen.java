@@ -158,8 +158,8 @@ public class Citizen extends Customer{
     /**
      * @return the gender
      */
-    public Gender getGender() {
-        return gender;
+    public String getGender() {
+        return gender.toString();
     }
 
     /**

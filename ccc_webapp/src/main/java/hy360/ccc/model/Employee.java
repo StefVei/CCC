@@ -8,13 +8,14 @@ package hy360.ccc.model;
  *
  * @author sckou
  */
-public class Employee extends Company{
+public class Employee {
     private String first_name;
     private String last_name;
     private String birth_date;
     private Gender gender;
     private String address;
     private String email;
+    private String phone;
     
     public Employee(){
         first_name = "";
@@ -37,18 +38,6 @@ public class Employee extends Company{
 
     }
     
-    public Employee(String first_name, 
-            String last_name, String birth_date,
-            Gender gender, String address, String email, String company_id, String name, String establishment_date){
-        super(company_id, name, establishment_date);
-        this.gender = gender;
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.birth_date = birth_date;
-        this.address = address;
-        this.email = email;
-
-    }
             
     /**
      * Enum for supporting gender values
@@ -166,7 +155,21 @@ public class Employee extends Company{
                 .append("email: ").append(email).append("\n")
                 .append("birth_date: ").append(birth_date).append("\n");
        
-        return super.toString() + ss.toString();
+        return ss.toString();
 
+    }
+
+    /**
+     * @return the phone
+     */
+    public String getPhone() {
+        return phone;
+    }
+
+    /**
+     * @param phone the phone to set
+     */
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

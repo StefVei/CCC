@@ -2,15 +2,19 @@
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <servlet>
         <servlet-name>OpenCompanyAccount</servlet-name>
-        <servlet-class>Servlets.OpenCompanyAccount</servlet-class>
+        <servlet-class>Servlets.Register.OpenCompanyAccount</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>OpenCitizenAccount</servlet-name>
-        <servlet-class>Servlets.OpenCitizenAccount</servlet-class>
+        <servlet-class>Servlets.Register.OpenCitizenAccount</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>OpenMerchantAccount</servlet-name>
-        <servlet-class>Servlets.OpenMerchantAccount</servlet-class>
+        <servlet-class>Servlets.Register.OpenMerchantAccount</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CloseCitizenAccount</servlet-name>
+        <servlet-class>Servlets.Close.CloseCitizenAccount</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>OpenCompanyAccount</servlet-name>
@@ -23,6 +27,10 @@
     <servlet-mapping>
         <servlet-name>OpenMerchantAccount</servlet-name>
         <url-pattern>/OpenMerchantAccount</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CloseCitizenAccount</servlet-name>
+        <url-pattern>/CloseCitizenAccount</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
