@@ -142,17 +142,16 @@ public class CompanyDB {
         Company comp = null;
         try {
             con = CccDB.getConnection();
-            String findComp = "SELECT FROM companies WHERE "
-                    + columnToSearch + " = ?";
-            preparedStatement = con.prepareStatement(findComp);
-            setValues(preparedStatement, value);
+            String findComp = "SELECT * FROM companies WHERE "
+                    + columnToSearch + " = " + columnToSearch;
+            preparedStatement = con.prepareStatement(findComp, PreparedStatement);
             preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
             if (res.next()) {
                 comp = new Company();
                 comp.setCompany_id(res.getString("USERID"));
                 comp.setEstablishment_date(res.getString("ESTABLISHMENT_DATE"));
-                comp.setLogotype(res.getString("LOGOTYPE"));
+                //comp.setLogotype(res.getString("LOGOTYPE"));
                 comp.setName(res.getString("NAME"));
                 comp.setAddress(res.getString("ADDRESS"));
                 comp.setUserName(res.getString("USERNAME"));

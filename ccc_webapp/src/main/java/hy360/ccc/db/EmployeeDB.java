@@ -56,7 +56,7 @@ public class EmployeeDB {
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement("INSERT INTO employees ( "
                     + "BIRTH_DATE, EMAIL, ADDRESS, FIRST_NAME, LAST_NAME,"
-                    + " PHONE, GENDER) " + "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    + " PHONE, GENDER, COMPANY_USERID) " + "VALUES (?, ?, ?, ?, ?, ?, ?)",
                     preparedStatement.RETURN_GENERATED_KEYS);
 
             setValues(preparedStatement,
@@ -66,7 +66,9 @@ public class EmployeeDB {
                     employee.getFirst_name(),
                     employee.getLast_name(),
                     employee.getPhone(),
-                    employee.getGender());
+                    employee.getGender(),
+                    employee.getCompany_id()
+            );
 
             preparedStatement.executeUpdate();
 
@@ -83,7 +85,7 @@ public class EmployeeDB {
         Connection con = null;
         try {
             con = CccDB.getConnection();
-            String del = "DELETE FROM employees WHERE EMPLOYEE_ID = ?";
+            String del = "DELETE FROM employees WHERE EMPLOYEE_ID = ? ";
             preparedStatement = con.prepareStatement(del);
             preparedStatement.setInt(1, Integer.valueOf(employee.getId()));
             preparedStatement.executeUpdate();
