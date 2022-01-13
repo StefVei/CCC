@@ -15,6 +15,7 @@ public class Citizen extends Customer{
     private String vat;
     private String birth_date;
     private Gender gender;
+    private String user_id;
     
     
     
@@ -158,8 +159,8 @@ public class Citizen extends Customer{
     /**
      * @return the gender
      */
-    public Gender getGender() {
-        return gender;
+    public String getGender() {
+        return gender.toString();
     }
 
     /**
@@ -182,5 +183,19 @@ public class Citizen extends Customer{
        
         return super.toString() + ss.toString();
 
+    }
+
+    /**
+     * @return the user_id
+     */
+    public String getUser_id() {
+        return user_id;
+    }
+
+    /**
+     * @param user_id the user_id to set
+     */
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 }

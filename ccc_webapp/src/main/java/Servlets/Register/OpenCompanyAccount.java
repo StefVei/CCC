@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Servlets;
+package Servlets.Register;
 
 import com.google.gson.Gson;
 import hy360.ccc.model.Company;
@@ -92,7 +92,7 @@ public class OpenCompanyAccount extends HttpServlet {
         comp.setEstablishment_date(request.getParameter("establishmentDate"));
         comp.setUserName(request.getParameter("username"));
         
-//        CompanyDB.addCompany(comp);
+//       CompanyDB.addCompany(comp);
         response.setStatus(200);
         str = gson.toJson(comp);
         response.getWriter().print(str);

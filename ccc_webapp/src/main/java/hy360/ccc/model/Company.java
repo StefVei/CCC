@@ -12,6 +12,7 @@ public class Company extends Customer{
     private String company_id;
     private String name;
     private String establishment_date;
+    private String logotype;
     
     public Company(){
         company_id = "";
@@ -37,6 +38,7 @@ public class Company extends Customer{
         this.establishment_date = establishment_date;
     }
 
+
     public String getCompany_id() {
         return company_id;
     }
@@ -61,6 +63,21 @@ public class Company extends Customer{
         this.establishment_date = establishment_date;
     }
 
+    /**
+     * @return the logotype
+     */
+    public String getLogotype() {
+        return logotype;
+    }
+
+    /**
+     * @param logotype the logotype to set
+     */
+    public void setLogotype(String logotype) {
+        this.logotype = logotype;
+    }
+
+
     @Override
     public String toString() {
         StringBuilder ss = new StringBuilder();
@@ -69,7 +86,7 @@ public class Company extends Customer{
                 .append("established_date= ").append(establishment_date).append("\n");
         return super.toString() + ss.toString();
     }
-    
+
     
     
     

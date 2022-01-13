@@ -58,9 +58,8 @@ public class User implements Serializable{
             || email == null || email.trim().isEmpty()
             || phone == null || phone.trim().isEmpty() 
             || address == null || address.trim().isEmpty()
-            || amount_due == null || amount_due.trim().isEmpty()
-            || account_number == null || account_number.trim().isEmpty() ){
-            
+                || amount_due == null || amount_due.trim().isEmpty()) {
+
             throw new Exception("Missing Fields");
         
         }
