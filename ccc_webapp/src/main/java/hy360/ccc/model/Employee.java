@@ -12,25 +12,27 @@ public class Employee {
     private String first_name;
     private String last_name;
     private String birth_date;
-    private Gender gender;
+    private String gender;
     private String address;
     private String email;
     private String phone;
     private String id;
+    private String company_id;
     
     public Employee(){
         first_name = "";
         last_name = "";
         birth_date = "";
-        gender = Gender.UNKNOWN;
+        gender = "";
         address = "";
         email = "";
         id = "";
+
     }
     
     public Employee(String first_name, 
             String last_name, String birth_date,
-            Gender gender, String address, String email, String id) {
+            String gender, String address, String email, String id) {
         this.gender = gender;
         this.first_name = first_name;
         this.last_name = last_name;
@@ -47,7 +49,8 @@ public class Employee {
                 || first_name == null || first_name.trim().isEmpty()
                 || birth_date == null || birth_date.trim().isEmpty()
                 || last_name == null || last_name.trim().isEmpty()
-                || phone == null || phone.trim().isEmpty()) {
+                || phone == null || phone.trim().isEmpty()
+                || company_id == null || company_id.trim().isEmpty()) {
 
             throw new Exception("Missing Fields");
         }
@@ -55,28 +58,6 @@ public class Employee {
 
     
             
-    /**
-     * Enum for supporting gender values
-     */
-    public enum Gender {
-
-        MALE("Male"), FEMALE("Female"), UNKNOWN("Unknown");
-        private final String value;
-
-        private Gender(String value) {
-            this.value = value;
-        }
-
-        /**
-         * Returns string representation of value
-         *
-         * @return
-         */
-        @Override
-        public String toString() {
-            return this.value;
-        }
-    }
     
     /**
      * @return the first_name
@@ -152,13 +133,13 @@ public class Employee {
      * @return the gender
      */
     public String getGender() {
-        return gender.toString();
+        return gender;
     }
 
     /**
      * @param gender the gender to set
      */
-    public void setGender(Gender gender) {
+    public void setGender(String gender) {
         this.gender = gender;
 
 
@@ -171,7 +152,10 @@ public class Employee {
                 .append("last_name: ").append(last_name).append("\n")
                 .append("address:").append(address).append("\n")
                 .append("email: ").append(email).append("\n")
-                .append("birth_date: ").append(birth_date).append("\n");
+                .append("birth_date: ").append(birth_date).append("\n")
+                .append("phone: ").append(phone).append("\n")
+                .append("company_id: ").append(company_id).append("\n")
+                .append("employee_id: ").append(id).append("\n");
        
         return ss.toString();
 
@@ -203,5 +187,19 @@ public class Employee {
      */
     public void setId(String id) {
         this.id = id;
+    }
+
+    /**
+     * @return the company_id
+     */
+    public String getCompany_id() {
+        return company_id;
+    }
+
+    /**
+     * @param company_id the company_id to set
+     */
+    public void setCompany_id(String company_id) {
+        this.company_id = company_id;
     }
 }

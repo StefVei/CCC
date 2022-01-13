@@ -5,8 +5,10 @@
 package Servlets.Register;
 
 import com.google.gson.Gson;
+import hy360.ccc.db.CompanyDB;
+import hy360.ccc.db.EmployeeDB;
+import hy360.ccc.model.Company;
 import hy360.ccc.model.Employee;
-import hy360.ccc.model.Employee.Gender;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
@@ -86,20 +88,22 @@ public class OpenEmployeeAccount extends HttpServlet {
 
         LocalDate date = java.time.LocalDate.now();
         date = date.plusYears(5);
+        String gender = "male".equals(request.getParameter("gender")) ? "M"
+                : "female".equals(request.getParameter("gender")) ? "F"
+                : "O";
+        Company comp = CompanyDB.getCompany("NAME", request.getParameter("companyName"));
+        String company_id = comp.getCompany_id();
 
         employee.setAddress(request.getParameter("address"));
-        employee.setBirth_date("birthDate");
-        employee.setEmail("email");
-        employee.setFirst_name("firstName");
-        employee.setLast_name("lastName");
-
-        Gender gender = "male".equals(request.getParameter("gender")) ? Gender.MALE
-                : "female".equals(request.getParameter("gender")) ? Gender.FEMALE
-                : Gender.UNKNOWN;
-
+        employee.setBirth_date(request.getParameter("birthDate"));
+        employee.setEmail(request.getParameter("email"));
+        employee.setFirst_name(request.getParameter("firstname"));
+        employee.setLast_name(request.getParameter("lastname"));
+        employee.setPhone(request.getParameter("phone"));
         employee.setGender(gender);
+        employee.setCompany_id(company_id);
 
-        //     EmployeeDB.addEmployee(employee);
+        EmployeeDB.addEmployee(employee);
         response.setStatus(200);
         str = gson.toJson(employee);
         response.getWriter().print(str);

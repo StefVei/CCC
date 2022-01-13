@@ -133,7 +133,7 @@ public class CompanyDB {
      * @param columnToSearch for example "NAME" or "USERID" column must be
      * UNIQUE
      * @param value The value of the desired row
-     * @return
+     * @return a Company with all the fields
      */
     public static Company getCompany(String columnToSearch, String value) {
 

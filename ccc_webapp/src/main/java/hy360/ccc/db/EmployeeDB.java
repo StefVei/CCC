@@ -5,7 +5,6 @@
 package hy360.ccc.db;
 
 import hy360.ccc.model.Employee;
-import hy360.ccc.model.Employee.Gender;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -55,9 +54,10 @@ public class EmployeeDB {
 
         try {
             con = CccDB.getConnection();
-            preparedStatement = con.prepareStatement("INSERT INTO employee ( "
+            preparedStatement = con.prepareStatement("INSERT INTO employees ( "
                     + "BIRTH_DATE, EMAIL, ADDRESS, FIRST_NAME, LAST_NAME,"
-                    + " PHONE, GENDER) " + "VALUES (?, ?, ?, ?, ?, ?, ?)");
+                    + " PHONE, GENDER) " + "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    preparedStatement.RETURN_GENERATED_KEYS);
 
             setValues(preparedStatement,
                     employee.getBirth_date(),
@@ -68,14 +68,6 @@ public class EmployeeDB {
                     employee.getPhone(),
                     employee.getGender());
 
-            preparedStatement.executeUpdate();
-            ResultSet res = preparedStatement.getGeneratedKeys();
-            if (res.next()) {
-                int employee_id = res.getInt(1);
-                employee.setId(String.valueOf(employee_id));
-            }
-            preparedStatement = con.prepareStatement("INSERT INTO employee (employee_ID) VALUES (?)");
-            setValues(preparedStatement, employee.getId());
             preparedStatement.executeUpdate();
 
         } catch (Exception ex) {
@@ -91,7 +83,7 @@ public class EmployeeDB {
         Connection con = null;
         try {
             con = CccDB.getConnection();
-            String del = "DELETE FROM employee WHERE EMPLOYEE_ID = ?";
+            String del = "DELETE FROM employees WHERE EMPLOYEE_ID = ?";
             preparedStatement = con.prepareStatement(del);
             preparedStatement.setInt(1, Integer.valueOf(employee.getId()));
             preparedStatement.executeUpdate();
@@ -106,7 +98,7 @@ public class EmployeeDB {
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
-            String updateemployee_sql = "UPDATE employee "
+            String updateemployee_sql = "UPDATE employees "
                     + "SET FIRST_NAME = ? "
                     + "SET LAST_NAME = ? "
                     + "SET BIRTH_DATE = ? "
@@ -136,12 +128,12 @@ public class EmployeeDB {
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
-            String sql_getemployee = "SELECT * FROM employee WHERE employee_ID = ?";
+            String sql_getemployee = "SELECT * FROM employees WHERE employee_ID = ?";
             con = CccDB.getConnection();
 
             preparedStatement = con.prepareStatement(sql_getemployee);
             setValues(preparedStatement, employee_id);
-            preparedStatement.executeUpdate();
+            preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
 
             if (res.next() == true) {
@@ -152,9 +144,9 @@ public class EmployeeDB {
                 employee.setEmail(res.getString("EMAIL"));
                 employee.setAddress(res.getString("ADDRESS"));
 
-                Gender gender = "male".equals(res.getString("MALE")) ? Employee.Gender.MALE
-                        : "female".equals(res.getString("GENDER")) ? Employee.Gender.FEMALE
-                        : Employee.Gender.UNKNOWN;
+                String gender = "male".equals(res.getString("MALE")) ? "M"
+                        : "female".equals(res.getString("GENDER")) ? "F"
+                        : "O";
 
                 employee.setGender(gender);
                 employee.setId(res.getString("EMPLOYEE_ID"));
@@ -175,10 +167,10 @@ public class EmployeeDB {
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
-            String sql_getemployees = "SELECT * FROM employee";
+            String sql_getemployees = "SELECT * FROM employees";
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement(sql_getemployees);
-            preparedStatement.executeUpdate();
+            preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
 
             while (res.next() == true) {
@@ -191,9 +183,9 @@ public class EmployeeDB {
                 employee.setEmail(res.getString("EMAIL"));
                 employee.setAddress(res.getString("ADDRESS"));
 
-                Gender gender = "male".equals(res.getString("MALE")) ? Employee.Gender.MALE
-                        : "female".equals(res.getString("GENDER")) ? Employee.Gender.FEMALE
-                        : Employee.Gender.UNKNOWN;
+                String gender = "male".equals(res.getString("MALE")) ? "M"
+                        : "female".equals(res.getString("GENDER")) ? "F"
+                        : "O";
 
                 employee.setGender(gender);
                 employee.setId(res.getString("EMPLOYEE_ID"));
