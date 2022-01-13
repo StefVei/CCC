@@ -91,7 +91,10 @@ public class OpenEmployeeAccount extends HttpServlet {
         String gender = "male".equals(request.getParameter("gender")) ? "M"
                 : "female".equals(request.getParameter("gender")) ? "F"
                 : "O";
-        Company comp = CompanyDB.getCompany("NAME", request.getParameter("companyName"));
+
+        String comp_name = request.getParameter("name");
+        System.out.println("cOMP NAME IS " + comp_name);
+        Company comp = CompanyDB.getCompany("NAME", comp_name);
         String company_id = comp.getCompany_id();
 
         employee.setAddress(request.getParameter("address"));

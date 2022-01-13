@@ -19,7 +19,7 @@ function CompanyRegister() {
     await cccClient
       .post(
         'OpenCompanyAccount',
-        `username=${Username}&password=${Password}&email=${Email}&address=${Address}&name=${CompanyName}&phone=${Phone}&creditBalance=${
+        `username=${Username}&password=${Password}&email=${Email}&address=${Address}&companyName=${CompanyName}&phone=${Phone}&creditBalance=${
           CreditBalance ? CreditBalance : 0
         }`
       )

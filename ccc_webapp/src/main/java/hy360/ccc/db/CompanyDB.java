@@ -142,9 +142,10 @@ public class CompanyDB {
         Company comp = null;
         try {
             con = CccDB.getConnection();
-            String findComp = "SELECT FROM companies WHERE ? = ?";
+            String findComp = "SELECT FROM companies WHERE "
+                    + columnToSearch + " = ?";
             preparedStatement = con.prepareStatement(findComp);
-            setValues(preparedStatement, columnToSearch, value);
+            setValues(preparedStatement, value);
             preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
             if (res.next()) {
