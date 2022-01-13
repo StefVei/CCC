@@ -14,7 +14,7 @@ public class Citizen extends Customer{
     private String amka;
     private String vat;
     private String birth_date;
-    private Gender gender;
+    private String gender;
     private String user_id;
     
     
@@ -25,12 +25,12 @@ public class Citizen extends Customer{
         amka = "";
         vat = "";
         birth_date = "";
-        gender = Gender.UNKNOWN;
+        gender = "O";
     }
     
     public Citizen(String first_name, 
             String last_name, String amka, String vat,
-            String birth_date, Gender gender){
+            String birth_date, String gender) {
         
         this.amka = amka;
         this.vat = vat;
@@ -46,7 +46,7 @@ public class Citizen extends Customer{
             String CustomerId, String account_due, 
             String amka, String vat, String first_name, 
             String last_name, String credit_limit, String credit_balance,
-            String birth_date, Gender gender){
+            String birth_date, String gender) {
         
         super(username, password, email, address, amount_due, account_number, 
                 CustomerId, credit_limit, account_due, credit_balance);
@@ -63,28 +63,6 @@ public class Citizen extends Customer{
     
     
     
-    /**
-     * Enum for supporting gender values
-     */
-    public enum Gender {
-
-        MALE("Male"), FEMALE("Female"), UNKNOWN("Unknown");
-        private final String value;
-
-        private Gender(String value) {
-            this.value = value;
-        }
-
-        /**
-         * Returns string representation of value
-         *
-         * @return
-         */
-        @Override
-        public String toString() {
-            return this.value;
-        }
-    }
 
     /**
      * @return the first_name
@@ -160,13 +138,13 @@ public class Citizen extends Customer{
      * @return the gender
      */
     public String getGender() {
-        return gender.toString();
+        return gender;
     }
 
     /**
      * @param gender the gender to set
      */
-    public void setGender(Gender gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
     

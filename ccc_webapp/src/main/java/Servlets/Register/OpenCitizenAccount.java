@@ -4,9 +4,10 @@
  */
 package Servlets.Register;
 
+import Utils_db.UtilitiesDB;
 import com.google.gson.Gson;
+import hy360.ccc.db.CitizenDB;
 import hy360.ccc.model.Citizen;
-import hy360.ccc.model.Citizen.Gender;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
@@ -84,7 +85,9 @@ public class OpenCitizenAccount extends HttpServlet {
 
         LocalDate date = java.time.LocalDate.now();
         date = date.plusYears(5);
+        String acc_number = UtilitiesDB.getNewAccountNumber();
 
+        cit.setAccount_number(acc_number);
         cit.setAccount_due_date(date.toString());
         cit.setUserName(request.getParameter("username"));
         cit.setPassword(request.getParameter("password"));
@@ -100,13 +103,13 @@ public class OpenCitizenAccount extends HttpServlet {
         cit.setVat(request.getParameter("vat"));
         cit.setBirth_date(request.getParameter("birthDate"));
 
-        Gender gender = "male".equals(request.getParameter("gender")) ? Gender.MALE
-                : "female".equals(request.getParameter("gender")) ? Gender.FEMALE
-                : Gender.UNKNOWN;
+        String gender = "male".equals(request.getParameter("gender")) ? "M"
+                : "female".equals(request.getParameter("gender")) ? "F"
+                : "O";
 
         cit.setGender(gender);
 
-//        CitizenDB.addCitizen(cit);
+        CitizenDB.addCitizen(cit);
         response.setStatus(200);
         str = gson.toJson(cit);
         response.getWriter().print(str);
