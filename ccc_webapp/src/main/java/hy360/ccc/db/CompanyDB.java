@@ -117,7 +117,7 @@ public class CompanyDB {
         Connection con = null;
         try {
             con = CccDB.getConnection();
-            String del = "DELETE FROM company WHERE COMPANY_ID = ?";
+            String del = "DELETE FROM companies WHERE USERID = ?";
             preparedStatement = con.prepareStatement(del);
             preparedStatement.setInt(1, Integer.valueOf(company.getCompany_id()));
             preparedStatement.executeUpdate();
@@ -126,6 +126,50 @@ public class CompanyDB {
         } finally {
             closeConnection(preparedStatement, con);
         }
+    }
+
+    /**
+     *
+     * @param columnToSearch for example "NAME" or "USERID" column must be
+     * UNIQUE
+     * @param value The value of the desired row
+     * @return
+     */
+    public static Company getCompany(String columnToSearch, String value) {
+
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+        Company comp = null;
+        try {
+            con = CccDB.getConnection();
+            String findComp = "SELECT FROM companies WHERE ? = ?";
+            preparedStatement = con.prepareStatement(findComp);
+            setValues(preparedStatement, columnToSearch, value);
+            preparedStatement.executeQuery();
+            ResultSet res = preparedStatement.getResultSet();
+            if (res.next()) {
+                comp = new Company();
+                comp.setCompany_id(res.getString("USERID"));
+                comp.setEstablishment_date(res.getString("ESTABLISHMENT_DATE"));
+                comp.setLogotype(res.getString("LOGOTYPE"));
+                comp.setName(res.getString("NAME"));
+                comp.setAddress(res.getString("ADDRESS"));
+                comp.setUserName(res.getString("USERNAME"));
+                comp.setPassword(res.getString("PASSWORD"));
+                comp.setEmail(res.getString("EMAIL"));
+                comp.setPhone(res.getString("PHONE"));
+                comp.setCredit_limit(res.getString("CREDIT_LIMIT"));
+                comp.setCredit_balance(res.getString("CREDIT_BALANCE"));
+                comp.setAccount_due_date(res.getString("ACCOUNT_DUE_DATE"));
+                comp.setAmount_due(res.getString("AMOUNT_DUE"));
+                comp.setAccount_number(res.getString("ACCOUNT_NUMBER"));
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(CompanyDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return comp;
     }
 
 }
