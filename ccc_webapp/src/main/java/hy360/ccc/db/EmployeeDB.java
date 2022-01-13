@@ -56,7 +56,7 @@ public class EmployeeDB {
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement("INSERT INTO employees ( "
                     + "BIRTH_DATE, EMAIL, ADDRESS, FIRST_NAME, LAST_NAME,"
-                    + " PHONE, GENDER, COMPANY_USERID) " + "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    + " PHONE, GENDER, COMPANY_USERID) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                     preparedStatement.RETURN_GENERATED_KEYS);
 
             setValues(preparedStatement,

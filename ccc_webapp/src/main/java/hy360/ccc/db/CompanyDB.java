@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -137,16 +138,21 @@ public class CompanyDB {
      */
     public static Company getCompany(String columnToSearch, String value) {
 
-        PreparedStatement preparedStatement = null;
+        Statement stmt = null;
         Connection con = null;
         Company comp = null;
         try {
             con = CccDB.getConnection();
-            String findComp = "SELECT * FROM companies WHERE "
-                    + columnToSearch + " = " + columnToSearch;
-            preparedStatement = con.prepareStatement(findComp, PreparedStatement);
-            preparedStatement.executeQuery();
-            ResultSet res = preparedStatement.getResultSet();
+            stmt = con.createStatement();
+
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("SELECT * FROM companies ")
+                    .append(" WHERE").append(" ").append(columnToSearch).append(" = ")
+                    .append("'").append(value).append("';");
+
+            stmt.execute(insQuery.toString());
+            ResultSet res = stmt.getResultSet();
             if (res.next()) {
                 comp = new Company();
                 comp.setCompany_id(res.getString("USERID"));
