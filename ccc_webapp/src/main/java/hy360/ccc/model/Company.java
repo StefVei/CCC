@@ -9,80 +9,56 @@ package hy360.ccc.model;
  * @author sckou
  */
 public class Company extends Customer{
-    private String company_id;
+    
     private String name;
     private String establishment_date;
-    private String logotype;
     
     public Company(){
-        company_id = "";
         name = "";
         establishment_date = "";
     }
     
-    public Company(String company_id, 
-            String name, String establishment_date)
+    public Company(String name, String establishment_date)
     {
-        this.company_id = company_id;
         this.name = name;
         this.establishment_date = establishment_date;
     }
     
-    public Company(String CustomerId, String account_due, 
-            String company_id, String name, String establishment_date, String credit_limit, String credit_balance){
+    public Company(String name, String establishment_date, String credit_limit,
+            String credit_balance, String account_due_date) {
         
-        super(CustomerId, credit_limit, account_due, credit_balance);
+        super(credit_limit, credit_balance, account_due_date);
         
-        this.company_id = company_id;
         this.name = name;
         this.establishment_date = establishment_date;
-    }
-
-
-    public String getCompany_id() {
-        return company_id;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getEstablishment_date() {
-        return establishment_date;
-    }
-
-    public void setCompany_id(String company_id) {
-        this.company_id = company_id;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEstablishment_date() {
+        return establishment_date;
     }
 
     public void setEstablishment_date(String establishment_date) {
         this.establishment_date = establishment_date;
     }
-
+    
     /**
-     * @return the logotype
-     */
-    public String getLogotype() {
-        return logotype;
-    }
-
-    /**
-     * @param logotype the logotype to set
-     */
-    public void setLogotype(String logotype) {
-        this.logotype = logotype;
-    }
-
-
+     * Return the string representation of the object in rows
+     *
+     * 
+    */
+    
     @Override
     public String toString() {
         StringBuilder ss = new StringBuilder();
-        ss.append("company_id= ").append(company_id).append("\n")
-                .append("name= ").append(name).append("\n")
+        ss.append("name= ").append(name).append("\n")
                 .append("established_date= ").append(establishment_date).append("\n");
         return super.toString() + ss.toString();
     }

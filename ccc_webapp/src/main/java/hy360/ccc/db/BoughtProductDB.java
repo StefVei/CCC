@@ -94,7 +94,7 @@ public class BoughtProductDB {
             ResultSet res = preparedStatement.getResultSet();
             while(res.next() == true){
                 BoughtProduct prod = new BoughtProduct();
-                prod.setBought_product_id(res.getString("BOUGHT_PRODUCT_ID"));
+                prod.setProduct_id(res.getString("BOUGHT_PRODUCT_ID"));
                 prod.setTransaction_id(res.getString("TRANSACTION_ID"));
                 products.add(prod);
             }

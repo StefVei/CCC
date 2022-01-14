@@ -9,60 +9,73 @@ package hy360.ccc.model;
  * @author panagiotisk
  */
 public class Product {
+    private String product_id;
     private String name;
     private String price;
-    private String product_id;
+    private String quantity;
+    
     
     public Product(){
+        product_id = "";
         name = "";
         price = "";
-        product_id = "";
+        quantity = "";
     }
     
-    public Product(String name, String price){
+    public Product(String name, String price, String quantity){
         this.name = name;
         this.price = price;
+        this.quantity = quantity;
     }
 
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
+    public void checkFields() throws Exception {
 
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+        if (name == null || name.trim().isEmpty()
+                || price == null || price.trim().isEmpty()
+                || quantity == null || quantity.trim().isEmpty()) {
 
-    /**
-     * @return the price
-     */
-    public String getPrice() {
-        return price;
+            throw new Exception("Missing Fields");
+        }
     }
-
-    /**
-     * @param price the price to set
-     */
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-    /**
-     * @return the product_id
-     */
+    
     public String getProduct_id() {
         return product_id;
     }
 
-    /**
-     * @param product_id the product_id to set
-     */
     public void setProduct_id(String product_id) {
         this.product_id = product_id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
+    
+    @Override
+    public String toString(){
+        StringBuilder ss = new StringBuilder();
+        ss.append("name: ").append(name).append("\n")
+                .append("price: ").append(price).append("\n")
+                .append("quantity: ").append(quantity).append("\n");
+        return ss.toString();
     }
 }

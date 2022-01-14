@@ -32,12 +32,20 @@ public class UtilitiesDB {
         }
     }
 
+<<<<<<< HEAD
     public static void closeConnection(PreparedStatement preparedStatement, Connection con, String name) {
+=======
+    public static void closeConnection(PreparedStatement preparedStatement, Connection con) {
+>>>>>>> master
         if (preparedStatement != null) {
             try {
                 preparedStatement.close();
             } catch (SQLException sql_ex) {
+<<<<<<< HEAD
                 Logger.getLogger(name).log(Level.SEVERE, null, sql_ex);
+=======
+                Logger.getLogger(UtilitiesDB.class.getName()).log(Level.SEVERE, null, sql_ex);
+>>>>>>> master
             }
         }
         if (con != null) {
@@ -116,4 +124,8 @@ public class UtilitiesDB {
 
     }
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> master

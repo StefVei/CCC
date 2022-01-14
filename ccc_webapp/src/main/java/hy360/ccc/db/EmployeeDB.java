@@ -87,7 +87,7 @@ public class EmployeeDB {
             con = CccDB.getConnection();
             String del = "DELETE FROM employees WHERE EMPLOYEE_ID = ? ";
             preparedStatement = con.prepareStatement(del);
-            preparedStatement.setInt(1, Integer.valueOf(employee.getId()));
+            preparedStatement.setInt(1, Integer.valueOf(employee.getEmployee_id()));
             preparedStatement.executeUpdate();
         } catch (Exception ex) {
             Logger.getLogger(EmployeeDB.class.getName()).log(Level.SEVERE, null, ex);
@@ -116,7 +116,7 @@ public class EmployeeDB {
                     employee.getLast_name(), employee.getBirth_date(),
                     employee.getPhone(), employee.getEmail(),
                     employee.getAddress(), employee.getGender(),
-                    employee.getId());
+                    employee.getEmployee_id());
             preparedStatement.executeUpdate();
         } catch (Exception ex) {
             Logger.getLogger(EmployeeDB.class.getName()).log(Level.SEVERE, null, ex);
@@ -151,7 +151,7 @@ public class EmployeeDB {
                         : "O";
 
                 employee.setGender(gender);
-                employee.setId(res.getString("EMPLOYEE_ID"));
+                employee.setEmployee_id(res.getString("EMPLOYEE_ID"));
             }
 
         } catch (Exception ex) {
@@ -180,7 +180,7 @@ public class EmployeeDB {
                 employee.setFirst_name(res.getString("FIRST_NAME"));
                 employee.setLast_name(res.getString("LAST_NAME"));
                 employee.setBirth_date(res.getString("BIRTH_DATE"));
-                employee.setId(res.getString("EMPLOYEE_ID"));
+                employee.setEmployee_id(res.getString("EMPLOYEE_ID"));
                 employee.setPhone(res.getString("PHONE"));
                 employee.setEmail(res.getString("EMAIL"));
                 employee.setAddress(res.getString("ADDRESS"));
@@ -190,7 +190,7 @@ public class EmployeeDB {
                         : "O";
 
                 employee.setGender(gender);
-                employee.setId(res.getString("EMPLOYEE_ID"));
+                employee.setEmployee_id(res.getString("EMPLOYEE_ID"));
                 employees.add(employee);
             }
 

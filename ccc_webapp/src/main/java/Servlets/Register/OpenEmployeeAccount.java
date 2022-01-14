@@ -93,9 +93,8 @@ public class OpenEmployeeAccount extends HttpServlet {
                 : "O";
 
         String comp_name = request.getParameter("name");
-        System.out.println("cOMP NAME IS " + comp_name);
         Company comp = CompanyDB.getCompany("NAME", comp_name);
-        String company_id = comp.getCompany_id();
+        String company_id = comp.getUser_id();
 
         employee.setAddress(request.getParameter("address"));
         employee.setBirth_date(request.getParameter("birthDate"));

@@ -54,25 +54,25 @@ public class CitizenDB {
             con = CccDB.getConnection();
 
             preparedStatement = con.prepareStatement("INSERT INTO citizens "
-                    + "( `LAST_NAME`, `FIRST_NAME`, `AMKA`, `VAT`, `BIRTH_DATE`, `GENDER`,"
-                    + " `USERNAME`, `PASSWORD`, `EMAIL`, `ADDRESS`, `PHONE`, `AMOUNT_DUE`,"
+                    + "( `AMKA`, `VAT`, `FIRST_NAME`, `LAST_NAME`, `BIRTH_DATE`, `GENDER`,"
+                    + " `USERNAME`, `PASSWORD`, `PHONE`, `EMAIL`, `ADDRESS`, `AMOUNT_DUE`,"
                     + " `ACCOUNT_NUMBER`, `CREDIT_LIMIT`, `CREDIT_BALANCE`, `ACCOUNT_DUE_DATE` )"
                     + " VALUES (? ,? ,? ,? ,? ,?"
                     + ", ?, ?, ?, ?, ?, ?"
                     + ", ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
 
             setValues(preparedStatement,
-                    citizen.getLast_name(),
-                    citizen.getFirst_name(),
                     citizen.getAmka(),
                     citizen.getVat(),
+                    citizen.getFirst_name(),
+                    citizen.getLast_name(),
                     citizen.getBirth_date(),
                     citizen.getGender(),
                     citizen.getUserName(),
                     citizen.getPassword(),
+                    citizen.getPhone(),
                     citizen.getEmail(),
                     citizen.getAddress(),
-                    citizen.getPhone(),
                     citizen.getAmount_due(),
                     citizen.getAccount_number(),
                     citizen.getCredit_limit(),
@@ -95,9 +95,9 @@ public class CitizenDB {
         Connection con = null;
         try {
             con = CccDB.getConnection();
-            String del = "DELETE FROM citizen WHERE AMKA = ?";
+            String del = "DELETE FROM citizens WHERE USERID = ?";
             preparedStatement = con.prepareStatement(del);
-            preparedStatement.setInt(1, Integer.valueOf(citizen.getAmka()));
+            preparedStatement.setInt(1, Integer.valueOf(citizen.getUser_id()));
             preparedStatement.executeUpdate();
         } catch (Exception ex) {
             Logger.getLogger(CitizenDB.class.getName()).log(Level.SEVERE, null, ex);

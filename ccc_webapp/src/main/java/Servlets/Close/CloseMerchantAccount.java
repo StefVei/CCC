@@ -82,7 +82,7 @@ public class CloseMerchantAccount extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         Merchant merchant = new Merchant();
-        merchant.setMerchant_id(request.getParameter("merchantanyId"));
+        merchant.setUser_id(request.getParameter("merchantanyId"));
 
         MerchantDB.deleteMerchant(merchant);
 

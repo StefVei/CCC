@@ -9,40 +9,65 @@ package hy360.ccc.model;
  * @author panagiotisk
  */
 public class Merchant extends User {
-    private String merchant_id;
-    private String last_name;
+    
     private String first_name;
+    private String last_name;
+    private String birth_date;
+    private String gender;
     private String supply;
     private String gain;
-    
+    private String purchases_total;
+
     
     public Merchant(){
-        merchant_id = "";
-        last_name = "";
         first_name = "";
+        last_name = "";
+        birth_date = "";
+        gender = "O";
         supply = "";
         gain = "";
+        purchases_total = "";
     }
     
-    public Merchant(String userName,
+    public Merchant(String first_name, 
+            String last_name, String birth_date, String gender,
+            String supply, String gain, String purchases_total ) {
+        
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.birth_date = birth_date;
+        this.gender = gender;
+        this.supply = supply;
+        this.gain = gain;
+        this.purchases_total = purchases_total;
+
+    }
+    
+    public Merchant( String userid,
+            String username,
             String password,
+            String phone,
             String email,
             String address,
             String amount_due,
-            String account_number, 
-            String id, 
+            String account_number,
+            String firstname,  
             String lastname, 
-            String firstname,
+            String birth_date,
+            String gender,
             String supply, 
-            String gain){
+            String gain,
+            String purchases_total){
         
-        super(userName, password, email, address, amount_due, account_number);
+        super(username, password, phone, email, address, amount_due, account_number);
 
-        merchant_id = id;
-        last_name = lastname;
-        first_name = firstname;
+        this.first_name = firstname;
+        this.last_name = lastname;
+        this.birth_date = birth_date;
+        this.gender = gender;
         this.supply = supply;
         this.gain = gain;
+        this.purchases_total = purchases_total;
     }
     
     
@@ -52,96 +77,91 @@ public class Merchant extends User {
         
         super.checkFields();
         
-        if(gain == null || gain.trim().isEmpty()
-            || first_name == null || first_name.trim().isEmpty()
-            || merchant_id == null || merchant_id.trim().isEmpty()
+        if(first_name == null || first_name.trim().isEmpty()
             || last_name == null || last_name.trim().isEmpty()
-            || supply == null || supply.trim().isEmpty())
+            || birth_date == null || birth_date.trim().isEmpty()
+            || gender == null || gender.trim().isEmpty()
+            || supply == null || supply.trim().isEmpty()
+            || gain == null || gain.trim().isEmpty()
+            || purchases_total == null || purchases_total.trim().isEmpty())
         {
             
             throw new Exception("Missing Fields");
         }
     }
 
-    /**
-     * @return the merchant_id
-     */
-    public String getMerchant_id() {
-        return merchant_id;
-    }
-
-    /**
-     * @param merchant_id the merchant_id to set
-     */
-    public void setMerchant_id(String merchant_id) {
-        this.merchant_id = merchant_id;
-    }
-
-    /**
-     * @return the last_name
-     */
-    public String getLast_name() {
-        return last_name;
-    }
-
-    /**
-     * @param last_name the last_name to set
-     */
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
-    }
-
-    /**
-     * @return the first_name
-     */
     public String getFirst_name() {
         return first_name;
     }
 
-    /**
-     * @param first_name the first_name to set
-     */
     public void setFirst_name(String first_name) {
         this.first_name = first_name;
     }
 
-    /**
-     * @return the supply
-     */
+    public String getLast_name() {
+        return last_name;
+    }
+
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
+    }
+
+    public String getBirth_date() {
+        return birth_date;
+    }
+
+    public void setBirth_date(String birth_date) {
+        this.birth_date = birth_date;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
     public String getSupply() {
         return supply;
     }
 
-    /**
-     * @param supply the supply to set
-     */
     public void setSupply(String supply) {
         this.supply = supply;
     }
 
-    /**
-     * @return the gain
-     */
     public String getGain() {
         return gain;
     }
 
-    /**
-     * @param gain the gain to set
-     */
     public void setGain(String gain) {
         this.gain = gain;
     }
+
+    public String getPurchases_total() {
+        return purchases_total;
+    }
+
+    public void setPurchases_total(String purchases_total) {
+        this.purchases_total = purchases_total;
+    }
     
+    /**
+     * Return the string representation of the object in rows
+     *
+     * 
+    */
+    
+    @Override
     public String toString(){
         StringBuilder ss = new StringBuilder();
-        ss.append("merchant_id: ").append(merchant_id).append("\n")
+        ss.append("first_name:").append(first_name).append("\n")
                 .append("last_name: ").append(last_name).append("\n")
-                .append("first_name:").append(first_name).append("\n")
+                .append("birth_date: ").append(birth_date).append("\n")
+                .append("gender: ").append(gender).append("\n")
                 .append("supply: ").append(supply).append("\n")
-                .append("gain: ").append(gain).append("\n");
-
-       
+                .append("gain: ").append(gain).append("\n")
+                .append("Purchases_total: ").append(purchases_total).append("\n");
         return super.toString() + ss.toString();
     }
 
