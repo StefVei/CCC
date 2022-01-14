@@ -20,6 +20,10 @@
         <servlet-name>CloseEmployeeAccount</servlet-name>
         <servlet-class>Servlets.Close.CloseEmployeeAccount</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>MakeTransaction</servlet-name>
+        <servlet-class>Servlets.Transactions.MakeTransaction</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>OpenCompanyAccount</servlet-name>
         <url-pattern>/OpenCompanyAccount</url-pattern>
@@ -39,6 +43,10 @@
     <servlet-mapping>
         <servlet-name>CloseEmployeeAccount</servlet-name>
         <url-pattern>/CloseEmployeeAccount</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MakeTransaction</servlet-name>
+        <url-pattern>/MakeTransaction</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
