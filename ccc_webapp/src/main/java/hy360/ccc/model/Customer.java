@@ -48,7 +48,7 @@ public class Customer extends User{
             String account_due_date,
             String credit_balance){
         
-        super(userName, password, email, address, amount_due, account_number);
+        //super(userName, password, email, address, amount_due, account_number);
         
         this.credit_balance = credit_balance;
         this.credit_limit = credit_limit;

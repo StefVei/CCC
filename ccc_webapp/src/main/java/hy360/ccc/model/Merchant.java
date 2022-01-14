@@ -9,40 +9,63 @@ package hy360.ccc.model;
  * @author panagiotisk
  */
 public class Merchant extends User {
-    private String merchant_id;
     private String last_name;
     private String first_name;
     private String supply;
     private String gain;
-    
+    private String birth_date;
+    private String gender;
+    private String purchases_total;
+    private String user_id;
+
     
     public Merchant(){
-        merchant_id = "";
         last_name = "";
         first_name = "";
         supply = "";
         gain = "";
+        birth_date = "";
+        gender = "O";
+        purchases_total = "";
     }
     
-    public Merchant(String userName,
+    public Merchant(String first_name, 
+            String last_name, String birth_date, String gender,
+            String supply, String gain, String purchases_total ) {
+        
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.birth_date = birth_date;
+        this.gender = gender;
+        this.supply = supply;
+        this.gain = gain;
+        this.purchases_total = purchases_total;
+
+    }
+    
+    public Merchant( String userName,
             String password,
             String email,
             String address,
             String amount_due,
-            String account_number, 
-            String id, 
+            String account_number,  
             String lastname, 
             String firstname,
             String supply, 
-            String gain){
+            String gain,
+            String birth_date,
+            String gender,
+            String purchases_total){
         
         super(userName, password, email, address, amount_due, account_number);
 
-        merchant_id = id;
-        last_name = lastname;
-        first_name = firstname;
+        this.last_name = lastname;
+        this.first_name = firstname;
         this.supply = supply;
         this.gain = gain;
+        this.birth_date = birth_date;
+        this.gender = gender;
+        this.purchases_total = purchases_total;
     }
     
     
@@ -54,29 +77,17 @@ public class Merchant extends User {
         
         if(gain == null || gain.trim().isEmpty()
             || first_name == null || first_name.trim().isEmpty()
-            || merchant_id == null || merchant_id.trim().isEmpty()
+            || birth_date == null || birth_date.trim().isEmpty()
             || last_name == null || last_name.trim().isEmpty()
-            || supply == null || supply.trim().isEmpty())
+            || supply == null || supply.trim().isEmpty()
+            || gender == null || gender.trim().isEmpty()
+            || purchases_total == null || purchases_total.trim().isEmpty())
         {
             
             throw new Exception("Missing Fields");
         }
     }
-
-    /**
-     * @return the merchant_id
-     */
-    public String getMerchant_id() {
-        return merchant_id;
-    }
-
-    /**
-     * @param merchant_id the merchant_id to set
-     */
-    public void setMerchant_id(String merchant_id) {
-        this.merchant_id = merchant_id;
-    }
-
+    
     /**
      * @return the last_name
      */
@@ -105,6 +116,34 @@ public class Merchant extends User {
         this.first_name = first_name;
     }
 
+     /**
+     * @return the birth_date
+     */
+    public String getBirth_date() {
+        return birth_date;
+    }
+
+    /**
+     * @param birth_date the birth_date to set
+     */
+    public void setBirth_date(String birth_date) {
+        this.birth_date = birth_date;
+    }
+
+    /**
+     * @return the gender
+     */
+    public String getGender() {
+        return gender;
+    }
+
+    /**
+     * @param gender the gender to set
+     */
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+    
     /**
      * @return the supply
      */
@@ -132,14 +171,40 @@ public class Merchant extends User {
     public void setGain(String gain) {
         this.gain = gain;
     }
+
+/**
+     * @return the purchases_total
+     */
+    public String getPurchases_total() {
+        return purchases_total;
+    }
+
+    /**
+     * @param purchases_total the purchases_total to set
+     */
+    public void setPurchases_total(String purchases_total) {
+        this.purchases_total = purchases_total;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+    
+    
     
     public String toString(){
         StringBuilder ss = new StringBuilder();
-        ss.append("merchant_id: ").append(merchant_id).append("\n")
-                .append("last_name: ").append(last_name).append("\n")
+        ss.append("last_name: ").append(last_name).append("\n")
                 .append("first_name:").append(first_name).append("\n")
                 .append("supply: ").append(supply).append("\n")
-                .append("gain: ").append(gain).append("\n");
+                .append("gain: ").append(gain).append("\n")
+                .append("birth_date: ").append(birth_date).append("\n")
+                .append("Gender: ").append(gender).append("\n")
+                .append("Purchases_total: ").append(purchases_total).append("\n");
 
        
         return super.toString() + ss.toString();

@@ -4,7 +4,10 @@
  */
 package Servlets.Register;
 
+
+import Utils_db.UtilitiesDB;
 import com.google.gson.Gson;
+import hy360.ccc.db.MerchantDB;
 import hy360.ccc.model.Merchant;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -79,19 +82,29 @@ public class OpenMerchantAccount extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         Merchant merchant = new Merchant();
-
+        
+        String acc_number = UtilitiesDB.getNewAccountNumber();
+        
+        merchant.setAccount_number(acc_number);
         merchant.setFirst_name(request.getParameter("firstname"));
         merchant.setLast_name(request.getParameter("lastname"));
+        merchant.setBirth_date(request.getParameter("birthdate"));
         merchant.setUserName(request.getParameter("username"));
         merchant.setPassword(request.getParameter("password"));
         merchant.setPhone(request.getParameter("phone"));
         merchant.setEmail(request.getParameter("email"));
         merchant.setAddress(request.getParameter("address"));
-        merchant.setSupply(request.getParameter("name"));
+        merchant.setSupply(request.getParameter("0.15"));
         merchant.setAmount_due("0");
-        merchant.setGain(request.getParameter("gain"));
+        merchant.setGain(request.getParameter("0"));
+        merchant.setPurchases_total("0");
+        String gender = "male".equals(request.getParameter("gender")) ? "M"
+                : "female".equals(request.getParameter("gender")) ? "F"
+                : "O";
 
-//        merchantDB.addMerchant(merchant);
+        merchant.setGender(gender);
+        
+        MerchantDB.addMerchant(merchant);
         response.setStatus(200);
         str = gson.toJson(merchant);
         response.getWriter().print(str);
