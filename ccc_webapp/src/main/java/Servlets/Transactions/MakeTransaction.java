@@ -5,6 +5,8 @@
 package Servlets.Transactions;
 
 import com.google.gson.Gson;
+import hy360.ccc.db.EmployeeDB;
+import hy360.ccc.db.TransactionDB;
 import hy360.ccc.model.Transaction;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -76,6 +78,7 @@ public class MakeTransaction extends HttpServlet {
         Gson gson = new Gson();
         String str;
 
+        String citizen_or_employee;
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
@@ -83,11 +86,29 @@ public class MakeTransaction extends HttpServlet {
 
         LocalDate date = java.time.LocalDate.now();
 
+        citizen_or_employee = request.getParameter("isCustomer");
+        if (citizen_or_employee.equals("true")) {
+            transaction.setCitizen_id(request.getParameter("citizenId"));
+            transaction.setMerchant_cit_id(request.getParameter("merchantId"));
+        } else {
+            int employee_id = Integer.valueOf(request.getParameter("employeeId"));
+            String company_id = EmployeeDB.getEmployee(employee_id).getCompany_id();
+
+            transaction.setCompany_id(company_id);
+            transaction.setEmployee_id(String.valueOf(employee_id));
+            transaction.setMerchant_comp_id(request.getParameter("merchantId"));
+
+        }
         transaction.setPay_type(request.getParameter("payType"));
         transaction.setTransaction_type(request.getParameter("transactionType"));
         transaction.setDate(request.getParameter("date"));
         transaction.setAmount(request.getParameter("amount"));
-        // transaction.setMerchant_cit_id(request.getParameter("merchantId"));
+
+        TransactionDB.addTransaction(transaction);
+        response.setStatus(200);
+        str = gson.toJson(transaction);
+        response.getWriter().print(str);
+
     }
 
     /**
