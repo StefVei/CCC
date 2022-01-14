@@ -24,6 +24,10 @@
         <servlet-name>MakeTransaction</servlet-name>
         <servlet-class>Servlets.Transactions.MakeTransaction</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CompleteTransaction</servlet-name>
+        <servlet-class>Servlets.Transactions.CompleteTransaction</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>OpenCompanyAccount</servlet-name>
         <url-pattern>/OpenCompanyAccount</url-pattern>
@@ -47,6 +51,10 @@
     <servlet-mapping>
         <servlet-name>MakeTransaction</servlet-name>
         <url-pattern>/MakeTransaction</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CompleteTransaction</servlet-name>
+        <url-pattern>/CompleteTransaction</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
