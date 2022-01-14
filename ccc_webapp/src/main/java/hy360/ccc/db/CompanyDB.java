@@ -5,10 +5,8 @@
 package hy360.ccc.db;
 
 import hy360.ccc.model.Company;
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,53 +55,30 @@ public class CompanyDB {
 
             String generatedColumns[] = {"COMPANY_ID"};
 
-            preparedStatement = con.prepareStatement("INSERT INTO company "
-                    + "(NAME, LOGOTYPE, ESTABLISHMENT_DATE)"
-                    + "VALUES (?, ?, ?)", generatedColumns);
+            preparedStatement = con.prepareStatement("INSERT INTO companies "
+                    + "(`NAME`, `ESTABLISHMENT_DATE`,"
+                    + " `USERNAME`, `PASSWORD`, `PHONE`, `EMAIL`, `ADDRESS`, `AMOUNT_DUE`,"
+                    + " `ACCOUNT_NUMBER`, `CREDIT_LIMIT`, `CREDIT_BALANCE`, `ACCOUNT_DUE_DATE` )"
+                    + " VALUES (?, ?,"
+                    + "?, ?, ?, ?, ?, ?,"
+                    + "?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
 
             setValues(preparedStatement,
                     company.getName(),
-                    company.getLogotype(),
-                    company.getEstablishment_date());
+                    company.getEstablishment_date(),
+                    company.getUsername(),
+                    company.getPassword(),
+                    company.getPhone(),
+                    company.getEmail(),
+                    company.getAddress(),
+                    company.getAmount_due(),
+                    company.getAccount_number(),
+                    company.getCredit_limit(),
+                    company.getCredit_balance(),
+                    company.getAccount_number());
 
             preparedStatement.executeUpdate();
-            ResultSet res = preparedStatement.getGeneratedKeys();
-            if (res.next()) {
-                int company_id = res.getInt(1);
-                company.setCompany_id(String.valueOf(company_id));
-            }
-            preparedStatement = con.prepareStatement("INSERT INTO company (company_ID) VALUES (?)");
-            setValues(preparedStatement, company.getCompany_id());
-            preparedStatement.executeUpdate();
-
-            String columns[] = {"CUSTOMER_ID", "ACCOUNT_NUMBER"};
-            preparedStatement = con.prepareStatement("INSERT INTO customer "
-                    + "USERNAME, PASSWORD, EMAIL, ADDRESS, AMOUNT_DUE, "
-                    + "ACCOUNT_DUE_DATE, CREDIT_LIMIT, CREDIT_BALANCE"
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)", columns);
-
-            setValues(preparedStatement, company.getUserName(), company.getPassword(),
-                    company.getEmail(), company.getAddress(), company.getAmount_due(),
-                    company.getAccount_due_date(), company.getCredit_limit(),
-                    company.getCredit_balance());
-            preparedStatement.executeUpdate();
-            res = preparedStatement.getGeneratedKeys();
-            if (res.next()) {
-                BigDecimal account_number = res.getBigDecimal("ACCOUNT_NUMBER");
-                company.setAccount_number("GR" + account_number.toString());
-
-                int customer_id = res.getInt("CUSTOMER_ID");
-                company.setCustomer_id(String.valueOf(customer_id));
-
-            }
-            preparedStatement = con.prepareStatement("INSERT INTO customer"
-                    + " (ACCOUNT_NUMBER, CUSTOMER_ID) VALUES (?, ?)");
-            setValues(preparedStatement, company.getAccount_number(),
-                    company.getCustomer_id());
-            preparedStatement.executeUpdate();
-
-
-
+            
         } catch (Exception ex) {
             Logger.getLogger(CompanyDB.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -117,9 +92,9 @@ public class CompanyDB {
         Connection con = null;
         try {
             con = CccDB.getConnection();
-            String del = "DELETE FROM company WHERE COMPANY_ID = ?";
+            String del = "DELETE FROM companies WHERE USERID = ?";
             preparedStatement = con.prepareStatement(del);
-            preparedStatement.setInt(1, Integer.valueOf(company.getCompany_id()));
+            preparedStatement.setInt(1, Integer.valueOf(company.getUserid()));
             preparedStatement.executeUpdate();
         } catch (Exception ex) {
             Logger.getLogger(CompanyDB.class.getName()).log(Level.SEVERE, null, ex);

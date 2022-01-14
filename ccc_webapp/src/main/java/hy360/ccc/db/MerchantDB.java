@@ -9,8 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -58,33 +56,29 @@ public class MerchantDB {
         try{
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement("INSERT INTO merchants "
-                    + "( `LAST_NAME`, `FIRST_NAME`, `SUPPLY`, `GAIN`, `BIRTH_DATE`, `GENDER`,"
-                    + " `USERNAME`, `PASSWORD`, `EMAIL`, `ADDRESS`, `PHONE`, `AMOUNT_DUE`,"
-                    + " `ACCOUNT_NUMBER`, `PURCHASES_TOTAL` )"
-                    + " VALUES (? ,? ,? ,? ,? ,?"
-                    + ", ?, ?, ?, ?, ?, ?"
-                    + ", ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
+                    + "( `FIRST_NAME`, `LAST_NAME`, `BIRTH_DATE`, `GENDER`, `SUPPLY`, `GAIN`, "
+                    + " `PURCHASES_TOTAL`, `USERNAME`, `PASSWORD`, `PHONE`, `EMAIL`, `ADDRESS`, `AMOUNT_DUE`,"
+                    + " `ACCOUNT_NUMBER` )"
+                    + " VALUES (? ,? ,? ,? ,? ,? , ?, ?, ?, ?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
             
             setValues(preparedStatement,
-                    merchant.getUserName(),
+                    merchant.getUsername(),
                     merchant.getPassword(),
+                    merchant.getPhone(),
                     merchant.getEmail(),
                     merchant.getAddress(),
-                    merchant.getPhone(),
                     merchant.getAmount_due(),
                     merchant.getAccount_number(),
                     merchant.getFirst_name(),
                     merchant.getLast_name(),
-                    merchant.getSupply(),
-                    merchant.getGain(),
                     merchant.getBirth_date(),
                     merchant.getGender(),
+                    merchant.getSupply(),
+                    merchant.getGain(),
                     merchant.getPurchases_total());
             
-            
-
-            
-            
+        preparedStatement.executeUpdate();
+        
         }catch(Exception ex){
             Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
@@ -93,15 +87,14 @@ public class MerchantDB {
     
     }
     
-    
     public static void deleteMerchant(Merchant merchant) {
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try{
             con = CccDB.getConnection();
-            String del = "DELETE FROM merchant WHERE USERID = ?";
+            String del = "DELETE FROM merchants WHERE USERID = ?";
             preparedStatement = con.prepareStatement(del);
-            preparedStatement.setInt(1, Integer.valueOf(merchant.getUser_id()));
+            preparedStatement.setInt(1, Integer.valueOf(merchant.getUserid()));
             preparedStatement.executeUpdate();
         }catch(Exception ex){
             Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE,null, ex);

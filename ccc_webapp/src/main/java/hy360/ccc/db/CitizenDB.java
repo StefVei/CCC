@@ -5,10 +5,8 @@
 package hy360.ccc.db;
 
 import hy360.ccc.model.Citizen;
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,7 +43,7 @@ public class CitizenDB {
     public static void addCitizen(Citizen citizen) {
 
         try {
-            citizen.checkFields();
+            //  citizen.checkFields();
         } catch (Exception ex) {
             Logger.getLogger(CitizenDB.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -55,45 +53,36 @@ public class CitizenDB {
         try {
             con = CccDB.getConnection();
 
-            preparedStatement = con.prepareStatement("INSERT INTO citizen "
-                    + "(LAST_NAME, FIRST_NAME, AMKA, VAT, BIRTH_DATE, GENDER "
-                    + "VALUES (?, ?, ?, ?, ?, ?)");
+            preparedStatement = con.prepareStatement("INSERT INTO citizens "
+                    + "( `AMKA`, `VAT`, `FIRST_NAME`, `LAST_NAME`, `BIRTH_DATE`, `GENDER`,"
+                    + " `USERNAME`, `PASSWORD`, `PHONE`, `EMAIL`, `ADDRESS`, `AMOUNT_DUE`,"
+                    + " `ACCOUNT_NUMBER`, `CREDIT_LIMIT`, `CREDIT_BALANCE`, `ACCOUNT_DUE_DATE` )"
+                    + " VALUES (? ,? ,? ,? ,? ,?"
+                    + ", ?, ?, ?, ?, ?, ?"
+                    + ", ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
 
             setValues(preparedStatement,
-                    citizen.getLast_name(),
-                    citizen.getFirst_name(),
+                    
+                    
                     citizen.getAmka(),
                     citizen.getVat(),
+                    citizen.getFirst_name(),
+                    citizen.getLast_name(),
                     citizen.getBirth_date(),
-                    citizen.getGender());
+                    citizen.getGender(),
+                    citizen.getUsername(),
+                    citizen.getPassword(),
+                    citizen.getPhone(),
+                    citizen.getEmail(),
+                    citizen.getAddress(),
+                    citizen.getAmount_due(),
+                    citizen.getAccount_number(),
+                    citizen.getCredit_limit(),
+                    citizen.getCredit_balance(),
+                    citizen.getAccount_due_date());
 
             preparedStatement.executeUpdate();
 
-            String columns[] = {"CUSTOMER_ID", "ACCOUNT_NUMBER"};
-            preparedStatement = con.prepareStatement("INSERT INTO customer "
-                    + "USERNAME, PASSWORD, EMAIL, ADDRESS, AMOUNT_DUE, "
-                    + "ACCOUNT_DUE_DATE, CREDIT_LIMIT, CREDIT_BALANCE"
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)", columns);
-
-            setValues(preparedStatement, citizen.getUserName(), citizen.getPassword(),
-                    citizen.getEmail(), citizen.getAddress(), citizen.getAmount_due(),
-                    citizen.getAccount_due_date(), citizen.getCredit_limit(),
-                    citizen.getCredit_balance());
-            preparedStatement.executeUpdate();
-            ResultSet res = preparedStatement.getGeneratedKeys();
-            if (res.next()) {
-                BigDecimal account_number = res.getBigDecimal("ACCOUNT_NUMBER");
-                citizen.setAccount_number("GR" + account_number.toString());
-
-                int customer_id = res.getInt("CUSTOMER_ID");
-                citizen.setCustomer_id(String.valueOf(customer_id));
-
-            }
-            preparedStatement = con.prepareStatement("INSERT INTO customer"
-                    + " (ACCOUNT_NUMBER, CUSTOMER_ID) VALUES (?, ?)");
-            setValues(preparedStatement, citizen.getAccount_number(),
-                    citizen.getCustomer_id());
-            preparedStatement.executeUpdate();
 
         } catch (Exception ex) {
             Logger.getLogger(CitizenDB.class.getName()).log(Level.SEVERE, null, ex);
@@ -108,9 +97,9 @@ public class CitizenDB {
         Connection con = null;
         try {
             con = CccDB.getConnection();
-            String del = "DELETE FROM citizen WHERE AMKA = ?";
+            String del = "DELETE FROM citizens WHERE USERID = ?";
             preparedStatement = con.prepareStatement(del);
-            preparedStatement.setInt(1, Integer.valueOf(citizen.getAmka()));
+            preparedStatement.setInt(1, Integer.valueOf(citizen.getUserid()));
             preparedStatement.executeUpdate();
         } catch (Exception ex) {
             Logger.getLogger(CitizenDB.class.getName()).log(Level.SEVERE, null, ex);
