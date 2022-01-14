@@ -8,6 +8,9 @@ import Utils_db.UtilitiesDB;
 import hy360.ccc.model.Transaction;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -63,7 +66,7 @@ public class TransactionDB {
         
     }
 
-    public void completeTransaction(Transaction transaction) {
+    public static void updateTransaction(Transaction transaction) {
 
         PreparedStatement preparedStatement = null;
         Connection con = null;
@@ -75,7 +78,7 @@ public class TransactionDB {
                     + "SET TRANSACTION_TYPE = ?, SET AMOUNT = ?, SET DATE = ?, SET CITIZEN_USERID = ? "
                     + ", SET MERCHANT_TRADE = ?"
                     : "SET PAY_TYPE = ?, "
-                    + "SET TRANSACTION_TYPE = ?, SET AMOUNT = ?, SET DATE = ?, SET EMPLOYEE_ID = ? "
+                    + "SET TRANSACTION_TYPE = ?, SET AMOUNT = ?, SET DATE = ?, SET transaction_ID = ? "
                     + ", SET COMPANY_USERID = ?, MERCHANT_TRAFFIC";
             String insert_sql = "UPDATE transactions" + quer_part
                     + "TRANSACTION_ID = ?";
@@ -90,7 +93,7 @@ public class TransactionDB {
             } else {
                 UtilitiesDB.setValues(preparedStatement, transaction.getPay_type(),
                         transaction.getTransaction_type(), transaction.getAmount(),
-                        transaction.getDate(), transaction.getEmployee_id(),
+                        transaction.getDate(), transaction.getTransaction_id(),
                         transaction.getCompany_id(),
                         transaction.getMerchant_comp_id(), transaction.getTransaction_id());
 
@@ -104,6 +107,51 @@ public class TransactionDB {
             UtilitiesDB.closeConnection(preparedStatement, con, TransactionDB.class.getName());
         }
 
+    }
+
+    public static Transaction getTransactions(List<String> query_part, String query_type) {
+        List<Transaction> transactions = new ArrayList<>();
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+        try {
+            String sqlGetTransactions;
+            if (query_type == "timeline") {
+                sqlGetTransactions = "SELECT * FROM transactions T"
+                        + "WHERE T.date >= " + query_part.get(0)
+                        + " AND T.date <= " + query_part.get(1);
+
+            } else {
+                sqlGetTransactions = "SELECT * FROM transactions T"
+                        + "WHERE transaction_ID in (" + query_part.toString() + ")";
+            }
+            con = CccDB.getConnection();
+            preparedStatement = con.prepareStatement(sqlGetTransactions);
+            preparedStatement.executeQuery();
+            ResultSet res = preparedStatement.getResultSet();
+
+            while (res.next() == true) {
+                Transaction transaction = new Transaction();
+                transaction.setTransaction_id(res.getString("TRANSCTION_ID"));
+                transaction.setDate(res.getString("DATE"));
+                transaction.setPay_type(res.getString("PAY_TYPE"));
+                transaction.setAmount(res.getString("AMOUNT"));
+                transaction.setTransaction_type(res.getString("TRANSACTION_TYPE"));
+                transaction.setCitizen_id(res.getString("CITIZEN_USERID"));
+                transaction.setCompany_id(res.getString("COMPANY_USERID"));
+                transaction.setMerchant_cit_id(res.getString("MERCHANT_TRADE"));
+                transaction.setMerchant_comp_id(res.getString("MERCHANT_TRAFFIC"));
+                transaction.setEmployee_id(res.getString("EMPLOYEE_ID"));
+
+                transactions.add(transaction);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(TransactionDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, TransactionDB.class.getName());
+        }
+
+        return null;
     }
     
 }
