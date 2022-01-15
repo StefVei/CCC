@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Εξυπηρετητής: 127.0.0.1
--- Χρόνος δημιουργίας: 30 Δεκ 2021 στις 17:20:45
+-- Χρόνος δημιουργίας: 14 Ιαν 2022 στις 04:51:56
 -- Έκδοση διακομιστή: 10.4.22-MariaDB
 -- Έκδοση PHP: 8.1.1
 
@@ -18,459 +18,473 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Βάση δεδομένων: `ccc_version1`
+-- Βάση δεδομένων: `mydatabase`
 --
+
+DELIMITER $$
+--
+-- Διαδικασίες
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_product` (IN `name` VARCHAR(20), IN `price` DOUBLE, IN `proquan` INT(10), IN `merid` INT(10))  BEGIN
+DECLARE msup double DEFAULT 0;
+INSERT INTO products VALUES(NULL, name, price, proquan, merid);
+SELECT SUPPLY INTO msup FROM merchants WHERE USERID = merid;
+UPDATE merchants SET SUPPLY = (msup + 0.01) WHERE USERID = merid;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `citizenPurchase` (IN `citid` INT(10), IN `proid` INT(10), IN `merid` INT(10), IN `totalp` INT(10))  BEGIN
+DECLARE cbalance double DEFAULT 0;
+DECLARE proprice double DEFAULT 0;
+DECLARE proquan int(10) DEFAULT 0;
+DECLARE mergain double DEFAULT 0;
+DECLARE mersupp double DEFAULT 0;
+DECLARE mertotal int(10) DEFAULT 0;
+
+
+SELECT PRICE, QUANTITY INTO proprice, proquan FROM products WHERE (PRODUCT_ID = proid AND MERCHANT_USERID = merid);
+
+SELECT CREDIT_BALANCE INTO cbalance FROM citizens WHERE USERID = citid;
+	
+IF (proprice*totalp) < cbalance THEN
+
+UPDATE products SET QUANTITY = (proquan-totalp) WHERE (PRODUCT_ID = proid AND MERCHANT_USERID = merid);
+
+UPDATE citizens SET AMOUNT_DUE = (proprice*totalp) WHERE USERID = citid;
+UPDATE citizens SET CREDIT_BALANCE = (cbalance - (proprice*totalp)) WHERE USERID = citid;
+
+UPDATE merchants SET GAIN = (proprice*totalp) WHERE USERID = merid;
+SELECT GAIN, SUPPLY, PURCHASES_TOTAL INTO mergain, mersupp, mertotal FROM merchants WHERE USERID = merid;
+UPDATE merchants SET AMOUNT_DUE = (mergain*mersupp) WHERE USERID = merid;
+UPDATE merchants SET PURCHASES_TOTAL = (mertotal+1) WHERE USERID = merid;
+
+INSERT INTO transactions VALUES(NULL, DEFAULT, DEFAULT, (proprice*totalp), curdate(), citid, merid, DEFAULT, DEFAULT, DEFAULT);
+
+INSERT INTO bought_products VALUES (LAST_INSERT_ID(), proid, merid, totalp);
+
+INSERT INTO cm_trades VALUES(citid, merid);
+END IF;	
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `citizen_insert` (IN `amka` VARCHAR(11), IN `vat` VARCHAR(9), IN `fname` VARCHAR(20), IN `lname` VARCHAR(20), IN `birth` DATE, IN `gen` CHAR(1), IN `usern` VARCHAR(20), IN `pwd` VARCHAR(20), IN `em` VARCHAR(50), IN `addr` VARCHAR(50), IN `pnumber` VARCHAR(10), IN `acnumber` VARCHAR(27), IN `acdate` DATE)  BEGIN
+INSERT INTO citizens VALUES(NULL, amka, vat, fname, lname, birth, gen, usern, pwd, em, addr, pnumber, DEFAULT, acnumber, DEFAULT, DEFAULT, acdate);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `company_insert` (IN `name` VARCHAR(20), IN `estdate` DATE, IN `usern` VARCHAR(20), IN `pwd` VARCHAR(20), IN `em` VARCHAR(50), IN `addr` VARCHAR(50), IN `pnumber` VARCHAR(10), IN `acdate` DATE, IN `acnumber` VARCHAR(27))  BEGIN
+INSERT INTO companies VALUES(NULL, name, estdate, usern, pwd, em, addr, pnumber, DEFAULT, DEFAULT, DEFAULT, acDate, acNumber);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_citizen` (IN `ciid` INT(10))  BEGIN
+DELETE FROM citizens WHERE USERID = ciid AND AMOUNT_DUE = 0;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_company` (IN `coid` INT(10))  BEGIN
+DELETE FROM companies WHERE USERID = coid AND AMOUNT_DUE = 0;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_merchant` (IN `merid` INT(10))  BEGIN
+DELETE FROM merchants WHERE USERID = merid AND AMOUNT_DUE = 0;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `employee_insert` (IN `fname` VARCHAR(20), IN `lname` VARCHAR(20), IN `birth` DATE, IN `gen` CHAR(1), IN `em` VARCHAR(50), IN `addr` VARCHAR(50), IN `pnumber` VARCHAR(10), IN `comid` INT(10))  BEGIN
+DECLARE Climit double DEFAULT 0;
+INSERT INTO employees VALUES(NULL, fname, lname, birth, gen, em, addr, pnumber, comid);
+SELECT CREDIT_LIMIT INTO Climit FROM companies WHERE USERID = comid;
+UPDATE companies SET CREDIT_LIMIT = (Climit + 500) WHERE USERID = comid;
+UPDATE companies SET CREDIT_BALANCE = (Climit + 500) WHERE USERID = comid;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `merchant_insert` (IN `fname` VARCHAR(20), IN `lname` VARCHAR(20), IN `birth` DATE, IN `gen` CHAR(1), IN `usern` VARCHAR(20), IN `pwd` VARCHAR(20), IN `em` VARCHAR(50), IN `addr` VARCHAR(50), IN `pnumber` VARCHAR(10), IN `acnumber` VARCHAR(27))  BEGIN
+INSERT INTO merchants VALUES(NULL, fname, lname, birth, gen, DEFAULT, DEFAULT, DEFAULT, usern, pwd, em, addr, pnumber, DEFAULT, acNumber);
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
 --
--- Δομή πίνακα για τον πίνακα `bought_product`
+-- Δομή πίνακα για τον πίνακα `bought_products`
 --
 
-CREATE TABLE `bought_product` (
+CREATE TABLE `bought_products` (
   `TRANSACTION_ID` int(10) NOT NULL,
-  `PRODUCT_ID` int(10) NOT NULL
+  `PRODUCT_ID` int(10) NOT NULL,
+  `MERCHANT_USERID` int(10) NOT NULL,
+  `TOTAL` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Άδειασμα δεδομένων του πίνακα `bought_product`
---
-
-INSERT INTO `bought_product` (`TRANSACTION_ID`, `PRODUCT_ID`) VALUES
-(5111, 4111),
-(5222, 4222),
-(5333, 4333),
-(5444, 4444),
-(5555, 4555);
 
 -- --------------------------------------------------------
 
 --
--- Δομή πίνακα για τον πίνακα `cm_transactions`
+-- Δομή πίνακα για τον πίνακα `citizens`
 --
 
-CREATE TABLE `cm_transactions` (
-  `CUSTOMER_ID` int(10) NOT NULL,
-  `MERCHANT_ID` int(10) NOT NULL,
-  `TRANSACTION` int(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Άδειασμα δεδομένων του πίνακα `cm_transactions`
---
-
-INSERT INTO `cm_transactions` (`CUSTOMER_ID`, `MERCHANT_ID`, `TRANSACTION`) VALUES
-(1222, 3111, 5111),
-(1555, 3222, 5222),
-(1555, 3333, 5333),
-(1444, 3555, 5333),
-(1222, 3444, 5222);
-
--- --------------------------------------------------------
-
---
--- Δομή πίνακα για τον πίνακα `company`
---
-
-CREATE TABLE `company` (
-  `COMPANY_ID` int(10) NOT NULL,
-  `NAME` varchar(100) NOT NULL,
-  `ESTABLISHMENT_DATE` date NOT NULL,
-  `CUSTOMER_ID` int(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Άδειασμα δεδομένων του πίνακα `company`
---
-
-INSERT INTO `company` (`COMPANY_ID`, `NAME`, `ESTABLISHMENT_DATE`, `CUSTOMER_ID`) VALUES
-(2111, 'Epignosis', '2011-09-21', 1111),
-(2222, 'Stonewave', '2018-09-21', 1222),
-(2333, 'Petas', '2009-09-21', 1333),
-(2444, 'Oikoses', '2004-09-21', 1444),
-(2555, 'Deloitte', '2007-09-21', 1555);
-
--- --------------------------------------------------------
-
---
--- Δομή πίνακα για τον πίνακα `customer`
---
-
-CREATE TABLE `customer` (
-  `CUSTOMER_ID` int(10) NOT NULL,
-  `USERNAME` varchar(100) NOT NULL,
-  `PASSWORD` varchar(100) NOT NULL,
-  `EMAIL` varchar(200) NOT NULL,
-  `ADDRESS` varchar(200) NOT NULL,
-  `AMOUNT_DUE` double NOT NULL,
-  `ACCOUNT_DUE_DATE` date NOT NULL,
-  `CREDIT_LIMIT` double NOT NULL,
-  `CREDIT_BALANCE` double NOT NULL,
-  `ACCOUNT_NUMBER` varchar(27) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Άδειασμα δεδομένων του πίνακα `customer`
---
-
-INSERT INTO `customer` (`CUSTOMER_ID`, `USERNAME`, `PASSWORD`, `EMAIL`, `ADDRESS`, `AMOUNT_DUE`, `ACCOUNT_DUE_DATE`, `CREDIT_LIMIT`, `CREDIT_BALANCE`, `ACCOUNT_NUMBER`) VALUES
-(1111, 'Nazgul', 'wlcoding3440', 'savas@example.com', '(909) 982-4314 1534 Columbine Way Upland, California(CA), 91786', 0, '2011-11-07', 1000, 1000, 'GR11111111111122222222222XG'),
-(1222, 'Mikkel', 'wlcoding3550', 'spirar@example.com', '(704) 938-1676 901 Oakwood Ave Kannapolis, North Carolina(NC), 28081', 10, '2014-03-31', 1000, 1000, 'GR33333333333344444444444XG'),
-(1333, 'ZaFiR', 'wlcoding3660', 'epignosis@example.com', '(260) 768-7181 7280 W 350th N Shipshewana, Indiana(IN), 46565', 20, '2010-11-09', 1000, 1000, 'GR55555555555566666666666XG'),
-(1444, 'Tsounis', 'wlcoding3770', 'stonewave@example.com', '(360) 757-0799 7727 Ershig Rd Bow, Washington(WA), 98232', 30, '2021-12-06', 1000, 1000, 'GR77777777777788888888888XG'),
-(1555, 'RussheX', 'wlcoding3880', 'celina@example.com', '(513) 398-1549 776 Indianwood Dr Mason, Ohio(OH), 45040', 40, '2004-11-07', 1000, 1000, 'GR99999999999900000000000XG');
-
--- --------------------------------------------------------
-
---
--- Δομή πίνακα για τον πίνακα `customer_phone`
---
-
-CREATE TABLE `customer_phone` (
-  `CUSTOMER_ID` int(10) NOT NULL,
-  `PHONE_NUMBER` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Άδειασμα δεδομένων του πίνακα `customer_phone`
---
-
-INSERT INTO `customer_phone` (`CUSTOMER_ID`, `PHONE_NUMBER`) VALUES
-(1111, '6972221111'),
-(1222, '6972222222'),
-(1333, '6972223333'),
-(1333, '6972227777'),
-(1444, '6972224444'),
-(1555, '6972225555');
-
--- --------------------------------------------------------
-
---
--- Δομή πίνακα για τον πίνακα `employee`
---
-
-CREATE TABLE `employee` (
-  `EMPLOYEE_ID` int(10) NOT NULL,
-  `FIRST_NAME` varchar(100) NOT NULL,
-  `LAST_NAME` varchar(100) NOT NULL,
-  `BIRTH_DATE` date NOT NULL,
-  `GENDER` char(1) NOT NULL,
-  `ADDRESS` varchar(200) NOT NULL,
-  `EMAIL` varchar(200) NOT NULL,
-  `COMPANY_ID` int(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Άδειασμα δεδομένων του πίνακα `employee`
---
-
-INSERT INTO `employee` (`EMPLOYEE_ID`, `FIRST_NAME`, `LAST_NAME`, `BIRTH_DATE`, `GENDER`, `ADDRESS`, `EMAIL`, `COMPANY_ID`) VALUES
-(6111, 'Mahesh', 'Pegasus', '2011-11-30', 'M', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(VA), 22503', 'mahesh@example.com', 2111),
-(6222, 'Anna', 'Dervilla', '2001-11-30', 'F', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(VA), 22503', 'anna@example.com', 2111),
-(6333, 'Helena', 'Bart', '2006-11-30', 'F', '(319) 883-3563 429 W Donald St Waterloo, Iowa(IA), 50703', 'helena@example.com', 2222),
-(6444, 'Pedro', 'Lema', '2004-11-30', 'M', '(661) 670-9845 24602 Town Center Dr Valencia, California(CA), 91355', 'pedro@example.com', 2333),
-(6555, 'Vigga', 'Stegga', '2007-11-30', 'F', '(541) 459-4502 232 Riverwood Ln Oakland, Oregon(OR), 97462', 'vigga@example.com', 2555);
-
--- --------------------------------------------------------
-
---
--- Δομή πίνακα για τον πίνακα `employee_phone`
---
-
-CREATE TABLE `employee_phone` (
-  `EMPLOYEE_ID` int(10) NOT NULL,
-  `PHONE_NUMBER` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Άδειασμα δεδομένων του πίνακα `employee_phone`
---
-
-INSERT INTO `employee_phone` (`EMPLOYEE_ID`, `PHONE_NUMBER`) VALUES
-(6111, '6976660000'),
-(6111, '6976661111'),
-(6222, '6976662222'),
-(6333, '6976663333'),
-(6444, '6976664444'),
-(6555, '6976665555');
-
--- --------------------------------------------------------
-
---
--- Δομή πίνακα για τον πίνακα `merchant`
---
-
-CREATE TABLE `merchant` (
-  `MERCHANT_ID` int(10) NOT NULL,
-  `FIRST_NAME` varchar(100) NOT NULL,
-  `LAST_NAME` varchar(100) NOT NULL,
-  `SUPPLY` double NOT NULL,
-  `GAIN` double NOT NULL,
-  `ADDRESS` varchar(200) NOT NULL,
-  `EMAIL` varchar(200) NOT NULL,
-  `USERNAME` varchar(100) NOT NULL,
-  `PASSWORD` varchar(100) NOT NULL,
-  `AMOUNT_DUE` double NOT NULL,
-  `ACCOUNT_NUMBER` varchar(27) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Άδειασμα δεδομένων του πίνακα `merchant`
---
-
-INSERT INTO `merchant` (`MERCHANT_ID`, `FIRST_NAME`, `LAST_NAME`, `SUPPLY`, `GAIN`, `ADDRESS`, `EMAIL`, `USERNAME`, `PASSWORD`, `AMOUNT_DUE`, `ACCOUNT_NUMBER`) VALUES
-(3111, 'Jenny', 'Luitger', 0, 0, '(701) 594-8249 2733 New Jersey St #B Grand Forks Afb, North Dakota(ND), 58204', 'jenny@example.com', 'j3nn1', 'wlcoding3110', 0, 'GR11111111111122222222222CG'),
-(3222, 'Tihana', 'Bret', 0, 0, '(701) 594-8249 2733 New Jersey St #B Grand Forks Afb, North Dakota(ND), 58204', 'tihana@example.com', 't1h4n4', 'wlcoding3220', 0, 'GR11111111111133333333333CG'),
-(3333, 'Wilma', 'Lorenza', 0, 0, '757) 410-2495 717 Sea Pines Run Chesapeake, Virginia(VA), 23320', 'wilma@example.com', 'w1lm4', 'wlcoding3330', 0, 'GR11111111111144444444444CG'),
-(3444, 'Roman', 'Erna', 0, 0, '(973) 838-0558 143 S Glen Rd Butler, New Jersey(NJ), 07405', 'roman@example.com', 'r0m4n', 'wlcoding3000', 0, 'GR11111111111155555555555CG'),
-(3555, 'Ligia', 'Zara', 0, 0, '(561) 483-4884 2900 NW 32nd St Boca Raton, Florida(FL), 33434', 'ligia@example.com', 'l1g1a', 'wlcoding4110', 0, 'GR11111111111166666666666CG');
-
--- --------------------------------------------------------
-
---
--- Δομή πίνακα για τον πίνακα `merchant_phone`
---
-
-CREATE TABLE `merchant_phone` (
-  `MERCHANT_ID` int(10) NOT NULL,
-  `PHONE_NUMBER` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Άδειασμα δεδομένων του πίνακα `merchant_phone`
---
-
-INSERT INTO `merchant_phone` (`MERCHANT_ID`, `PHONE_NUMBER`) VALUES
-(3111, '6973331111'),
-(3222, '6973332222'),
-(3333, '6973333333'),
-(3444, '6973334444'),
-(3555, '6973335555'),
-(3555, '6973337777');
-
--- --------------------------------------------------------
-
---
--- Δομή πίνακα για τον πίνακα `private_citizen`
---
-
-CREATE TABLE `private_citizen` (
+CREATE TABLE `citizens` (
+  `USERID` int(10) NOT NULL,
   `AMKA` varchar(11) NOT NULL,
   `VAT` varchar(9) NOT NULL,
-  `FIRST_NAME` varchar(100) NOT NULL,
-  `LAST_NAME` varchar(100) NOT NULL,
+  `FIRST_NAME` varchar(20) NOT NULL,
+  `LAST_NAME` varchar(20) NOT NULL,
+  `BIRTH_DATE` date NOT NULL,
+  `GENDER` char(1) NOT NULL DEFAULT 'O',
+  `USERNAME` varchar(20) NOT NULL,
+  `PASSWORD` varchar(20) NOT NULL,
+  `EMAIL` varchar(50) NOT NULL,
+  `ADDRESS` varchar(50) NOT NULL,
+  `PHONE` varchar(10) NOT NULL,
+  `AMOUNT_DUE` double NOT NULL DEFAULT 0,
+  `ACCOUNT_NUMBER` varchar(27) NOT NULL,
+  `CREDIT_LIMIT` double NOT NULL DEFAULT 1000,
+  `CREDIT_BALANCE` double NOT NULL DEFAULT 1000,
+  `ACCOUNT_DUE_DATE` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Άδειασμα δεδομένων του πίνακα `citizens`
+--
+
+INSERT INTO `citizens` (`USERID`, `AMKA`, `VAT`, `FIRST_NAME`, `LAST_NAME`, `BIRTH_DATE`, `GENDER`, `USERNAME`, `PASSWORD`, `EMAIL`, `ADDRESS`, `PHONE`, `AMOUNT_DUE`, `ACCOUNT_NUMBER`, `CREDIT_LIMIT`, `CREDIT_BALANCE`, `ACCOUNT_DUE_DATE`) VALUES
+(1, '11111111111', '111111111', 'George', 'Katsa', '1999-03-31', 'M', 'geoka', 'geoka3440', 'geoka@example.com', 'georgiou papandreou, Archagelos rhodes 851 02', '2273011111', 0, 'GR0101010101010101010101010', 1000, 1000, '2025-09-09'),
+(2, '22222222222', '222222222', 'Selina', 'Moon', '1999-03-31', 'F', 'selmo', 'selmo3440', 'selmo@example.com', 'georgiou papandreou, Archagelos rhodes 851 02', '2273022222', 0, 'GR0202020202020202020202020', 1000, 1000, '2025-09-09'),
+(3, '33333333333', '333333333', 'Victor', 'Xalm', '1999-03-31', 'M', 'vixa', 'vixa3440', 'vixa@example.com', 'georgiou papandreou, Archagelos rhodes 851 02', '2273033333', 0, 'GR0303030303030303030303030', 1000, 1000, '2025-09-09'),
+(4, '44444444444', '444444444', 'Beth', 'Harmon', '1999-03-31', 'F', 'beha', 'beha3440', 'beha@example.com', 'georgiou papandreou, Archagelos rhodes 851 02', '2273044444', 0, 'GR0404040404040404040404040', 1000, 1000, '2025-09-09'),
+(5, '55555555555', '555555555', 'Benny', 'Watts', '1999-03-31', 'M', 'bewa', 'bewa3440', 'bewa@example.com', 'georgiou papandreou, Archagelos rhodes 851 02', '2273055555', 0, 'GR0505050505050505050505050', 1000, 1000, '2025-09-09');
+
+-- --------------------------------------------------------
+
+--
+-- Δομή πίνακα για τον πίνακα `cm_trades`
+--
+
+CREATE TABLE `cm_trades` (
+  `CITIZEN_USERID` int(10) NOT NULL,
+  `MERCHANT_USERID` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Δομή πίνακα για τον πίνακα `cm_traffics`
+--
+
+CREATE TABLE `cm_traffics` (
+  `EMPLOYEE_ID` int(10) NOT NULL,
+  `COMPANY_USERID` int(10) NOT NULL,
+  `MERCHANT_USERID` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Δομή πίνακα για τον πίνακα `companies`
+--
+
+CREATE TABLE `companies` (
+  `USERID` int(10) NOT NULL,
+  `NAME` varchar(20) NOT NULL,
+  `ESTABLISHMENT_DATE` date NOT NULL,
+  `USERNAME` varchar(20) NOT NULL,
+  `PASSWORD` varchar(20) NOT NULL,
+  `EMAIL` varchar(50) NOT NULL,
+  `ADDRESS` varchar(50) NOT NULL,
+  `PHONE` varchar(10) NOT NULL,
+  `AMOUNT_DUE` double NOT NULL DEFAULT 0,
+  `CREDIT_LIMIT` double NOT NULL DEFAULT 1000,
+  `CREDIT_BALANCE` double NOT NULL DEFAULT 1000,
+  `ACCOUNT_DUE_DATE` date NOT NULL,
+  `ACCOUNT_NUMBER` varchar(27) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Άδειασμα δεδομένων του πίνακα `companies`
+--
+
+INSERT INTO `companies` (`USERID`, `NAME`, `ESTABLISHMENT_DATE`, `USERNAME`, `PASSWORD`, `EMAIL`, `ADDRESS`, `PHONE`, `AMOUNT_DUE`, `CREDIT_LIMIT`, `CREDIT_BALANCE`, `ACCOUNT_DUE_DATE`, `ACCOUNT_NUMBER`) VALUES
+(1, 'Epignosis', '2003-03-03', 'epi', 'epi3440', 'epi@example.com', '160 Piccadilly, St. James\'s, London W1J 9EB, Unite', '2810111111', 0, 2000, 2000, '2025-09-09', 'BR0101010101010101010101010'),
+(2, 'Stonewave', '1999-03-20', 'stone', 'stone3440', 'stone@example.com', '160 Piccadilly, St. James\'s, London W1J 9EB, Unite', '2810222222', 0, 1500, 1500, '2025-09-09', 'BR0202020202020202020202020'),
+(3, 'OTE', '2008-03-20', 'ote', 'ote3440', 'ote@example.com', '160 Piccadilly, St. James\'s, London W1J 9EB, Unite', '2810333333', 0, 1500, 1500, '2025-09-09', 'BR0303030303030303030303030'),
+(4, 'CSD', '2004-03-20', 'csd', 'csd3440', 'csd@example.com', '160 Piccadilly, St. James\'s, London W1J 9EB, Unite', '2810444444', 0, 1500, 1500, '2025-09-09', 'BR0404040404040404040404040'),
+(5, 'Alphabank', '1990-03-20', 'alpha', 'alpha3440', 'alpha@example.com', '160 Piccadilly, St. James\'s, London W1J 9EB, Unite', '2810555555', 0, 1500, 1500, '2025-09-09', 'BR0505050505050505050505050');
+
+-- --------------------------------------------------------
+
+--
+-- Δομή πίνακα για τον πίνακα `employees`
+--
+
+CREATE TABLE `employees` (
+  `EMPLOYEE_ID` int(10) NOT NULL,
+  `FIRST_NAME` varchar(20) NOT NULL,
+  `LAST_NAME` varchar(20) NOT NULL,
+  `BIRTH_DATE` date NOT NULL,
+  `GENDER` char(1) NOT NULL DEFAULT 'O',
+  `EMAIL` varchar(50) NOT NULL,
+  `ADDRESS` varchar(50) NOT NULL,
+  `PHONE` varchar(10) NOT NULL,
+  `COMPANY_USERID` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Άδειασμα δεδομένων του πίνακα `employees`
+--
+
+INSERT INTO `employees` (`EMPLOYEE_ID`, `FIRST_NAME`, `LAST_NAME`, `BIRTH_DATE`, `GENDER`, `EMAIL`, `ADDRESS`, `PHONE`, `COMPANY_USERID`) VALUES
+(1, 'Mahesh', 'Pegasus', '2011-11-30', 'M', 'mape@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2101111111', 1),
+(3, 'Anna', 'Derilla', '2001-11-30', 'F', 'ande@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2102222222', 1),
+(4, 'Helena', 'Burt', '1996-03-31', 'F', 'hebu@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2103333333', 2),
+(5, 'Pedro', 'Lema', '2004-11-01', 'O', 'pele@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2104444444', 3),
+(6, 'Vigga', 'Stegga', '2001-09-13', 'O', 'viste@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2105555555', 4),
+(7, 'Wilma', 'Lorenza', '2003-09-14', 'F', 'wilo@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2106666666', 5);
+
+-- --------------------------------------------------------
+
+--
+-- Δομή πίνακα για τον πίνακα `merchants`
+--
+
+CREATE TABLE `merchants` (
+  `USERID` int(10) NOT NULL,
+  `FIRST_NAME` varchar(20) NOT NULL,
+  `LAST_NAME` varchar(20) NOT NULL,
   `BIRTH_DATE` date NOT NULL,
   `GENDER` char(1) NOT NULL,
-  `CUSTOMER_ID` int(10) NOT NULL
+  `SUPPLY` double NOT NULL DEFAULT 0.15,
+  `GAIN` double NOT NULL DEFAULT 0,
+  `PURCHASES_TOTAL` int(10) NOT NULL DEFAULT 0,
+  `USERNAME` varchar(20) NOT NULL,
+  `PASSWORD` varchar(20) NOT NULL,
+  `EMAIL` varchar(50) NOT NULL,
+  `ADDRESS` varchar(50) NOT NULL,
+  `PHONE` varchar(10) NOT NULL,
+  `AMOUNT_DUE` double NOT NULL DEFAULT 0,
+  `ACCOUNT_NUMBER` varchar(27) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Άδειασμα δεδομένων του πίνακα `private_citizen`
+-- Άδειασμα δεδομένων του πίνακα `merchants`
 --
 
-INSERT INTO `private_citizen` (`AMKA`, `VAT`, `FIRST_NAME`, `LAST_NAME`, `BIRTH_DATE`, `GENDER`, `CUSTOMER_ID`) VALUES
-('11111111111', '122222222', 'Arthur', 'Zela', '2011-11-23', 'M', 1111),
-('22222222222', '133333333', 'Melina', 'Zayne', '2009-11-23', 'F', 1222),
-('33333333333', '155555555', 'Jacob', 'Miles', '2003-11-23', 'M', 1333),
-('44444444444', '100000000', 'Ali', 'Coco', '2004-11-23', 'M', 1444),
-('55555555555', '144444444', 'Selina', 'Feri', '2005-11-23', 'F', 1555);
+INSERT INTO `merchants` (`USERID`, `FIRST_NAME`, `LAST_NAME`, `BIRTH_DATE`, `GENDER`, `SUPPLY`, `GAIN`, `PURCHASES_TOTAL`, `USERNAME`, `PASSWORD`, `EMAIL`, `ADDRESS`, `PHONE`, `AMOUNT_DUE`, `ACCOUNT_NUMBER`) VALUES
+(1, 'Lydia', 'Xamm', '2006-03-31', 'O', 0.17, 0, 0, 'lyxa', 'lyxa3440', 'lyxa@example.com', '30 Berkeley St, London W1J 8EH, United Kingdom', '6972231111', 0, 'GB0101010101010101010101010'),
+(2, 'Stephen', 'Taylor', '2006-10-09', 'M', 0.16, 0, 0, 'steta', 'steta3440', 'steta@example.com', '30 Berkeley St, London W1J 8EH, United Kingdom', '6972232222', 0, 'GB0202020202020202020202020'),
+(3, 'Zinos', 'Koukou', '1999-03-31', 'M', 0.16, 0, 0, 'zikou', 'Zikou3440', 'zikou@example.com', '30 Berkeley St, London W1J 8EH, United Kingdom', '6972233333', 0, 'GB0303030303030303030303030'),
+(4, 'Diva', 'Stodio', '1998-03-07', 'F', 0.16, 0, 0, 'disto', 'disto3440', 'disto@example.com', '30 Berkeley St, London W1J 8EH, United Kingdom', '6972234444', 0, 'GB0404040404040404040404040'),
+(5, 'Spiros', 'Tridos', '2004-03-07', 'M', 0.17, 0, 0, 'spitri', 'spitri3440', 'spitri@example.com', '30 Berkeley St, London W1J 8EH, United Kingdom', '6972235555', 0, 'GB0505050505050505050505050');
 
 -- --------------------------------------------------------
 
 --
--- Δομή πίνακα για τον πίνακα `product`
+-- Δομή πίνακα για τον πίνακα `products`
 --
 
-CREATE TABLE `product` (
+CREATE TABLE `products` (
   `PRODUCT_ID` int(10) NOT NULL,
-  `NAME` varchar(100) NOT NULL,
+  `NAME` varchar(20) NOT NULL,
   `PRICE` double NOT NULL,
-  `MERCHANT_ID` int(10) NOT NULL
+  `QUANTITY` int(10) NOT NULL DEFAULT 0,
+  `MERCHANT_USERID` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Άδειασμα δεδομένων του πίνακα `product`
+-- Άδειασμα δεδομένων του πίνακα `products`
 --
 
-INSERT INTO `product` (`PRODUCT_ID`, `NAME`, `PRICE`, `MERCHANT_ID`) VALUES
-(4111, 'PC Games', 240.6, 3111),
-(4222, 'PC Gadgets', 360.6, 3222),
-(4333, 'PC Desktops ', 1240.6, 3333),
-(4444, 'PC Laptops', 640.6, 3444),
-(4555, 'PC Antivirus', 40.6, 3555),
-(4666, 'Movies', 20.6, 3111);
+INSERT INTO `products` (`PRODUCT_ID`, `NAME`, `PRICE`, `QUANTITY`, `MERCHANT_USERID`) VALUES
+(1, 'PC Antivirus', 30.5, 20, 1),
+(3, 'PC Games', 360.5, 210, 1),
+(4, 'PC Gadgets', 240.5, 50, 2),
+(5, 'PC Monitor', 120.5, 40, 3),
+(6, 'Laptops', 650.99, 140, 4),
+(7, 'Movies', 10.5, 297, 5),
+(8, 'PC Desktops', 1249.99, 34, 5);
 
 -- --------------------------------------------------------
 
 --
--- Δομή πίνακα για τον πίνακα `transaction`
+-- Δομή πίνακα για τον πίνακα `transactions`
 --
 
-CREATE TABLE `transaction` (
+CREATE TABLE `transactions` (
   `TRANSACTION_ID` int(10) NOT NULL,
-  `PAY_TYPE` char(1) NOT NULL,
-  `TRANSACTION_TYPE` char(1) NOT NULL,
-  `AMOUNT` double NOT NULL,
-  `DATE` datetime NOT NULL
+  `PENDING` char(1) NOT NULL DEFAULT 'T',
+  `TRANSACTION_TYPE` char(1) NOT NULL DEFAULT 'A',
+  `AMOUNT` double NOT NULL DEFAULT 0,
+  `DATE` date NOT NULL,
+  `CITIZEN_USERID` int(10) DEFAULT NULL,
+  `MERCHANT_TRADE` int(10) DEFAULT NULL,
+  `EMPLOYEE_ID` int(10) DEFAULT NULL,
+  `COMPANY_USERID` int(10) DEFAULT NULL,
+  `MERCHANT_TRAFFIC` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Άδειασμα δεδομένων του πίνακα `transaction`
---
-
-INSERT INTO `transaction` (`TRANSACTION_ID`, `PAY_TYPE`, `TRANSACTION_TYPE`, `AMOUNT`, `DATE`) VALUES
-(5111, 'C', '', 103.7, '2013-10-08 05:59:36'),
-(5222, 'C', '', 103.7, '2013-01-08 05:59:36'),
-(5333, 'D', '', 3.7, '2010-12-08 05:59:36'),
-(5444, 'C', '', 10.7, '2019-11-08 05:59:36'),
-(5555, 'D', '', 153.7, '2020-01-08 05:59:36');
 
 --
 -- Ευρετήρια για άχρηστους πίνακες
 --
 
 --
--- Ευρετήρια για πίνακα `bought_product`
+-- Ευρετήρια για πίνακα `bought_products`
 --
-ALTER TABLE `bought_product`
-  ADD UNIQUE KEY `TRANSACTION_ID` (`TRANSACTION_ID`);
+ALTER TABLE `bought_products`
+  ADD PRIMARY KEY (`TRANSACTION_ID`,`PRODUCT_ID`,`MERCHANT_USERID`),
+  ADD KEY `TRANSACTION_ID` (`TRANSACTION_ID`),
+  ADD KEY `PRODUCT_ID` (`PRODUCT_ID`),
+  ADD KEY `MERCHANT_USERID` (`MERCHANT_USERID`),
+  ADD KEY `PRODUCT_ID_2` (`PRODUCT_ID`,`MERCHANT_USERID`);
 
 --
--- Ευρετήρια για πίνακα `cm_transactions`
+-- Ευρετήρια για πίνακα `citizens`
 --
-ALTER TABLE `cm_transactions`
-  ADD KEY `CUSTOMER_ID` (`CUSTOMER_ID`),
-  ADD KEY `MERCHANT_ID` (`MERCHANT_ID`),
-  ADD KEY `TRANSACTION` (`TRANSACTION`);
+ALTER TABLE `citizens`
+  ADD PRIMARY KEY (`USERID`),
+  ADD UNIQUE KEY `AMKA` (`AMKA`),
+  ADD UNIQUE KEY `VAT` (`VAT`),
+  ADD UNIQUE KEY `LOGIN` (`USERNAME`,`PASSWORD`) USING BTREE,
+  ADD UNIQUE KEY `ACCOUNT_NUMBER` (`ACCOUNT_NUMBER`);
 
 --
--- Ευρετήρια για πίνακα `company`
+-- Ευρετήρια για πίνακα `cm_trades`
 --
-ALTER TABLE `company`
-  ADD PRIMARY KEY (`COMPANY_ID`),
-  ADD UNIQUE KEY `CUSTOMER_ID` (`CUSTOMER_ID`) USING BTREE;
+ALTER TABLE `cm_trades`
+  ADD PRIMARY KEY (`CITIZEN_USERID`,`MERCHANT_USERID`),
+  ADD KEY `CITIZEN_USERID` (`CITIZEN_USERID`),
+  ADD KEY `MERCHANT_USERID` (`MERCHANT_USERID`);
 
 --
--- Ευρετήρια για πίνακα `customer`
+-- Ευρετήρια για πίνακα `cm_traffics`
 --
-ALTER TABLE `customer`
-  ADD PRIMARY KEY (`CUSTOMER_ID`),
-  ADD UNIQUE KEY `ACCOUNT_NUMBER` (`ACCOUNT_NUMBER`) USING BTREE;
+ALTER TABLE `cm_traffics`
+  ADD PRIMARY KEY (`EMPLOYEE_ID`,`COMPANY_USERID`,`MERCHANT_USERID`),
+  ADD KEY `EMPLOYEE_ID` (`EMPLOYEE_ID`),
+  ADD KEY `COMPANY_USERID` (`COMPANY_USERID`),
+  ADD KEY `MERCHANT_USERID` (`MERCHANT_USERID`);
 
 --
--- Ευρετήρια για πίνακα `customer_phone`
+-- Ευρετήρια για πίνακα `companies`
 --
-ALTER TABLE `customer_phone`
-  ADD UNIQUE KEY `PHONE_NUMBER` (`PHONE_NUMBER`),
-  ADD KEY `CUSTOMER_ID` (`CUSTOMER_ID`);
+ALTER TABLE `companies`
+  ADD PRIMARY KEY (`USERID`),
+  ADD UNIQUE KEY `NAME` (`NAME`),
+  ADD UNIQUE KEY `LOGIN` (`USERNAME`,`PASSWORD`) USING BTREE,
+  ADD UNIQUE KEY `ACCOUNT_NUMBER` (`ACCOUNT_NUMBER`);
 
 --
--- Ευρετήρια για πίνακα `employee`
+-- Ευρετήρια για πίνακα `employees`
 --
-ALTER TABLE `employee`
-  ADD PRIMARY KEY (`EMPLOYEE_ID`),
-  ADD KEY `COMPANY_ID` (`COMPANY_ID`);
+ALTER TABLE `employees`
+  ADD PRIMARY KEY (`EMPLOYEE_ID`,`COMPANY_USERID`),
+  ADD KEY `COMPANY_USERID` (`COMPANY_USERID`) USING BTREE;
 
 --
--- Ευρετήρια για πίνακα `employee_phone`
+-- Ευρετήρια για πίνακα `merchants`
 --
-ALTER TABLE `employee_phone`
-  ADD UNIQUE KEY `PHONE_NUMBER` (`PHONE_NUMBER`),
-  ADD KEY `EMPLOYEE_ID` (`EMPLOYEE_ID`);
+ALTER TABLE `merchants`
+  ADD PRIMARY KEY (`USERID`),
+  ADD UNIQUE KEY `ACCOUNT_NUMBER` (`ACCOUNT_NUMBER`),
+  ADD UNIQUE KEY `LOGIN` (`USERNAME`,`PASSWORD`) USING BTREE;
 
 --
--- Ευρετήρια για πίνακα `merchant`
+-- Ευρετήρια για πίνακα `products`
 --
-ALTER TABLE `merchant`
-  ADD PRIMARY KEY (`MERCHANT_ID`),
-  ADD UNIQUE KEY `ACCOUNT_NUMBER` (`ACCOUNT_NUMBER`) USING BTREE;
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`PRODUCT_ID`,`MERCHANT_USERID`),
+  ADD KEY `MERCHANT_USERID` (`MERCHANT_USERID`) USING BTREE;
 
 --
--- Ευρετήρια για πίνακα `merchant_phone`
+-- Ευρετήρια για πίνακα `transactions`
 --
-ALTER TABLE `merchant_phone`
-  ADD UNIQUE KEY `PHONE_NUMBER` (`PHONE_NUMBER`),
-  ADD KEY `MERCHANT_ID` (`MERCHANT_ID`);
+ALTER TABLE `transactions`
+  ADD PRIMARY KEY (`TRANSACTION_ID`),
+  ADD KEY `CITIZEN_USERID` (`CITIZEN_USERID`),
+  ADD KEY `MERCHANT_TRADE` (`MERCHANT_TRADE`),
+  ADD KEY `EMPLOYEE_ID` (`EMPLOYEE_ID`),
+  ADD KEY `COMPANY_USERID` (`COMPANY_USERID`),
+  ADD KEY `MERCHANT_TRAFFIC` (`MERCHANT_TRAFFIC`),
+  ADD KEY `EMPLOYEE_ID_2` (`EMPLOYEE_ID`,`COMPANY_USERID`);
 
 --
--- Ευρετήρια για πίνακα `private_citizen`
+-- AUTO_INCREMENT για άχρηστους πίνακες
 --
-ALTER TABLE `private_citizen`
-  ADD PRIMARY KEY (`AMKA`),
-  ADD UNIQUE KEY `CUSTOMER_ID` (`CUSTOMER_ID`) USING BTREE;
 
 --
--- Ευρετήρια για πίνακα `product`
+-- AUTO_INCREMENT για πίνακα `citizens`
 --
-ALTER TABLE `product`
-  ADD PRIMARY KEY (`PRODUCT_ID`),
-  ADD KEY `MERCHANT_ID` (`MERCHANT_ID`);
+ALTER TABLE `citizens`
+  MODIFY `USERID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- Ευρετήρια για πίνακα `transaction`
+-- AUTO_INCREMENT για πίνακα `companies`
 --
-ALTER TABLE `transaction`
-  ADD PRIMARY KEY (`TRANSACTION_ID`);
+ALTER TABLE `companies`
+  MODIFY `USERID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT για πίνακα `employees`
+--
+ALTER TABLE `employees`
+  MODIFY `EMPLOYEE_ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT για πίνακα `merchants`
+--
+ALTER TABLE `merchants`
+  MODIFY `USERID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT για πίνακα `products`
+--
+ALTER TABLE `products`
+  MODIFY `PRODUCT_ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT για πίνακα `transactions`
+--
+ALTER TABLE `transactions`
+  MODIFY `TRANSACTION_ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Περιορισμοί για άχρηστους πίνακες
 --
 
 --
--- Περιορισμοί για πίνακα `bought_product`
+-- Περιορισμοί για πίνακα `bought_products`
 --
-ALTER TABLE `bought_product`
-  ADD CONSTRAINT `bought_product_ibfk_1` FOREIGN KEY (`TRANSACTION_ID`) REFERENCES `transaction` (`TRANSACTION_ID`);
+ALTER TABLE `bought_products`
+  ADD CONSTRAINT `bought_products_ibfk_1` FOREIGN KEY (`TRANSACTION_ID`) REFERENCES `transactions` (`TRANSACTION_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `bought_products_ibfk_2` FOREIGN KEY (`PRODUCT_ID`,`MERCHANT_USERID`) REFERENCES `products` (`PRODUCT_ID`, `MERCHANT_USERID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Περιορισμοί για πίνακα `cm_transactions`
+-- Περιορισμοί για πίνακα `cm_trades`
 --
-ALTER TABLE `cm_transactions`
-  ADD CONSTRAINT `cm_transactions_ibfk_1` FOREIGN KEY (`CUSTOMER_ID`) REFERENCES `customer` (`CUSTOMER_ID`),
-  ADD CONSTRAINT `cm_transactions_ibfk_2` FOREIGN KEY (`MERCHANT_ID`) REFERENCES `merchant` (`MERCHANT_ID`),
-  ADD CONSTRAINT `cm_transactions_ibfk_3` FOREIGN KEY (`TRANSACTION`) REFERENCES `transaction` (`TRANSACTION_ID`);
+ALTER TABLE `cm_trades`
+  ADD CONSTRAINT `cm_trades_ibfk_1` FOREIGN KEY (`CITIZEN_USERID`) REFERENCES `citizens` (`USERID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `cm_trades_ibfk_2` FOREIGN KEY (`MERCHANT_USERID`) REFERENCES `merchants` (`USERID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Περιορισμοί για πίνακα `company`
+-- Περιορισμοί για πίνακα `cm_traffics`
 --
-ALTER TABLE `company`
-  ADD CONSTRAINT `company_ibfk_1` FOREIGN KEY (`CUSTOMER_ID`) REFERENCES `customer` (`CUSTOMER_ID`);
+ALTER TABLE `cm_traffics`
+  ADD CONSTRAINT `cm_traffics_ibfk_1` FOREIGN KEY (`EMPLOYEE_ID`,`COMPANY_USERID`) REFERENCES `employees` (`EMPLOYEE_ID`, `COMPANY_USERID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `cm_traffics_ibfk_2` FOREIGN KEY (`MERCHANT_USERID`) REFERENCES `merchants` (`USERID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Περιορισμοί για πίνακα `customer_phone`
+-- Περιορισμοί για πίνακα `employees`
 --
-ALTER TABLE `customer_phone`
-  ADD CONSTRAINT `customer_phone_ibfk_1` FOREIGN KEY (`CUSTOMER_ID`) REFERENCES `customer` (`CUSTOMER_ID`);
+ALTER TABLE `employees`
+  ADD CONSTRAINT `employees_ibfk_1` FOREIGN KEY (`COMPANY_USERID`) REFERENCES `companies` (`USERID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Περιορισμοί για πίνακα `employee`
+-- Περιορισμοί για πίνακα `products`
 --
-ALTER TABLE `employee`
-  ADD CONSTRAINT `employee_ibfk_1` FOREIGN KEY (`COMPANY_ID`) REFERENCES `company` (`COMPANY_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `products`
+  ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`MERCHANT_USERID`) REFERENCES `merchants` (`USERID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Περιορισμοί για πίνακα `employee_phone`
+-- Περιορισμοί για πίνακα `transactions`
 --
-ALTER TABLE `employee_phone`
-  ADD CONSTRAINT `employee_phone_ibfk_1` FOREIGN KEY (`EMPLOYEE_ID`) REFERENCES `employee` (`EMPLOYEE_ID`);
-
---
--- Περιορισμοί για πίνακα `merchant_phone`
---
-ALTER TABLE `merchant_phone`
-  ADD CONSTRAINT `merchant_phone_ibfk_1` FOREIGN KEY (`MERCHANT_ID`) REFERENCES `merchant` (`MERCHANT_ID`);
-
---
--- Περιορισμοί για πίνακα `private_citizen`
---
-ALTER TABLE `private_citizen`
-  ADD CONSTRAINT `private_citizen_ibfk_1` FOREIGN KEY (`CUSTOMER_ID`) REFERENCES `customer` (`CUSTOMER_ID`);
-
---
--- Περιορισμοί για πίνακα `product`
---
-ALTER TABLE `product`
-  ADD CONSTRAINT `product_ibfk_1` FOREIGN KEY (`MERCHANT_ID`) REFERENCES `merchant` (`MERCHANT_ID`);
+ALTER TABLE `transactions`
+  ADD CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`CITIZEN_USERID`) REFERENCES `citizens` (`USERID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `transactions_ibfk_2` FOREIGN KEY (`MERCHANT_TRADE`) REFERENCES `merchants` (`USERID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `transactions_ibfk_3` FOREIGN KEY (`EMPLOYEE_ID`,`COMPANY_USERID`) REFERENCES `employees` (`EMPLOYEE_ID`, `COMPANY_USERID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `transactions_ibfk_4` FOREIGN KEY (`MERCHANT_TRAFFIC`) REFERENCES `merchants` (`USERID`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
