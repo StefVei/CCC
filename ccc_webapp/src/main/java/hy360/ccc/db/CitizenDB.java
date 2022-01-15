@@ -4,10 +4,11 @@
  */
 package hy360.ccc.db;
 
+import Utils_db.UtilitiesDB;
 import hy360.ccc.model.Citizen;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.ResultSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,28 +18,6 @@ import java.util.logging.Logger;
  */
 public class CitizenDB {
 
-    public static void setValues(PreparedStatement preparedStatement, Object... values) throws SQLException {
-        for (int i = 0; i < values.length; i++) {
-            preparedStatement.setObject(i + 1, values[i]);
-        }
-    }
-
-    private static void closeConnection(PreparedStatement preparedStatement, Connection con) {
-        if (preparedStatement != null) {
-            try {
-                preparedStatement.close();
-            } catch (SQLException sql_ex) {
-                Logger.getLogger(CitizenDB.class.getName()).log(Level.SEVERE, null, sql_ex);
-            }
-        }
-        if (con != null) {
-            try {
-                con.close();
-            } catch (SQLException sql_ex) {
-                Logger.getLogger(CitizenDB.class.getName()).log(Level.SEVERE, null, sql_ex);
-            }
-        }
-    }
 
     public static void addCitizen(Citizen citizen) {
 
@@ -61,7 +40,7 @@ public class CitizenDB {
                     + ", ?, ?, ?, ?, ?, ?"
                     + ", ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
 
-            setValues(preparedStatement,
+            UtilitiesDB.setValues(preparedStatement,
                     citizen.getAmka(),
                     citizen.getVat(),
                     citizen.getFirst_name(),
@@ -85,7 +64,8 @@ public class CitizenDB {
         } catch (Exception ex) {
             Logger.getLogger(CitizenDB.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            closeConnection(preparedStatement, con);
+            UtilitiesDB.closeConnection(preparedStatement, con, CitizenDB.class.getName());
+
         }
 
     }
@@ -102,8 +82,52 @@ public class CitizenDB {
         } catch (Exception ex) {
             Logger.getLogger(CitizenDB.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            closeConnection(preparedStatement, con);
+            UtilitiesDB.closeConnection(preparedStatement, con, CitizenDB.class.getName());
         }
+    }
+
+    public static Citizen getCitizen(int citizen_id) {
+
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+        Citizen cit = null;
+        try {
+            con = CccDB.getConnection();
+            String sel = "SELECT * FROM citizens WHERE USERID = ?";
+            preparedStatement = con.prepareStatement(sel);
+            preparedStatement.setInt(1, citizen_id);
+            preparedStatement.executeUpdate();
+
+            ResultSet res = preparedStatement.getResultSet();
+            if (res.next() == true) {
+                cit = new Citizen();
+                cit.setUser_id(res.getString("USERID"));
+                cit.setAmka(res.getString("AMKA"));
+                cit.setVat(res.getString("VAT"));
+                cit.setFirst_name(res.getString("FIRST_NAME"));
+                cit.setLast_name(res.getString("LAST_NAME"));
+                cit.setBirth_date(res.getString("BIRTH_DATE"));
+                cit.setGender(res.getString("GENDER"));
+                cit.setUserName(res.getString("USERNAME"));
+                cit.setPassword(res.getString("PASSWORD"));
+                cit.setEmail(res.getString("EMAIL"));
+                cit.setAddress(res.getString("ADDRESS"));
+                cit.setPhone(res.getString("PHONE"));
+                cit.setAmount_due(res.getString("AMOUNT_DUE"));
+                cit.setAccount_number(res.getString("ACCOUNT_NUMBER"));
+                cit.setCredit_limit(res.getString("CREDIT_LIMIT"));
+                cit.setCredit_balance(res.getString("CREDIT_BALANCE"));
+                cit.setAccount_due_date(res.getString("ACCOUNT_DUE_DATE"));
+
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(CitizenDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, CitizenDB.class.getName());
+        }
+
+        return cit;
+
     }
 
 

@@ -83,7 +83,7 @@ public class CompleteTransaction extends HttpServlet {
 
         LocalDate date = java.time.LocalDate.now();
 
-        transaction.setPay_type(request.getParameter("payType"));
+        transaction.setPending(request.getParameter("payType"));
         transaction.setTransaction_type(request.getParameter("transactionType"));
         transaction.setDate(request.getParameter("date"));
         transaction.setAmount(request.getParameter("amount"));

@@ -11,7 +11,7 @@ package hy360.ccc.model;
 public class Transaction {
     private String transaction_id;
     private String date;
-    private String pay_type;
+    private String pending;
     private String transaction_type;
     private String amount;
     private String citizen_id;
@@ -25,7 +25,7 @@ public class Transaction {
     public Transaction() {
         transaction_id = "";
         date = "";
-        pay_type = "U";
+        pending = "U";
         transaction_type = "U";
         amount = "";
         citizen_id = "";
@@ -35,12 +35,12 @@ public class Transaction {
         employee_id = "";
     }
 
-    public Transaction(String tr_id, String date, String pay_type,
+    public Transaction(String tr_id, String date, String pending,
             String tr_type, String amount, String cit_id, String comp_id,
             String merchant_cit_id, String merchant_comp_id, String empl_id) {
         transaction_id = tr_id;
         this.date = date;
-        this.pay_type = pay_type;
+        this.pending = pending;
         transaction_type = tr_type;
         this.amount = amount;
         citizen_id = cit_id;
@@ -49,7 +49,7 @@ public class Transaction {
         this.merchant_comp_id = merchant_comp_id;
         this.employee_id = empl_id;
 
-        activeFields = "PAY_TYPE, TRANSACTION_TYPE, AMOUNT, DATE, ";
+        activeFields = "PENDING, TRANSACTION_TYPE, AMOUNT, DATE, ";
         if (!citizen_id.isEmpty()) {
             activeFields += "CITIZEN_USERID, MERCHANT_TRADE";
         } else {
@@ -64,7 +64,7 @@ public class Transaction {
         if(date == null || date.trim().isEmpty()
             || amount == null || amount.trim().isEmpty()
                 || date == null || date.trim().isEmpty()
-                || (pay_type == null && pay_type.trim().isEmpty())
+                || (pending == null && pending.trim().isEmpty())
                 || (transaction_type == null && transaction_type.trim().isEmpty()))        {
             
             throw new Exception("Missing Fields");
@@ -123,17 +123,17 @@ public class Transaction {
     }
 
     /**
-     * @return the pay_type
+     * @return the pending
      */
-    public String getPay_type() {
-        return pay_type;
+    public String getPending() {
+        return pending;
     }
 
     /**
-     * @param pay_type the pay_type to set
+     * @param pending the pending to set
      */
-    public void setPay_type(String pay_type) {
-        this.pay_type = pay_type;
+    public void setPending(String pending) {
+        this.pending = pending;
     }
 
     /**
@@ -238,7 +238,7 @@ public class Transaction {
     public String toString() {
         StringBuilder ss = new StringBuilder();
         ss.append("transaction_id: ").append(transaction_id).append("\n")
-                .append("pay_type: ").append(pay_type).append("\n")
+                .append("pay_type: ").append(pending).append("\n")
                 .append("transaction_type:").append(transaction_type).append("\n")
                 .append("amount: ").append(amount).append("\n")
                 .append("date: ").append(date).append("\n")

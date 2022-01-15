@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,12 +41,12 @@ public class TransactionDB {
             preparedStatement = con.prepareStatement(insert_sql,
                     PreparedStatement.RETURN_GENERATED_KEYS);
             if (fields.contains("CITIZEN_USERID")) {
-                UtilitiesDB.setValues(preparedStatement, transaction.getPay_type(),
+                UtilitiesDB.setValues(preparedStatement, transaction.getPending(),
                         transaction.getTransaction_type(), transaction.getAmount(),
                         transaction.getDate(), transaction.getCitizen_id(),
                         transaction.getMerchant_cit_id());
             } else {
-                UtilitiesDB.setValues(preparedStatement, transaction.getPay_type(),
+                UtilitiesDB.setValues(preparedStatement, transaction.getPending(),
                         transaction.getTransaction_type(), transaction.getAmount(),
                         transaction.getDate(), transaction.getEmployee_id(),
                         transaction.getCompany_id(),
@@ -74,7 +75,7 @@ public class TransactionDB {
 
             String fields = transaction.getActiveFields();
             con = CccDB.getConnection();
-            String quer_part = fields.contains("CITIZEN_USERID") ? "SET PAY_TYPE = ?, "
+            String quer_part = fields.contains("CITIZEN_USERID") ? "SET PENDING = ?, "
                     + "SET TRANSACTION_TYPE = ?, SET AMOUNT = ?, SET DATE = ?, SET CITIZEN_USERID = ? "
                     + ", SET MERCHANT_TRADE = ?"
                     : "SET PAY_TYPE = ?, "
@@ -86,12 +87,12 @@ public class TransactionDB {
             preparedStatement = con.prepareStatement(insert_sql,
                     PreparedStatement.RETURN_GENERATED_KEYS);
             if (fields.contains("CITIZEN_USERID")) {
-                UtilitiesDB.setValues(preparedStatement, transaction.getPay_type(),
+                UtilitiesDB.setValues(preparedStatement, transaction.getPending(),
                         transaction.getTransaction_type(), transaction.getAmount(),
                         transaction.getDate(), transaction.getCitizen_id(),
                         transaction.getMerchant_cit_id(), transaction.getTransaction_id());
             } else {
-                UtilitiesDB.setValues(preparedStatement, transaction.getPay_type(),
+                UtilitiesDB.setValues(preparedStatement, transaction.getPending(),
                         transaction.getTransaction_type(), transaction.getAmount(),
                         transaction.getDate(), transaction.getTransaction_id(),
                         transaction.getCompany_id(),
@@ -109,20 +110,21 @@ public class TransactionDB {
 
     }
 
-    public static Transaction getTransactions(List<String> query_part, String query_type) {
+    public static Transaction getTransactions(String query_part, String query_type) {
         List<Transaction> transactions = new ArrayList<>();
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
             String sqlGetTransactions;
             if (query_type == "timeline") {
+                ArrayList<String> query_dates = new ArrayList<>(Arrays.asList(query_part.split(",[ ]*")));
                 sqlGetTransactions = "SELECT * FROM transactions T"
-                        + "WHERE T.date >= " + query_part.get(0)
-                        + " AND T.date <= " + query_part.get(1);
+                        + "WHERE T.date >= " + query_dates.get(0)
+                        + " AND T.date <= " + query_dates.get(1);
 
             } else {
                 sqlGetTransactions = "SELECT * FROM transactions T"
-                        + "WHERE transaction_ID in (" + query_part.toString() + ")";
+                        + "WHERE transaction_ID in (" + query_part + ")";
             }
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement(sqlGetTransactions);
@@ -133,7 +135,7 @@ public class TransactionDB {
                 Transaction transaction = new Transaction();
                 transaction.setTransaction_id(res.getString("TRANSCTION_ID"));
                 transaction.setDate(res.getString("DATE"));
-                transaction.setPay_type(res.getString("PAY_TYPE"));
+                transaction.setPending(res.getString("PAY_TYPE"));
                 transaction.setAmount(res.getString("AMOUNT"));
                 transaction.setTransaction_type(res.getString("TRANSACTION_TYPE"));
                 transaction.setCitizen_id(res.getString("CITIZEN_USERID"));

@@ -5,6 +5,8 @@
 package Servlets.Transactions;
 
 import com.google.gson.Gson;
+import hy360.ccc.db.CitizenDB;
+import hy360.ccc.db.CompanyDB;
 import hy360.ccc.db.EmployeeDB;
 import hy360.ccc.db.TransactionDB;
 import hy360.ccc.model.Transaction;
@@ -78,7 +80,11 @@ public class MakeTransaction extends HttpServlet {
         Gson gson = new Gson();
         String str;
 
+        int balance, cost, limit;
+        String credit_balance, products_cost, credit_limit, transaction_type;
         String citizen_or_employee;
+        String merchant_id;
+        String isPending;
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
@@ -86,23 +92,50 @@ public class MakeTransaction extends HttpServlet {
 
         LocalDate date = java.time.LocalDate.now();
 
-        citizen_or_employee = request.getParameter("isCustomer");
+        merchant_id = request.getParameter("merchantId");
+        products_cost = request.getParameter("amount");
+        transaction_type = request.getParameter("transactionType");
+
+        citizen_or_employee = request.getParameter("isCitizen");
         if (citizen_or_employee.equals("true")) {
-            transaction.setCitizen_id(request.getParameter("citizenId"));
-            transaction.setMerchant_cit_id(request.getParameter("merchantId"));
+            String citizen_id = request.getParameter("citizenId");
+            credit_balance = CitizenDB.getCitizen(Integer.valueOf(citizen_id)).getCredit_balance();
+            credit_limit = CitizenDB.getCitizen(Integer.valueOf(citizen_id)).getCredit_limit();
+            transaction.setCitizen_id(citizen_id);
+            transaction.setMerchant_cit_id(merchant_id);
+
         } else {
             int employee_id = Integer.valueOf(request.getParameter("employeeId"));
             String company_id = EmployeeDB.getEmployee(employee_id).getCompany_id();
-
+            credit_balance = CompanyDB.getCompany("USERID", company_id).getCredit_balance();
+            credit_limit = CompanyDB.getCompany("USERID", company_id).getCredit_limit();
             transaction.setCompany_id(company_id);
             transaction.setEmployee_id(String.valueOf(employee_id));
-            transaction.setMerchant_comp_id(request.getParameter("merchantId"));
+            transaction.setMerchant_comp_id(merchant_id);
 
         }
-        transaction.setPay_type(request.getParameter("payType"));
-        transaction.setTransaction_type(request.getParameter("transactionType"));
-        transaction.setDate(request.getParameter("date"));
-        transaction.setAmount(request.getParameter("amount"));
+
+        balance = Integer.valueOf(credit_balance);
+        limit = Integer.valueOf(credit_limit);
+        cost = Integer.valueOf(products_cost);
+        if (transaction_type.equals("AGORA")) {
+            if (balance > cost) {
+                transaction.setPending("F");
+                // UPDATE MERCHANT
+            } else if (balance < cost) {
+                transaction.setPending("T");
+                // UPDATE AMOUNT_DUE ON CITIZEN
+            } else if (1 == 2) { // ANYTHING ELSE HERE ???? TODO
+                // ANYTHING ELSE
+            }
+
+        } else if (transaction_type.equals("EPISTROFI")) {
+
+            transaction.setTransaction_type("A");
+        }
+
+        transaction.setDate(date.toString());
+        transaction.setAmount(products_cost);
 
         TransactionDB.addTransaction(transaction);
         response.setStatus(200);

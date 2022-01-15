@@ -81,7 +81,7 @@ public class CloseEmployeeAccount extends HttpServlet {
 
         Employee em = new Employee();
 
-        em.setId(request.getParameter("EMPLOYEE_ID"));
+        em.setEmployee_id(request.getParameter("EMPLOYEE_ID"));
         EmployeeDB.deleteEmployee(em);
 
         response.setStatus(200);

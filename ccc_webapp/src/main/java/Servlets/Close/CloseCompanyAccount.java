@@ -82,7 +82,7 @@ public class CloseCompanyAccount extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         
         Company comp = new Company();
-        comp.setCompany_id(request.getParameter("companyId"));
+        comp.setUser_id(request.getParameter("companyId"));
 
         CompanyDB.deleteCompany(comp);
 
