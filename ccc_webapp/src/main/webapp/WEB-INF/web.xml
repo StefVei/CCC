@@ -28,6 +28,10 @@
         <servlet-name>CompleteTransaction</servlet-name>
         <servlet-class>Servlets.Transactions.CompleteTransaction</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>Login</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>OpenCompanyAccount</servlet-name>
         <url-pattern>/OpenCompanyAccount</url-pattern>
@@ -55,6 +59,10 @@
     <servlet-mapping>
         <servlet-name>CompleteTransaction</servlet-name>
         <url-pattern>/CompleteTransaction</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/Login</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
