@@ -4,6 +4,7 @@
  */
 package hy360.ccc.db;
 
+import Utils_db.UtilitiesDB;
 import hy360.ccc.model.Company;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -152,6 +153,41 @@ public class CompanyDB {
         }
 
         return comp;
+    }
+
+    public static void updateCompany(Company comp) {
+
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+        try {
+            String updatecomp_sql = "UPDATE companies "
+                    + "SET NAME = ? "
+                    + "SET ESTABLISHMENT_DATE = ? "
+                    + "SET EMAIL = ? "
+                    + "SET ADDRESS = ? "
+                    + "SET PASSWORD = ? "
+                    + "SET PHONE = ? "
+                    + " SET AMOUNT_DUE = ? "
+                    + "SET CREDIT_LIMIT = ? "
+                    + "SET CREDIT_BALANCE = ? "
+                    + "SET ACCOUNT_DUE_DATE = ? "
+                    + "WHERE USER_ID = ?";
+
+            con = CccDB.getConnection();
+            preparedStatement = con.prepareStatement(updatecomp_sql);
+            UtilitiesDB.setValues(preparedStatement, comp.getName(),
+                    comp.getEstablishment_date(), comp.getEmail(),
+                    comp.getPassword(), comp.getPhone(),
+                    comp.getAmount_due(), comp.getCredit_limit(),
+                    comp.getCredit_balance(), comp.getAccount_due_date(),
+                    comp.getUser_id());
+            preparedStatement.executeUpdate();
+        } catch (Exception ex) {
+            Logger.getLogger(CompanyDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, CompanyDB.class.getName());
+        }
+
     }
 
 }

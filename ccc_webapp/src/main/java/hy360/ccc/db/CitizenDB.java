@@ -96,7 +96,7 @@ public class CitizenDB {
             String sel = "SELECT * FROM citizens WHERE USERID = ?";
             preparedStatement = con.prepareStatement(sel);
             preparedStatement.setInt(1, citizen_id);
-            preparedStatement.executeUpdate();
+            preparedStatement.executeQuery();
 
             ResultSet res = preparedStatement.getResultSet();
             if (res.next() == true) {
@@ -130,5 +130,38 @@ public class CitizenDB {
 
     }
 
+    public static void updateCitizen(Citizen cit) {
+
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+        try {
+            String update_cit_sql = "UPDATE citizens "
+                    + "SET LAST_NAME = ? "
+                    + "SET PHONE = ? "
+                    + "SET EMAIL = ? "
+                    + "SET ADDRESS = ? "
+                    + " SET GENDER = ? "
+                    + "SET PASSWORD = ? "
+                    + "SET AMOUNT_DUE = ? "
+                    + "SET CREDIT_LIMIT = ? "
+                    + "SET CREDIT_BALANCE = ? "
+                    + "SET ACCOUNT_DUE_DATE = ? "
+                    + "WHERE USERID = ?";
+
+            con = CccDB.getConnection();
+            preparedStatement = con.prepareStatement(update_cit_sql);
+            UtilitiesDB.setValues(preparedStatement, cit.getLast_name(),
+                    cit.getPhone(), cit.getEmail(),
+                    cit.getAddress(), cit.getGender(), cit.getPassword(),
+                    cit.getAmount_due(), cit.getCredit_limit(), cit.getCredit_balance(),
+                    cit.getAccount_due_date(), cit.getUser_id());
+            preparedStatement.executeUpdate();
+        } catch (Exception ex) {
+            Logger.getLogger(CitizenDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, CitizenDB.class.getName());
+        }
+
+    }
 
 }

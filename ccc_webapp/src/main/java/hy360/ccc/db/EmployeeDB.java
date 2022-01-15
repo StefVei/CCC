@@ -4,6 +4,7 @@
  */
 package hy360.ccc.db;
 
+import Utils_db.UtilitiesDB;
 import hy360.ccc.model.Employee;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -75,7 +76,7 @@ public class EmployeeDB {
         } catch (Exception ex) {
             Logger.getLogger(EmployeeDB.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            closeConnection(preparedStatement, con);
+            UtilitiesDB.closeConnection(preparedStatement, con, EmployeeDB.class.getName());
         }
 
     }
@@ -92,7 +93,7 @@ public class EmployeeDB {
         } catch (Exception ex) {
             Logger.getLogger(EmployeeDB.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            closeConnection(preparedStatement, con);
+            UtilitiesDB.closeConnection(preparedStatement, con, EmployeeDB.class.getName());
         }
     }
 
@@ -112,7 +113,7 @@ public class EmployeeDB {
 
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement(updateemployee_sql);
-            setValues(preparedStatement, employee.getFirst_name(),
+            UtilitiesDB.setValues(preparedStatement, employee.getFirst_name(),
                     employee.getLast_name(), employee.getBirth_date(),
                     employee.getPhone(), employee.getEmail(),
                     employee.getAddress(), employee.getGender(),
@@ -121,7 +122,7 @@ public class EmployeeDB {
         } catch (Exception ex) {
             Logger.getLogger(EmployeeDB.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            closeConnection(preparedStatement, con);
+            UtilitiesDB.closeConnection(preparedStatement, con, EmployeeDB.class.getName());
         }
     }
 
@@ -134,7 +135,7 @@ public class EmployeeDB {
             con = CccDB.getConnection();
 
             preparedStatement = con.prepareStatement(sql_getemployee);
-            setValues(preparedStatement, employee_id);
+            UtilitiesDB.setValues(preparedStatement, employee_id);
             preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
 
@@ -157,7 +158,7 @@ public class EmployeeDB {
         } catch (Exception ex) {
             Logger.getLogger(EmployeeDB.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            closeConnection(preparedStatement, con);
+            UtilitiesDB.closeConnection(preparedStatement, con, EmployeeDB.class.getName());
         }
 
         return employee;
@@ -197,7 +198,7 @@ public class EmployeeDB {
         } catch (Exception ex) {
             Logger.getLogger(EmployeeDB.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            closeConnection(preparedStatement, con);
+            UtilitiesDB.closeConnection(preparedStatement, con, EmployeeDB.class.getName());
         }
 
         return employees;
