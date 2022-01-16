@@ -4,7 +4,9 @@
  */
 package Servlets.Register;
 
+import Utils_db.UtilitiesDB;
 import com.google.gson.Gson;
+import hy360.ccc.db.CompanyDB;
 import hy360.ccc.model.Company;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -76,9 +78,11 @@ public class OpenCompanyAccount extends HttpServlet {
 
         Company comp = new Company();
         
+        String acc_number = UtilitiesDB.getNewAccountNumber();
         LocalDate date = java.time.LocalDate.now();
         date = date.plusYears(5);
 
+        comp.setAccount_number(acc_number);
         comp.setAccount_due_date(date.toString());
         comp.setUserName(request.getParameter("username"));
         comp.setPassword(request.getParameter("password"));
@@ -89,10 +93,9 @@ public class OpenCompanyAccount extends HttpServlet {
         comp.setAmount_due("0");
         comp.setCredit_balance(request.getParameter("creditBalance"));
         comp.setCredit_limit("5000");
-        comp.setEstablishment_date(request.getParameter("establishmentDate"));
-        comp.setUserName(request.getParameter("username"));
+        comp.setEstablishment_date(date.minusYears(5).toString());
         
-//       CompanyDB.addCompany(comp);
+        CompanyDB.addCompany(comp);
         response.setStatus(200);
         str = gson.toJson(comp);
         response.getWriter().print(str);

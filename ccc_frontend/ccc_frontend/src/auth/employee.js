@@ -74,6 +74,7 @@ function CompanyRegister() {
         <Box pt={3}>
           <TextField
             label="Password:"
+            type="password"
             variant="filled"
             value={Password}
             onChange={(e) => setPassword(e.target.value)}
@@ -87,6 +88,7 @@ function CompanyRegister() {
             value={Phone}
             onChange={(e) => setPhone(e.target.value)}
             required
+            inputProps={{ maxLength: 10 }}
           />
         </Box>
         <Box pt={3}>
@@ -115,16 +117,6 @@ function CompanyRegister() {
             onChange={(e) => setCompanyName(e.target.value)}
             required
           />
-        </Box>
-        <Box pt={3}>
-          <LocalizationProvider dateAdapter={AdapterDay}>
-            <DesktopDatePicker
-              label="Birth Date"
-              value={BirthDate}
-              onChange={handleDateChange}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </LocalizationProvider>
         </Box>
         <Box pt={3}>
           <TextField
@@ -158,6 +150,16 @@ function CompanyRegister() {
               <FormControlLabel value="unknown" control={<Radio />} label="Other" />
             </RadioGroup>
           </FormControl>
+        </Box>
+        <Box pt={3}>
+          <LocalizationProvider dateAdapter={AdapterDay}>
+            <DesktopDatePicker
+              label="Birth Date"
+              value={BirthDate}
+              onChange={handleDateChange}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
         </Box>
         <div className={styles.buttonContainer}>
           <Button type="submit" variant="contained" color="primary" onClick={() => handleSubmit()}>

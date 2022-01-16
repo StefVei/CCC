@@ -19,7 +19,7 @@ function CompanyRegister() {
     await cccClient
       .post(
         'OpenCompanyAccount',
-        `username=${Username}&password=${Password}&email=${Email}&address=${Address}&companyName=${CompanyName}&phone=${Phone}&creditBalance=${
+        `username=${Username}&password=${Password}&email=${Email}&address=${Address}&name=${CompanyName}&phone=${Phone}&creditBalance=${
           CreditBalance ? CreditBalance : 0
         }`
       )
@@ -58,6 +58,7 @@ function CompanyRegister() {
           value={Phone}
           onChange={(e) => setPhone(e.target.value)}
           required
+          inputProps={{ maxLength: 10 }}
         />
         <TextField
           label="Email:"
@@ -86,6 +87,7 @@ function CompanyRegister() {
           value={CreditBalance}
           onChange={(e) => setCreditBalance(e.target.value)}
           required
+          type="number"
         />
         <div className={styles.buttonContainer}>
           <Button type="submit" variant="contained" color="primary" onClick={() => handleSubmit()}>

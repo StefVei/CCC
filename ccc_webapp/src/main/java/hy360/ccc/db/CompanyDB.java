@@ -77,7 +77,7 @@ public class CompanyDB {
                     company.getAccount_number(),
                     company.getCredit_limit(),
                     company.getCredit_balance(),
-                    company.getAccount_number());
+                    company.getAccount_due_date());
 
             preparedStatement.executeUpdate();
             

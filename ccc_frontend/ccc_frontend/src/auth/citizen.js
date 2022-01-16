@@ -92,6 +92,7 @@ function CitizenRegister() {
             value={Phone}
             onChange={(e) => setPhone(e.target.value)}
             required
+            inputProps={{ maxLength: 10 }}
           />
         </Box>
         <Box pt={3}>
@@ -137,6 +138,7 @@ function CitizenRegister() {
             value={Amka}
             onChange={(e) => setAmka(e.target.value)}
             required
+            inputProps={{ maxLength: 11 }}
           />
         </Box>
         <Box pt={3}>
@@ -146,21 +148,13 @@ function CitizenRegister() {
             value={Vat}
             onChange={(e) => setVat(e.target.value)}
             required
+            inputProps={{ maxLength: 9 }}
           />
-        </Box>
-        <Box pt={3}>
-          <LocalizationProvider dateAdapter={AdapterDay}>
-            <DesktopDatePicker
-              label="Birth Date"
-              value={BirthDate}
-              onChange={handleDateChange}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </LocalizationProvider>
         </Box>
         <Box pt={3}>
           <TextField
             label="Credit Balance:"
+            type="number"
             variant="filled"
             value={CreditBalance}
             onChange={(e) => setCreditBalance(e.target.value)}
@@ -181,6 +175,16 @@ function CitizenRegister() {
               <FormControlLabel value="unknown" control={<Radio />} label="Other" />
             </RadioGroup>
           </FormControl>
+        </Box>
+        <Box pt={3}>
+          <LocalizationProvider dateAdapter={AdapterDay}>
+            <DesktopDatePicker
+              label="Birth Date"
+              value={BirthDate}
+              onChange={handleDateChange}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
         </Box>
         <div className={styles.buttonContainer}>
           <Button type="submit" variant="contained" color="primary" onClick={() => handleSubmit()}>

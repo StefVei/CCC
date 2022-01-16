@@ -62,20 +62,20 @@ public class MerchantDB {
                     + " VALUES (? ,? ,? ,? ,? ,? , ?, ?, ?, ?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
             
             setValues(preparedStatement,
-                    merchant.getUserName(),
-                    merchant.getPassword(),
-                    merchant.getPhone(),
-                    merchant.getEmail(),
-                    merchant.getAddress(),
-                    merchant.getAmount_due(),
-                    merchant.getAccount_number(),
                     merchant.getFirst_name(),
                     merchant.getLast_name(),
                     merchant.getBirth_date(),
                     merchant.getGender(),
                     merchant.getSupply(),
                     merchant.getGain(),
-                    merchant.getPurchases_total());
+                    merchant.getPurchases_total(),
+                    merchant.getUserName(),
+                    merchant.getPassword(),
+                    merchant.getPhone(),
+                    merchant.getEmail(),
+                    merchant.getAddress(),
+                    merchant.getAmount_due(),
+                    merchant.getAccount_number());
             
         preparedStatement.executeUpdate();
         
