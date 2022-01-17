@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Typography } from '@mui/material';
 import { TextField, Button, Box } from '@mui/material';
 import Table from '@mui/material/Table';
@@ -17,50 +17,36 @@ function Merchant() {
   const styles = useStyles();
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
-
-	const getProducts = async () => {
-		await cccClient
-		.post(
-			'getProducts',
-			`userid=${userid}`)
-			.then(function (response){
-				console.log(response);
-			
-		})
-		.catch(function (err){
-			console.log(err);
-		});
-	};
- 
-  const addProduct = async () => {
-	await cccClient
-		.post(
-			'addProduct',
-			`name=${name}&price=${price}&userid=${userid}`)
-			.then(function (response){
-				console.log(response);
-			
-		})
-		.catch(function (err){
-			console.log(err);
-		});
-	};
-
   const [quantity, setQuantity] = useState(0);
+  const [products, setProducts] = useState([]);
+  let userid = 5;
 
-  function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-  }
+  useEffect(() => {
+    getProducts();
+  }, []);
 
-  const rows = [
-    createData('1', 'Product1', 1, 24.0),
-    createData('2', 'Product2', 2, 37.0),
-    createData('3', 'Product3', 2, 24.99),
-    createData('4', 'Product4', 1, 67.0),
-    createData('5', 'Product5', 3, 4.99)
-  ];
+  const getProducts = async () => {
+    await cccClient
+      .post('getProducts', `userid=${userid}`)
+      .then(function (response) {
+        console.log(response);
+        setProducts(response.data);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
 
-	let userid = 5; 
+  const addProduct = async () => {
+    await cccClient
+      .post('addProduct', `name=${name}&price=${price}&userid=${userid}`)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
 
   return (
     <div className={styles.container}>
@@ -96,14 +82,9 @@ function Merchant() {
             required
           />{' '}
         </Box>
-        <Button type="submit" variant="contained" color="primary" onClick={() => handleSubmit()}>
+        <Button type="submit" variant="contained" color="primary" onClick={() => addProduct()}>
           add Product
         </Button>
-		<Button variant="contained" color="secondary" onClick={() => getProducts()}>
-             get Products
-        </Button>
-
-		</div>
         <div>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -116,7 +97,7 @@ function Merchant() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
+                {products.map((row) => (
                   <TableRow
                     key={row.name}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
