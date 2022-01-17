@@ -129,7 +129,7 @@ public class MerchantDB {
      */
     public static Merchant getMerchant(String columnToSearch, String value) {
 
-        Merchant mer = new Merchant();
+        Merchant mer = null;
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
@@ -146,6 +146,7 @@ public class MerchantDB {
             ResultSet res = preparedStatement.getResultSet();
 
             if (res.next() == true) {
+                mer = new Merchant();
                 mer.setUser_id(res.getString("USERID"));
                 mer.setFirst_name(res.getString("FIRST_NAME"));
                 mer.setLast_name(res.getString("LAST_NAME"));
