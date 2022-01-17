@@ -126,7 +126,7 @@ public class EmployeeDB {
         }
     }
 
-    public static Employee getEmployee(int employee_id) {
+    public static Employee getEmployee(String employee_id) {
         Employee employee = new Employee();
         PreparedStatement preparedStatement = null;
         Connection con = null;

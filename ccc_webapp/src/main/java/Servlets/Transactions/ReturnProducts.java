@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Servlets.Transactions;
 
@@ -9,11 +9,12 @@ import hy360.ccc.db.CitizenDB;
 import hy360.ccc.db.CompanyDB;
 import hy360.ccc.db.EmployeeDB;
 import hy360.ccc.db.MerchantDB;
-import hy360.ccc.db.TransactionDB;
+import hy360.ccc.db.ProductDB;
 import hy360.ccc.model.Citizen;
 import hy360.ccc.model.Company;
 import hy360.ccc.model.Employee;
 import hy360.ccc.model.Merchant;
+import hy360.ccc.model.Product;
 import hy360.ccc.model.Transaction;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,9 +26,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author panagiotisk
+ * @author sckou
  */
-public class MakeTransaction extends HttpServlet {
+public class ReturnProducts extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -46,10 +47,10 @@ public class MakeTransaction extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet MakeTransaction</title>");
+            out.println("<title>Servlet ReturnProducts</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet MakeTransaction at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ReturnProducts at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -84,117 +85,94 @@ public class MakeTransaction extends HttpServlet {
 
         Gson gson = new Gson();
         String str;
-
-        double balance, cost, limit;
-        String credit_balance, products_cost, credit_limit, transaction_type;
-        String citizen_or_employee;
-        String merchant_id, citizen_id;
-        String employee_id;
-        String isPending;
+        
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-
+        
         Transaction transaction = new Transaction();
-
+        String customer_type;
+        String merchant_id, citizen_id, company_id, employee_id, product_id, quantity;
+        String customer_amount_due;
+        double product_quantity, merchant_gain, merchant_supply ;
+        
+        
         LocalDate date = java.time.LocalDate.now();
-
+        
         merchant_id = request.getParameter("merchantId");
-        products_cost = request.getParameter("amount");
-        transaction_type = request.getParameter("transactionType");
-
-        citizen_or_employee = request.getParameter("isCitizen");
-        if (citizen_or_employee.equals("true")) {
+        product_id = request.getParameter("productId");
+        quantity = request.getParameter("quantityOfReturningProduct");
+        customer_type = request.getParameter("isCitizen");
+        
+        transaction.setTransaction_type("E");
+        transaction.setPending("Y");
+        transaction.setDate(date.toString());
+        
+        Product returning_product = ProductDB.getProduct(product_id, merchant_id);
+        product_quantity = Integer.valueOf(returning_product.getQuantity()) + Integer.valueOf(quantity);
+        returning_product.setQuantity(String.valueOf(product_quantity));
+        
+        Merchant merchant = MerchantDB.getMerchant(Integer.valueOf(merchant_id));
+        merchant_gain = Double.valueOf(merchant.getGain())-(Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity));
+        merchant_supply = Double.valueOf(merchant.getSupply());
+        merchant.setGain(String.valueOf(merchant_gain));
+        merchant.setAmount_due(String.valueOf(merchant_gain * merchant_supply));
+        MerchantDB.updateMerchant(merchant);
+        
+        if (customer_type.equals("true")) {
             citizen_id = request.getParameter("citizenId");
-            credit_balance = CitizenDB.getCitizen(Integer.valueOf(citizen_id)).getCredit_balance();
-            credit_limit = CitizenDB.getCitizen(Integer.valueOf(citizen_id)).getCredit_limit();
+            customer_amount_due = CitizenDB.getCitizen(Integer.valueOf(citizen_id)).getAmount_due();
             transaction.setCitizen_id(citizen_id);
             transaction.setMerchant_cit_id(merchant_id);
 
         } else {
             employee_id = request.getParameter("employeeId");
-            String company_id = EmployeeDB.getEmployee(employee_id).getCompany_id();
-            credit_balance = CompanyDB.getCompany("USERID", company_id).getCredit_balance();
-            credit_limit = CompanyDB.getCompany("USERID", company_id).getCredit_limit();
+            company_id = EmployeeDB.getEmployee(employee_id).getCompany_id();
+            customer_amount_due = CompanyDB.getCompany("USERID", company_id).getAmount_due();
             transaction.setCompany_id(company_id);
             transaction.setEmployee_id(String.valueOf(employee_id));
             transaction.setMerchant_comp_id(merchant_id);
 
         }
-
-        balance = Integer.valueOf(credit_balance);
-        limit = Integer.valueOf(credit_limit);
-        cost = Integer.valueOf(products_cost);
-        if (balance > cost) {
-            transaction.setPending("N");
-            if (citizen_or_employee.equals("true")) { // CITIZEN
-
+        
+        if(Double.valueOf(customer_amount_due)== 0){
+            if (customer_type.equals("true")){
                 citizen_id = request.getParameter("citizenId");
                 int cit_id = Integer.valueOf(citizen_id);
                 Citizen cit = CitizenDB.getCitizen(cit_id);
-                double new_balance = Double.valueOf(cit.getCredit_balance()) - cost;
+                double new_balance = Double.valueOf(cit.getCredit_balance()) + (Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity));
                 cit.setCredit_balance(String.valueOf(new_balance));
                 CitizenDB.updateCitizen(cit);
-            } else {
+            }
+            else{
                 employee_id = request.getParameter("employeeId");
                 Employee em = EmployeeDB.getEmployee(employee_id);
                 Company comp = CompanyDB.getCompany("USERID", em.getCompany_id());
                 double new_balance = Double.valueOf(comp.getCredit_balance());
-                new_balance = new_balance - cost;
-                comp.setAmount_due(String.valueOf(new_balance));
+                new_balance = new_balance + (Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity));
+                comp.setCredit_balance(String.valueOf(new_balance));
                 CompanyDB.updateCompany(comp);
-
             }
-
-            int mer_id = Integer.valueOf(merchant_id);
-
-            Merchant mer = MerchantDB.getMerchant(mer_id);
-            double new_total = Double.valueOf(mer.getPurchases_total()) + cost;
-            mer.setPurchases_total(String.valueOf(new_total));
-            MerchantDB.updateMerchant(mer);
-
-                // UPdate credit_Balance on citizen or employye->company
-        } else if (balance < cost) {
-            transaction.setPending("Y");
-            if (citizen_or_employee.equals("true")) { // CITIZEN
+        }
+        else{
+            if (customer_type.equals("true")){
                 citizen_id = request.getParameter("citizenId");
                 int cit_id = Integer.valueOf(citizen_id);
                 Citizen cit = CitizenDB.getCitizen(cit_id);
-                double new_amountDue = Double.valueOf(cit.getAmount_due());
-                new_amountDue += cost;
-                cit.setAmount_due(String.valueOf(new_amountDue));
+                double new_balance = Double.valueOf(cit.getCredit_balance()) + (Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity));
+                cit.setCredit_balance(String.valueOf(new_balance));
+                cit.setAmount_due(String.valueOf(Double.valueOf(customer_amount_due)- (Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity))));
                 CitizenDB.updateCitizen(cit);
-            } else {                                // EMPLOYEE
+            }
+            else{
                 employee_id = request.getParameter("employeeId");
                 Employee em = EmployeeDB.getEmployee(employee_id);
                 Company comp = CompanyDB.getCompany("USERID", em.getCompany_id());
-                double new_amountDue = Double.valueOf(comp.getAmount_due());
-                new_amountDue += cost;
-                comp.setAmount_due(String.valueOf(new_amountDue));
+                double new_balance = Double.valueOf(comp.getCredit_balance());
+                new_balance = new_balance + (Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity));
+                comp.setCredit_balance(String.valueOf(new_balance));
+                comp.setAmount_due(String.valueOf(Double.valueOf(customer_amount_due)- (Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity))));
                 CompanyDB.updateCompany(comp);
             }
-        } else if (1 == 2) { // ANYTHING ELSE HERE ???? TODO
-                // ANYTHING ELSE
         }
-
-
-        transaction.setDate(date.toString());
-        transaction.setAmount(products_cost);
-
-        TransactionDB.addTransaction(transaction);
-        response.setStatus(200);
-        str = gson.toJson(transaction);
-        response.getWriter().print(str);
-
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }

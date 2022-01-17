@@ -13,6 +13,7 @@ public class Product {
     private String name;
     private String price;
     private String quantity;
+    private String merchant_id;
     
     
     public Product(){
@@ -20,19 +21,22 @@ public class Product {
         name = "";
         price = "";
         quantity = "";
+        merchant_id = "";
     }
     
-    public Product(String name, String price, String quantity){
+    public Product(String name, String price, String quantity, String merchant_id){
         this.name = name;
         this.price = price;
         this.quantity = quantity;
+        this.merchant_id = merchant_id;
     }
 
     public void checkFields() throws Exception {
 
         if (name == null || name.trim().isEmpty()
                 || price == null || price.trim().isEmpty()
-                || quantity == null || quantity.trim().isEmpty()) {
+                || quantity == null || quantity.trim().isEmpty()
+                || merchant_id == null || merchant_id.trim().isEmpty()) {
 
             throw new Exception("Missing Fields");
         }
@@ -69,13 +73,24 @@ public class Product {
     public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
+
+    public String getMerchant_id() {
+        return merchant_id;
+    }
+
+    public void setMerchant_id(String merchant_id) {
+        this.merchant_id = merchant_id;
+    }
+    
+    
     
     @Override
     public String toString(){
         StringBuilder ss = new StringBuilder();
         ss.append("name: ").append(name).append("\n")
                 .append("price: ").append(price).append("\n")
-                .append("quantity: ").append(quantity).append("\n");
+                .append("quantity: ").append(quantity).append("\n")
+                .append("merchant_id: ").append(merchant_id).append("\n");
         return ss.toString();
     }
 }
