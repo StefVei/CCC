@@ -17,8 +17,36 @@ function Merchant() {
   const styles = useStyles();
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
+
+	const getProducts = async () => {
+		await cccClient
+		.post(
+			'getProducts',
+			`userid=${userid}`)
+			.then(function (response){
+				console.log(response);
+			
+		})
+		.catch(function (err){
+			console.log(err);
+		});
+	};
+ 
+  const addProduct = async () => {
+	await cccClient
+		.post(
+			'addProduct',
+			`name=${name}&price=${price}&userid=${userid}`)
+			.then(function (response){
+				console.log(response);
+			
+		})
+		.catch(function (err){
+			console.log(err);
+		});
+	};
+
   const [quantity, setQuantity] = useState(0);
-  let userid = 4;
 
   function createData(name, calories, fat, carbs, protein) {
     return { name, calories, fat, carbs, protein };
@@ -32,16 +60,7 @@ function Merchant() {
     createData('5', 'Product5', 3, 4.99)
   ];
 
-  const handleSubmit = async () => {
-    await cccClient
-      .post('addProduct', `name=${name}&price=${price}&userid=${userid}`)
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-  };
+	let userid = 5; 
 
   return (
     <div className={styles.container}>
@@ -80,6 +99,11 @@ function Merchant() {
         <Button type="submit" variant="contained" color="primary" onClick={() => handleSubmit()}>
           add Product
         </Button>
+		<Button variant="contained" color="secondary" onClick={() => getProducts()}>
+             get Products
+        </Button>
+
+		</div>
         <div>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">

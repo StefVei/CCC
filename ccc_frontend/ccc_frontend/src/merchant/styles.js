@@ -8,7 +8,8 @@ const useStyles = makeStyles({
   },
   textContainer: {
     display: 'flex',
-    flexDirection: 'column',
+	flexDirection: 'column',
+    justifyContent: 'center',
     padding: '2.5%'
   }
 });
