@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   TextField,
   Button,
@@ -14,43 +13,39 @@ import {
 import AdapterDay from '@mui/lab/AdapterDayjs';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import { useNavigate } from 'react-router-dom';
 import useStyles from './styles';
 import { cccClient } from '../network';
 
-function CitizenRegister() {
+function MerchantRegister() {
   const navigate = useNavigate();
   const styles = useStyles();
   const [Username, setUsername] = useState('');
   const [Password, setPassword] = useState('');
-  const [Phone, setPhone] = useState('');
   const [Email, setEmail] = useState('');
   const [Address, setAddress] = useState('');
   const [Firstname, setFirstname] = useState('');
-  const [CreditBalance, setCreditBalance] = useState('');
   const [Lastname, setLastname] = useState('');
-  const [Amka, setAmka] = useState('');
-  const [Vat, setVat] = useState('');
   const [BirthDate, setBirthDate] = useState(new Date());
   const [Gender, setGender] = useState('female');
-
-  const handleChange = (event) => {
-    setGender(event.target.value);
-  };
+  const [Phone, setPhone] = useState('');
 
   const handleDateChange = (newValue) => {
     setBirthDate(newValue);
   };
 
+  const handleChange = (event) => {
+    setGender(event.target.value);
+  };
+
   const handleSubmit = async () => {
     await cccClient
       .post(
-        'OpenCitizenAccount',
-        `username=${Username}&password=${Password}&email=${Email}&address=${Address}&firstname=${Firstname}&phone=${Phone}&creditBalance=${
-          CreditBalance ? CreditBalance : 0
-        }&lastname=${Lastname}&amka=${Amka}&vat=${Vat}&birthDate=${BirthDate.toISOString().slice(
+        'OpenMerchantAccount',
+        `username=${Username}&password=${Password}&email=${Email}&address=${Address}&firstname=${Firstname}&lastname=${Lastname}&birthDate=${BirthDate.toISOString().slice(
           0,
           10
-        )}&gender=${Gender}`
+        )}&gender=${Gender}&phone=${Phone}`
       )
       .then(function (response) {
         console.log(response);
@@ -64,7 +59,7 @@ function CitizenRegister() {
     <div className={styles.container}>
       <div className={styles.textFieldContainer}>
         <Typography alignSelf={'center'} variant="h4">
-          Register Citizen
+          Register Merchant
         </Typography>
         <Box pt={3}>
           <TextField
@@ -73,13 +68,13 @@ function CitizenRegister() {
             value={Username}
             onChange={(e) => setUsername(e.target.value)}
             required
-          />
+          />{' '}
         </Box>
         <Box pt={3}>
           <TextField
             label="Password:"
-            variant="filled"
             type="password"
+            variant="filled"
             value={Password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -92,6 +87,7 @@ function CitizenRegister() {
             value={Phone}
             onChange={(e) => setPhone(e.target.value)}
             required
+            inputProps={{ maxLength: 10 }}
           />
         </Box>
         <Box pt={3}>
@@ -101,7 +97,7 @@ function CitizenRegister() {
             value={Email}
             onChange={(e) => setEmail(e.target.value)}
             required
-          />
+          />{' '}
         </Box>
         <Box pt={3}>
           <TextField
@@ -110,7 +106,7 @@ function CitizenRegister() {
             value={Address}
             onChange={(e) => setAddress(e.target.value)}
             required
-          />
+          />{' '}
         </Box>
         <Box pt={3}>
           <TextField
@@ -119,7 +115,7 @@ function CitizenRegister() {
             value={Firstname}
             onChange={(e) => setFirstname(e.target.value)}
             required
-          />
+          />{' '}
         </Box>
         <Box pt={3}>
           <TextField
@@ -128,44 +124,7 @@ function CitizenRegister() {
             value={Lastname}
             onChange={(e) => setLastname(e.target.value)}
             required
-          />
-        </Box>
-        <Box pt={3}>
-          <TextField
-            label="AMKA:"
-            variant="filled"
-            value={Amka}
-            onChange={(e) => setAmka(e.target.value)}
-            required
-          />
-        </Box>
-        <Box pt={3}>
-          <TextField
-            label="VAT:"
-            variant="filled"
-            value={Vat}
-            onChange={(e) => setVat(e.target.value)}
-            required
-          />
-        </Box>
-        <Box pt={3}>
-          <LocalizationProvider dateAdapter={AdapterDay}>
-            <DesktopDatePicker
-              label="Birth Date"
-              value={BirthDate}
-              onChange={handleDateChange}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </LocalizationProvider>
-        </Box>
-        <Box pt={3}>
-          <TextField
-            label="Credit Balance:"
-            variant="filled"
-            value={CreditBalance}
-            onChange={(e) => setCreditBalance(e.target.value)}
-            required
-          />
+          />{' '}
         </Box>
         <Box pt={3}>
           <FormControl component="fieldset">
@@ -182,6 +141,16 @@ function CitizenRegister() {
             </RadioGroup>
           </FormControl>
         </Box>
+        <Box pt={3}>
+          <LocalizationProvider dateAdapter={AdapterDay}>
+            <DesktopDatePicker
+              label="Birth Date"
+              value={BirthDate}
+              onChange={handleDateChange}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
+        </Box>
         <div className={styles.buttonContainer}>
           <Button type="submit" variant="contained" color="primary" onClick={() => handleSubmit()}>
             Signup
@@ -195,4 +164,4 @@ function CitizenRegister() {
   );
 }
 
-export default CitizenRegister;
+export default MerchantRegister;

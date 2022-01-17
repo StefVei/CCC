@@ -2,10 +2,11 @@ import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import Home from './home';
-import CompanyRegister from './register/company';
-import CitizenRegister from './register/citizen';
-import MerchantRegister from './register/merchant';
-import EmployeeRegister from './register/employee';
+import CompanyRegister from './auth/company';
+import CitizenRegister from './auth/citizen';
+import MerchantRegister from './auth/merchant';
+import EmployeeRegister from './auth/employee';
+import Login from './auth/login';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/CitizenRegister" element={<CitizenRegister />} />
           <Route path="/MerchantRegister" element={<MerchantRegister />} />
           <Route path="/EmployeeRegister" element={<EmployeeRegister />} />
+          <Route path="/Login" element={<Login />} />
           <Route element={<div>Oops! Page not found!</div>} />
         </Routes>
       </BrowserRouter>
