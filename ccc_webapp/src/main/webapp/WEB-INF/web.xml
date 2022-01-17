@@ -30,7 +30,7 @@
     </servlet>
     <servlet>
         <servlet-name>Login</servlet-name>
-        <servlet-class>Login</servlet-class>
+        <servlet-class>Servlets.Register.Login</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>addProduct</servlet-name>
