@@ -7,6 +7,10 @@ import CitizenRegister from './auth/citizen';
 import MerchantRegister from './auth/merchant';
 import EmployeeRegister from './auth/employee';
 import Login from './auth/login';
+import Company from './company';
+import Citizen from './citizen';
+import Merchant from './merchant';
+import Employee from './employee';
 
 function App() {
   return (
@@ -19,6 +23,10 @@ function App() {
           <Route path="/MerchantRegister" element={<MerchantRegister />} />
           <Route path="/EmployeeRegister" element={<EmployeeRegister />} />
           <Route path="/Login" element={<Login />} />
+          <Route path="/Company" element={<Company />} />
+          <Route path="/Citizen" element={<Citizen />} />
+          <Route path="/Merchant" element={<Merchant />} />
+          <Route path="/Employee" element={<Employee />} />
           <Route element={<div>Oops! Page not found!</div>} />
         </Routes>
       </BrowserRouter>
