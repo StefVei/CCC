@@ -14,6 +14,19 @@ function Login() {
     await cccClient
       .post('Login', `username=${Username}&password=${Password}`)
       .then(function (response) {
+        if (response.data === 'Wrong Credentials') {
+          alert(response.data);
+        } else {
+          if (response.data.companyid) {
+            navigate('/Company');
+          } else if (response.data.employeeid) {
+            navigate('/Employee');
+          } else if (response.data.citizenid) {
+            navigate('/Citizen');
+          } else {
+            navigate('/Merchant');
+          }
+        }
         console.log(response);
       })
       .catch(function (error) {
