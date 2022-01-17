@@ -77,9 +77,21 @@ public class getProducts extends HttpServlet {
 
         String str;
         Gson gson = new Gson();
-        List<Product> products = new ArrayList<Product>();
+        List<Product> products = new ArrayList<>();
+
+        String user_id = request.getParameter("userid");
+
+        System.out.println("user id is " + user_id);
+
 
         products = ProductDB.getProducts(request.getParameter("userid"));
+
+        response.setStatus(200);
+        str = gson.toJson(products);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().print(str);
+
 
     }
 

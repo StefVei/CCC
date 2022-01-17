@@ -220,6 +220,8 @@ CREATE TABLE `employees` (
   `EMAIL` varchar(50) NOT NULL,
   `ADDRESS` varchar(50) NOT NULL,
   `PHONE` varchar(10) NOT NULL,
+  `USERNAME` varchar(100) NOT NULL,
+  `PASSWORD` varchar(100) NOT NULL,
   `COMPANY_USERID` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -227,13 +229,13 @@ CREATE TABLE `employees` (
 -- Άδειασμα δεδομένων του πίνακα `employees`
 --
 
-INSERT INTO `employees` (`EMPLOYEE_ID`, `FIRST_NAME`, `LAST_NAME`, `BIRTH_DATE`, `GENDER`, `EMAIL`, `ADDRESS`, `PHONE`, `COMPANY_USERID`) VALUES
-(1, 'Mahesh', 'Pegasus', '2011-11-30', 'M', 'mape@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2101111111', 1),
-(3, 'Anna', 'Derilla', '2001-11-30', 'F', 'ande@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2102222222', 1),
-(4, 'Helena', 'Burt', '1996-03-31', 'F', 'hebu@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2103333333', 2),
-(5, 'Pedro', 'Lema', '2004-11-01', 'O', 'pele@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2104444444', 3),
-(6, 'Vigga', 'Stegga', '2001-09-13', 'O', 'viste@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2105555555', 4),
-(7, 'Wilma', 'Lorenza', '2003-09-14', 'F', 'wilo@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2106666666', 5);
+INSERT INTO `employees` (`EMPLOYEE_ID`, `FIRST_NAME`, `LAST_NAME`, `BIRTH_DATE`, `GENDER`, `EMAIL`, `ADDRESS`, `PHONE`, `USERNAME` , `PASSWORD` , `COMPANY_USERID`) VALUES
+(1, 'Mahesh', 'Pegasus', '2011-11-30', 'M', 'mape@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2101111111', 'NIKOS123', 'XYZ!!'  ,1),
+(3, 'Anna', 'Derilla', '2001-11-30', 'F', 'ande@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2102222222', 'TEO123', 'XYZ222' , ,1),
+(4, 'Helena', 'Burt', '1996-03-31', 'F', 'hebu@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2103333333', 'TT124', 'XYZ333' , 2),
+(5, 'Pedro', 'Lema', '2004-11-01', 'O', 'pele@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2104444444', 'TT232', 'XYZ123' , 3),
+(6, 'Vigga', 'Stegga', '2001-09-13', 'O', 'viste@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2105555555', 'TT324', 'XYZ111' , 4),
+(7, 'Wilma', 'Lorenza', '2003-09-14', 'F', 'wilo@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2106666666', 'TTTT', 'XYZ212' ,5);
 
 -- --------------------------------------------------------
 
@@ -337,7 +339,7 @@ ALTER TABLE `citizens`
   ADD PRIMARY KEY (`USERID`),
   ADD UNIQUE KEY `AMKA` (`AMKA`),
   ADD UNIQUE KEY `VAT` (`VAT`),
-  ADD UNIQUE KEY `LOGIN` (`USERNAME`,`PASSWORD`) USING BTREE,
+  ADD UNIQUE KEY `USERNAME` (`USERNAME`) USING BTREE,
   ADD UNIQUE KEY `ACCOUNT_NUMBER` (`ACCOUNT_NUMBER`);
 
 --
@@ -363,7 +365,7 @@ ALTER TABLE `cm_traffics`
 ALTER TABLE `companies`
   ADD PRIMARY KEY (`USERID`),
   ADD UNIQUE KEY `NAME` (`NAME`),
-  ADD UNIQUE KEY `LOGIN` (`USERNAME`,`PASSWORD`) USING BTREE,
+  ADD UNIQUE KEY `USERNAME` (`USERNAME`),
   ADD UNIQUE KEY `ACCOUNT_NUMBER` (`ACCOUNT_NUMBER`);
 
 --
@@ -371,7 +373,8 @@ ALTER TABLE `companies`
 --
 ALTER TABLE `employees`
   ADD PRIMARY KEY (`EMPLOYEE_ID`,`COMPANY_USERID`),
-  ADD KEY `COMPANY_USERID` (`COMPANY_USERID`) USING BTREE;
+  ADD KEY `COMPANY_USERID` (`COMPANY_USERID`) USING BTREE,
+  ADD UNIQUE KEY `USERNAME` (`USERNAME`);
 
 --
 -- Ευρετήρια για πίνακα `merchants`
@@ -379,7 +382,7 @@ ALTER TABLE `employees`
 ALTER TABLE `merchants`
   ADD PRIMARY KEY (`USERID`),
   ADD UNIQUE KEY `ACCOUNT_NUMBER` (`ACCOUNT_NUMBER`),
-  ADD UNIQUE KEY `LOGIN` (`USERNAME`,`PASSWORD`) USING BTREE;
+  ADD UNIQUE KEY `USERNAME` (`USERNAME`);
 
 --
 -- Ευρετήρια για πίνακα `products`

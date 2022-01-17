@@ -98,7 +98,6 @@ public class CitizenDB {
         Citizen cit = null;
         try {
             con = CccDB.getConnection();
-            con = CccDB.getConnection();
 
             StringBuilder insQuery = new StringBuilder();
 

@@ -17,9 +17,24 @@ function Merchant() {
   const styles = useStyles();
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
-	let userid = 4; 
+	let userid = 5; 
+
+
+	const getProducts = async () => {
+		await cccClient
+		.post(
+			'getProducts',
+			`userid=${userid}`)
+			.then(function (response){
+				console.log(response);
+			
+		})
+		.catch(function (err){
+			console.log(err);
+		});
+	};
  
-  const handleSubmit = async () => {
+  const addProduct = async () => {
 	await cccClient
 		.post(
 			'addProduct',
@@ -57,8 +72,11 @@ function Merchant() {
 				required
 			/>{' '}
 		</Box>
-		<Button type="submit" variant="contained" color="primary" onClick={() => handleSubmit()}>
+		<Button type="submit" variant="contained" color="primary" onClick={() => addProduct()}>
             add Product
+        </Button>
+		<Button variant="contained" color="secondary" onClick={() => getProducts()}>
+             get Products
         </Button>
 
 		</div>

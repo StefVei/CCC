@@ -151,7 +151,7 @@ public class ProductDB {
                 pro.setName(res.getString("NAME"));
                 pro.setPrice(res.getString("PRICE"));
                 pro.setQuantity(res.getString("QUANTITY"));
-                pro.setMerchant_id(res.getString("MERCHANT_ID"));
+                pro.setMerchant_id(res.getString("MERCHANT_USERID"));
                 products.add(pro);
             }
 
