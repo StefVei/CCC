@@ -4,11 +4,11 @@
  */
 package hy360.ccc.db;
 
+import Utils_db.UtilitiesDB;
 import hy360.ccc.model.BoughtProduct;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,29 +22,6 @@ import java.util.logging.Logger;
  */
 public class BoughtProductDB {
     
-    public static void setValues(PreparedStatement preparedStatement, Object... values) throws SQLException{
-        for(int i = 0; i < values.length; i++){
-            preparedStatement.setObject(i + 1, values[i]);
-        }
-    }
-    
-        
-    private static void closeConnection(PreparedStatement preparedStatement, Connection con){
-        if(preparedStatement != null){
-            try{
-                preparedStatement.close();
-            }catch(SQLException sql_ex){
-                Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE,null, sql_ex);
-            }
-        }
-        if(con != null){
-            try{
-                con.close();
-            }catch(SQLException sql_ex){
-                Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE,null, sql_ex);
-            }
-        }
-    }
     
     /**
      * 
@@ -65,13 +42,13 @@ public class BoughtProductDB {
             while(it.hasNext()){
                 preparedStatement = con.prepareStatement("INSERT INTO bought_product"+
                     " TRANSACTION_ID, BOUGHT_PRODUCT_ID ) "+"VALUES (?, ?)");
-                setValues(preparedStatement, transaction_id, it.next());
+                UtilitiesDB.setValues(preparedStatement, transaction_id, it.next());
                 preparedStatement.executeUpdate();
             }
         }catch(Exception ex){
             Logger.getLogger(BoughtProductDB.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
-            closeConnection(preparedStatement, con);
+            UtilitiesDB.closeConnection(preparedStatement, con, BoughtProductDB.class.getName());
         }
     }
     
@@ -89,7 +66,7 @@ public class BoughtProductDB {
             con = CccDB.getConnection();
             String sql_select = "SELECT * FROM BOUGHT_PRODUCT WHERE TRANSACTION_ID = ?";
             preparedStatement = con.prepareStatement(sql_select);
-            setValues(preparedStatement, transaction_id);
+            UtilitiesDB.setValues(preparedStatement, transaction_id);
             preparedStatement.executeUpdate();
             ResultSet res = preparedStatement.getResultSet();
             while(res.next() == true){
@@ -101,7 +78,7 @@ public class BoughtProductDB {
         }catch(Exception ex){
             Logger.getLogger(BoughtProductDB.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
-            closeConnection(preparedStatement, con);
+            UtilitiesDB.closeConnection(preparedStatement, con, BoughtProductDB.class.getName());
         }
 
         return products;

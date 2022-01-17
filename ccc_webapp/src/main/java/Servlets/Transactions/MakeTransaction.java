@@ -86,11 +86,10 @@ public class MakeTransaction extends HttpServlet {
         String str;
 
         double balance, cost, limit;
-        String credit_balance, products_cost, credit_limit, transaction_type;
-        String citizen_or_employee;
-        String merchant_id, citizen_id;
-        String employee_id;
-        String isPending;
+        String credit_balance, products_cost, credit_limit;
+        String citizen_or_employee, isPending;
+        String merchant_id, citizen_id, employee_id;
+
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
@@ -100,7 +99,6 @@ public class MakeTransaction extends HttpServlet {
 
         merchant_id = request.getParameter("merchantId");
         products_cost = request.getParameter("amount");
-        transaction_type = request.getParameter("transactionType");
 
         citizen_or_employee = request.getParameter("isCitizen");
         if (citizen_or_employee.equals("true")) {
@@ -140,7 +138,7 @@ public class MakeTransaction extends HttpServlet {
                 Company comp = CompanyDB.getCompany("USERID", em.getCompany_id());
                 double new_balance = Double.valueOf(comp.getCredit_balance());
                 new_balance = new_balance - cost;
-                comp.setAmount_due(String.valueOf(new_balance));
+                comp.setCredit_balance(String.valueOf(new_balance));
                 CompanyDB.updateCompany(comp);
 
             }

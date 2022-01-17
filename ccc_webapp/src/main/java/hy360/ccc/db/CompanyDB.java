@@ -9,8 +9,6 @@ import hy360.ccc.model.Company;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,29 +17,6 @@ import java.util.logging.Logger;
  * @author panagiotisk
  */
 public class CompanyDB {
-
-    public static void setValues(PreparedStatement preparedStatement, Object... values) throws SQLException {
-        for (int i = 0; i < values.length; i++) {
-            preparedStatement.setObject(i + 1, values[i]);
-        }
-    }
-
-    private static void closeConnection(PreparedStatement preparedStatement, Connection con) {
-        if (preparedStatement != null) {
-            try {
-                preparedStatement.close();
-            } catch (SQLException sql_ex) {
-                Logger.getLogger(CompanyDB.class.getName()).log(Level.SEVERE, null, sql_ex);
-            }
-        }
-        if (con != null) {
-            try {
-                con.close();
-            } catch (SQLException sql_ex) {
-                Logger.getLogger(CompanyDB.class.getName()).log(Level.SEVERE, null, sql_ex);
-            }
-        }
-    }
 
     public static void addCompany(Company company) {
 
@@ -66,7 +41,7 @@ public class CompanyDB {
                     + "?, ?, ?, ?, ?, ?,"
                     + "?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
 
-            setValues(preparedStatement,
+            UtilitiesDB.setValues(preparedStatement,
                     company.getName(),
                     company.getEstablishment_date(),
                     company.getUserName(),
@@ -85,7 +60,7 @@ public class CompanyDB {
         } catch (Exception ex) {
             Logger.getLogger(CompanyDB.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            closeConnection(preparedStatement, con);
+            UtilitiesDB.closeConnection(preparedStatement, con, CompanyDB.class.getName());
         }
 
     }
@@ -102,7 +77,7 @@ public class CompanyDB {
         } catch (Exception ex) {
             Logger.getLogger(CompanyDB.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            closeConnection(preparedStatement, con);
+            UtilitiesDB.closeConnection(preparedStatement, con, CompanyDB.class.getName());
         }
     }
 
@@ -115,12 +90,11 @@ public class CompanyDB {
      */
     public static Company getCompany(String columnToSearch, String value) {
 
-        Statement stmt = null;
+        PreparedStatement preparedStatement = null;
         Connection con = null;
         Company comp = null;
         try {
             con = CccDB.getConnection();
-            stmt = con.createStatement();
 
             StringBuilder insQuery = new StringBuilder();
 
@@ -128,8 +102,10 @@ public class CompanyDB {
                     .append(" WHERE").append(" ").append(columnToSearch).append(" = ")
                     .append("'").append(value).append("';");
 
-            stmt.execute(insQuery.toString());
-            ResultSet res = stmt.getResultSet();
+            preparedStatement = con.prepareStatement(insQuery.toString());
+            preparedStatement.executeQuery();
+            ResultSet res = preparedStatement.getResultSet();
+
             if (res.next()) {
                 comp = new Company();
                 comp.setUser_id(res.getString("USERID"));
@@ -150,6 +126,8 @@ public class CompanyDB {
 
         } catch (Exception ex) {
             Logger.getLogger(CompanyDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, CompanyDB.class.getName());
         }
 
         return comp;

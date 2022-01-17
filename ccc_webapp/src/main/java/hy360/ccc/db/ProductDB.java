@@ -9,7 +9,6 @@ import hy360.ccc.model.Product;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,28 +18,6 @@ import java.util.logging.Logger;
  */
 public class ProductDB {
     
-    public static void setValues(PreparedStatement preparedStatement, Object... values) throws SQLException {
-        for (int i = 0; i < values.length; i++) {
-            preparedStatement.setObject(i + 1, values[i]);
-        }
-    }
-
-    private static void closeConnection(PreparedStatement preparedStatement, Connection con) {
-        if (preparedStatement != null) {
-            try {
-                preparedStatement.close();
-            } catch (SQLException sql_ex) {
-                Logger.getLogger(ProductDB.class.getName()).log(Level.SEVERE, null, sql_ex);
-            }
-        }
-        if (con != null) {
-            try {
-                con.close();
-            } catch (SQLException sql_ex) {
-                Logger.getLogger(ProductDB.class.getName()).log(Level.SEVERE, null, sql_ex);
-            }
-        }
-    }
         
     
     public static void addProduct(Product product){

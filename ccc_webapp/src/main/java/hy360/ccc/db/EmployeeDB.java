@@ -9,7 +9,6 @@ import hy360.ccc.model.Employee;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,28 +20,6 @@ import java.util.logging.Logger;
  */
 public class EmployeeDB {
 
-    public static void setValues(PreparedStatement preparedStatement, Object... values) throws SQLException {
-        for (int i = 0; i < values.length; i++) {
-            preparedStatement.setObject(i + 1, values[i]);
-        }
-    }
-
-    private static void closeConnection(PreparedStatement preparedStatement, Connection con) {
-        if (preparedStatement != null) {
-            try {
-                preparedStatement.close();
-            } catch (SQLException sql_ex) {
-                Logger.getLogger(EmployeeDB.class.getName()).log(Level.SEVERE, null, sql_ex);
-            }
-        }
-        if (con != null) {
-            try {
-                con.close();
-            } catch (SQLException sql_ex) {
-                Logger.getLogger(EmployeeDB.class.getName()).log(Level.SEVERE, null, sql_ex);
-            }
-        }
-    }
 
     public static void addEmployee(Employee employee) {
         try {
@@ -60,7 +37,7 @@ public class EmployeeDB {
                     + " PHONE, GENDER, COMPANY_USERID) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                     preparedStatement.RETURN_GENERATED_KEYS);
 
-            setValues(preparedStatement,
+            UtilitiesDB.setValues(preparedStatement,
                     employee.getBirth_date(),
                     employee.getEmail(),
                     employee.getAddress(),
