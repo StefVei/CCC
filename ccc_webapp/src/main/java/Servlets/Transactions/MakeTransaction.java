@@ -103,14 +103,14 @@ public class MakeTransaction extends HttpServlet {
         citizen_or_employee = request.getParameter("isCitizen");
         if (citizen_or_employee.equals("true")) {
             citizen_id = request.getParameter("citizenId");
-            credit_balance = CitizenDB.getCitizen(Integer.valueOf(citizen_id)).getCredit_balance();
-            credit_limit = CitizenDB.getCitizen(Integer.valueOf(citizen_id)).getCredit_limit();
+            credit_balance = CitizenDB.getCitizen("USERID", citizen_id).getCredit_balance();
+            credit_limit = CitizenDB.getCitizen("USERID", citizen_id).getCredit_limit();
             transaction.setCitizen_id(citizen_id);
             transaction.setMerchant_cit_id(merchant_id);
 
         } else {
             employee_id = request.getParameter("employeeId");
-            String company_id = EmployeeDB.getEmployee(employee_id).getCompany_id();
+            String company_id = EmployeeDB.getEmployee("EMPLOYEE_ID", employee_id).getCompany_id();
             credit_balance = CompanyDB.getCompany("USERID", company_id).getCredit_balance();
             credit_limit = CompanyDB.getCompany("USERID", company_id).getCredit_limit();
             transaction.setCompany_id(company_id);
@@ -125,16 +125,14 @@ public class MakeTransaction extends HttpServlet {
         if (balance > cost) {
             transaction.setPending("N");
             if (citizen_or_employee.equals("true")) { // CITIZEN
-
                 citizen_id = request.getParameter("citizenId");
-                int cit_id = Integer.valueOf(citizen_id);
-                Citizen cit = CitizenDB.getCitizen(cit_id);
+                Citizen cit = CitizenDB.getCitizen("USERID", citizen_id);
                 double new_balance = Double.valueOf(cit.getCredit_balance()) - cost;
                 cit.setCredit_balance(String.valueOf(new_balance));
                 CitizenDB.updateCitizen(cit);
             } else {
                 employee_id = request.getParameter("employeeId");
-                Employee em = EmployeeDB.getEmployee(employee_id);
+                Employee em = EmployeeDB.getEmployee("EMPLOYEE_ID", employee_id);
                 Company comp = CompanyDB.getCompany("USERID", em.getCompany_id());
                 double new_balance = Double.valueOf(comp.getCredit_balance());
                 new_balance = new_balance - cost;
@@ -143,9 +141,7 @@ public class MakeTransaction extends HttpServlet {
 
             }
 
-            int mer_id = Integer.valueOf(merchant_id);
-
-            Merchant mer = MerchantDB.getMerchant(mer_id);
+            Merchant mer = MerchantDB.getMerchant("USERID", merchant_id);
             double new_total = Double.valueOf(mer.getPurchases_total()) + cost;
             mer.setPurchases_total(String.valueOf(new_total));
             MerchantDB.updateMerchant(mer);
@@ -155,15 +151,14 @@ public class MakeTransaction extends HttpServlet {
             transaction.setPending("Y");
             if (citizen_or_employee.equals("true")) { // CITIZEN
                 citizen_id = request.getParameter("citizenId");
-                int cit_id = Integer.valueOf(citizen_id);
-                Citizen cit = CitizenDB.getCitizen(cit_id);
+                Citizen cit = CitizenDB.getCitizen("USERID", citizen_id);
                 double new_amountDue = Double.valueOf(cit.getAmount_due());
                 new_amountDue += cost;
                 cit.setAmount_due(String.valueOf(new_amountDue));
                 CitizenDB.updateCitizen(cit);
             } else {                                // EMPLOYEE
                 employee_id = request.getParameter("employeeId");
-                Employee em = EmployeeDB.getEmployee(employee_id);
+                Employee em = EmployeeDB.getEmployee("EMPLOYEE_ID", employee_id);
                 Company comp = CompanyDB.getCompany("USERID", em.getCompany_id());
                 double new_amountDue = Double.valueOf(comp.getAmount_due());
                 new_amountDue += cost;

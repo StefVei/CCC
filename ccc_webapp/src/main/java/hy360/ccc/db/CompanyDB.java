@@ -57,7 +57,11 @@ public class CompanyDB {
 
             preparedStatement.executeUpdate();
 
-            
+            ResultSet set = preparedStatement.getGeneratedKeys();
+            if (set.next()) {
+                company.setUser_id(set.getString(1));
+            }
+
         } catch (Exception ex) {
             Logger.getLogger(CompanyDB.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
