@@ -57,7 +57,7 @@ public class MerchantDB {
             ResultSet res = preparedStatement.getGeneratedKeys();
 
             if (res.next()) {
-                merchant.setUser_id(res.getString("USERID"));
+                merchant.setUser_id(res.getString(1));
             }
         } catch (Exception ex) {
             Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE, null, ex);
@@ -121,17 +121,27 @@ public class MerchantDB {
         }
     }
 
-    public static Merchant getMerchant(int merchant_id) {
+    /**
+     *
+     * @param columnToSearch column of SQL TO search USERID OR USERNAME
+     * @param value the value of the column to be searched
+     * @return
+     */
+    public static Merchant getMerchant(String columnToSearch, String value) {
 
         Merchant mer = new Merchant();
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
-            String sql_getmer = "SELECT * FROM merchants WHERE USERID = ?";
             con = CccDB.getConnection();
 
-            preparedStatement = con.prepareStatement(sql_getmer);
-            UtilitiesDB.setValues(preparedStatement, merchant_id);
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("SELECT * FROM merchants ")
+                    .append(" WHERE").append(" ").append(columnToSearch).append(" = ")
+                    .append("'").append(value).append("';");
+
+            preparedStatement = con.prepareStatement(insQuery.toString());
             preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
 
