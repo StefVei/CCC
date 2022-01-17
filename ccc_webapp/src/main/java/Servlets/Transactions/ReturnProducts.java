@@ -110,12 +110,14 @@ public class ReturnProducts extends HttpServlet {
         Product returning_product = ProductDB.getProduct(product_id, merchant_id);
         product_quantity = Integer.valueOf(returning_product.getQuantity()) + Integer.valueOf(quantity);
         returning_product.setQuantity(String.valueOf(product_quantity));
+        ProductDB.updateProduct(returning_product);
         
         Merchant merchant = MerchantDB.getMerchant(Integer.valueOf(merchant_id));
         merchant_gain = Double.valueOf(merchant.getGain())-(Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity));
         merchant_supply = Double.valueOf(merchant.getSupply());
         merchant.setGain(String.valueOf(merchant_gain));
         merchant.setAmount_due(String.valueOf(merchant_gain * merchant_supply));
+        merchant.setPurchases_total(String.valueOf(Integer.valueOf(merchant.getPurchases_total()) - 1));
         MerchantDB.updateMerchant(merchant);
         
         if (customer_type.equals("true")) {
