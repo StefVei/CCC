@@ -50,6 +50,11 @@ public class EmployeeDB {
 
             preparedStatement.executeUpdate();
 
+            ResultSet set = preparedStatement.getGeneratedKeys();
+            if (set.next()) {
+                employee.setEmployee_id(set.getString(1));
+            }
+
         } catch (Exception ex) {
             Logger.getLogger(EmployeeDB.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -103,20 +108,25 @@ public class EmployeeDB {
         }
     }
 
-    public static Employee getEmployee(String employee_id) {
-        Employee employee = new Employee();
+    public static Employee getEmployee(String columnToSearch, String value) {
+        Employee employee = null;
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
-            String sql_getemployee = "SELECT * FROM employees WHERE employee_ID = ?";
             con = CccDB.getConnection();
 
-            preparedStatement = con.prepareStatement(sql_getemployee);
-            UtilitiesDB.setValues(preparedStatement, employee_id);
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("SELECT * FROM companies ")
+                    .append(" WHERE").append(" ").append(columnToSearch).append(" = ")
+                    .append("'").append(value).append("';");
+
+            preparedStatement = con.prepareStatement(insQuery.toString());
             preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
 
             if (res.next() == true) {
+                employee = new Employee();
                 employee.setFirst_name(res.getString("FIRST_NAME"));
                 employee.setLast_name(res.getString("LAST_NAME"));
                 employee.setBirth_date(res.getString("BIRTH_DATE"));

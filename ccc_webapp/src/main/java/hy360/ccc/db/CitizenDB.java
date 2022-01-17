@@ -60,9 +60,9 @@ public class CitizenDB {
 
             preparedStatement.executeUpdate();
 
-            ResultSet set = preparedStatement.getResultSet();
+            ResultSet set = preparedStatement.getGeneratedKeys();
             if (set.next()) {
-                citizen.setUser_id(set.getString("USERID"));
+                citizen.setUser_id(set.getString(1));
             }
 
 
@@ -91,16 +91,22 @@ public class CitizenDB {
         }
     }
 
-    public static Citizen getCitizen(int citizen_id) {
+    public static Citizen getCitizen(String columnToSearch, String value) {
 
         PreparedStatement preparedStatement = null;
         Connection con = null;
         Citizen cit = null;
         try {
             con = CccDB.getConnection();
-            String sel = "SELECT * FROM citizens WHERE USERID = ?";
-            preparedStatement = con.prepareStatement(sel);
-            preparedStatement.setInt(1, citizen_id);
+            con = CccDB.getConnection();
+
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("SELECT * FROM companies ")
+                    .append(" WHERE").append(" ").append(columnToSearch).append(" = ")
+                    .append("'").append(value).append("';");
+
+            preparedStatement = con.prepareStatement(insQuery.toString());
             preparedStatement.executeQuery();
 
             ResultSet res = preparedStatement.getResultSet();

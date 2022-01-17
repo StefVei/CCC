@@ -42,10 +42,15 @@ public class ProductDB {
                     product.getPrice(),
                     product.getQuantity(),
                     product.getMerchant_id()
-                    );
+            );
             
         preparedStatement.executeUpdate();
-        
+            ResultSet res = preparedStatement.getGeneratedKeys();
+
+            if (res.next()) {
+                product.setProduct_id(res.getString(1));
+            }
+
         }catch(Exception ex){
             Logger.getLogger(ProductDB.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
@@ -132,7 +137,7 @@ public class ProductDB {
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
-            String sql_getmer = "SELECT * FROM products AND MERCHANT_USERID = ?";
+            String sql_getmer = "SELECT * FROM products WHERE MERCHANT_USERID = ?";
             con = CccDB.getConnection();
 
             preparedStatement = con.prepareStatement(sql_getmer);

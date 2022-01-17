@@ -9,8 +9,6 @@ import hy360.ccc.db.ProductDB;
 import hy360.ccc.model.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author panagiotisk
  */
-public class getProducts extends HttpServlet {
+public class addProduct extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +37,10 @@ public class getProducts extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet getProducts</title>");
+            out.println("<title>Servlet addProduct</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet getProducts at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet addProduct at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -75,11 +73,22 @@ public class getProducts extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String str;
         Gson gson = new Gson();
-        List<Product> products = new ArrayList<Product>();
+        String str;
+        Product product = new Product();
 
-        products = ProductDB.getProducts(request.getParameter("userid"));
+        product.setName(request.getParameter("name"));
+        product.setPrice(request.getParameter("price"));
+        product.setMerchant_id(request.getParameter("userid"));
+
+        ProductDB.addProduct(product);
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        response.setStatus(200);
+        str = gson.toJson(product);
+        response.getWriter().print(str);
 
     }
 

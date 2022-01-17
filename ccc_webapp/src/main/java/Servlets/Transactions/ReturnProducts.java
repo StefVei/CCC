@@ -111,7 +111,7 @@ public class ReturnProducts extends HttpServlet {
         product_quantity = Integer.valueOf(returning_product.getQuantity()) + Integer.valueOf(quantity);
         returning_product.setQuantity(String.valueOf(product_quantity));
         
-        Merchant merchant = MerchantDB.getMerchant(Integer.valueOf(merchant_id));
+        Merchant merchant = MerchantDB.getMerchant("USERID", merchant_id);
         merchant_gain = Double.valueOf(merchant.getGain())-(Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity));
         merchant_supply = Double.valueOf(merchant.getSupply());
         merchant.setGain(String.valueOf(merchant_gain));
@@ -120,13 +120,13 @@ public class ReturnProducts extends HttpServlet {
         
         if (customer_type.equals("true")) {
             citizen_id = request.getParameter("citizenId");
-            customer_amount_due = CitizenDB.getCitizen(Integer.valueOf(citizen_id)).getAmount_due();
+            customer_amount_due = CitizenDB.getCitizen("USERID", citizen_id).getAmount_due();
             transaction.setCitizen_id(citizen_id);
             transaction.setMerchant_cit_id(merchant_id);
 
         } else {
             employee_id = request.getParameter("employeeId");
-            company_id = EmployeeDB.getEmployee(employee_id).getCompany_id();
+            company_id = EmployeeDB.getEmployee("EMPLOYEE_ID", employee_id).getCompany_id();
             customer_amount_due = CompanyDB.getCompany("USERID", company_id).getAmount_due();
             transaction.setCompany_id(company_id);
             transaction.setEmployee_id(String.valueOf(employee_id));
@@ -137,15 +137,14 @@ public class ReturnProducts extends HttpServlet {
         if(Double.valueOf(customer_amount_due)== 0){
             if (customer_type.equals("true")){
                 citizen_id = request.getParameter("citizenId");
-                int cit_id = Integer.valueOf(citizen_id);
-                Citizen cit = CitizenDB.getCitizen(cit_id);
+                Citizen cit = CitizenDB.getCitizen("USERID", citizen_id);
                 double new_balance = Double.valueOf(cit.getCredit_balance()) + (Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity));
                 cit.setCredit_balance(String.valueOf(new_balance));
                 CitizenDB.updateCitizen(cit);
             }
             else{
                 employee_id = request.getParameter("employeeId");
-                Employee em = EmployeeDB.getEmployee(employee_id);
+                Employee em = EmployeeDB.getEmployee("EMPLOYEE_ID", employee_id);
                 Company comp = CompanyDB.getCompany("USERID", em.getCompany_id());
                 double new_balance = Double.valueOf(comp.getCredit_balance());
                 new_balance = new_balance + (Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity));
@@ -156,8 +155,7 @@ public class ReturnProducts extends HttpServlet {
         else{
             if (customer_type.equals("true")){
                 citizen_id = request.getParameter("citizenId");
-                int cit_id = Integer.valueOf(citizen_id);
-                Citizen cit = CitizenDB.getCitizen(cit_id);
+                Citizen cit = CitizenDB.getCitizen("USERID", citizen_id);
                 double new_balance = Double.valueOf(cit.getCredit_balance()) + (Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity));
                 cit.setCredit_balance(String.valueOf(new_balance));
                 cit.setAmount_due(String.valueOf(Double.valueOf(customer_amount_due)- (Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity))));
@@ -165,7 +163,7 @@ public class ReturnProducts extends HttpServlet {
             }
             else{
                 employee_id = request.getParameter("employeeId");
-                Employee em = EmployeeDB.getEmployee(employee_id);
+                Employee em = EmployeeDB.getEmployee("EMPLOYEE_ID", employee_id);
                 Company comp = CompanyDB.getCompany("USERID", em.getCompany_id());
                 double new_balance = Double.valueOf(comp.getCredit_balance());
                 new_balance = new_balance + (Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity));
