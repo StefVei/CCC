@@ -3,12 +3,12 @@ import { makeStyles } from '@mui/styles';
 const useStyles = makeStyles({
   container: {
     display: 'flex',
-	flexDirection: 'column',
-    alignItem: 'center'
+    alignItem: 'center',
+    justifyContent: 'center'
   },
   textContainer: {
     display: 'flex',
-    justifyContent: 'center',
+    flexDirection: 'column',
     padding: '2.5%'
   }
 });
