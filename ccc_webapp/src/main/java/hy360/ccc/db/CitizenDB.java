@@ -60,6 +60,11 @@ public class CitizenDB {
 
             preparedStatement.executeUpdate();
 
+            ResultSet set = preparedStatement.getResultSet();
+            if (set.next()) {
+                citizen.setUser_id(set.getString("USERID"));
+            }
+
 
         } catch (Exception ex) {
             Logger.getLogger(CitizenDB.class.getName()).log(Level.SEVERE, null, ex);

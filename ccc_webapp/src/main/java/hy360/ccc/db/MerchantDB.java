@@ -54,10 +54,10 @@ public class MerchantDB {
                     merchant.getAccount_number());
             
             preparedStatement.executeUpdate();
+            ResultSet res = preparedStatement.getGeneratedKeys();
 
-            ResultSet set = preparedStatement.getResultSet();
-            if (set.next()) {
-                merchant.setUser_id(set.getString("USERID"));
+            if (res.next()) {
+                merchant.setUser_id(res.getString("USERID"));
             }
         } catch (Exception ex) {
             Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE, null, ex);

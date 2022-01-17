@@ -56,6 +56,7 @@ public class CompanyDB {
                     company.getAccount_due_date());
 
             preparedStatement.executeUpdate();
+
             
         } catch (Exception ex) {
             Logger.getLogger(CompanyDB.class.getName()).log(Level.SEVERE, null, ex);

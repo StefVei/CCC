@@ -110,6 +110,7 @@ public class OpenCitizenAccount extends HttpServlet {
         cit.setGender(gender);
 
         CitizenDB.addCitizen(cit);
+
         response.setStatus(200);
         str = gson.toJson(cit);
         response.getWriter().print(str);

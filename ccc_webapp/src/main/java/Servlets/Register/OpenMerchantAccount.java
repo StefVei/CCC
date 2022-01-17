@@ -104,8 +104,9 @@ public class OpenMerchantAccount extends HttpServlet {
                 : "O";
 
         merchant.setGender(gender);
-        
+
         MerchantDB.addMerchant(merchant);
+
         response.setStatus(200);
         str = gson.toJson(merchant);
         response.getWriter().print(str);
