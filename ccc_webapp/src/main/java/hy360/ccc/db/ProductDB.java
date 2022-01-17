@@ -9,6 +9,8 @@ import hy360.ccc.model.Product;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -124,6 +126,39 @@ public class ProductDB {
 
     }
 
+    public static List<Product> getProducts(String merchant) {
+
+        List<Product> products = new ArrayList<Product>();
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+        try {
+            String sql_getmer = "SELECT * FROM products AND MERCHANT_USERID = ?";
+            con = CccDB.getConnection();
+
+            preparedStatement = con.prepareStatement(sql_getmer);
+            UtilitiesDB.setValues(preparedStatement, Integer.valueOf(merchant));
+            preparedStatement.executeQuery();
+            ResultSet res = preparedStatement.getResultSet();
+
+            while (res.next() == true) {
+                Product pro = new Product();
+                pro.setProduct_id(res.getString("PRODUCT_ID"));
+                pro.setName(res.getString("NAME"));
+                pro.setPrice(res.getString("PRICE"));
+                pro.setQuantity(res.getString("QUANTITY"));
+                pro.setMerchant_id(res.getString("MERCHANT_ID"));
+                products.add(pro);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(ProductDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, ProductDB.class.getName());
+        }
+
+        return products;
+
+    }
 
 
 }

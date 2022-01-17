@@ -53,9 +53,13 @@ public class MerchantDB {
                     merchant.getAmount_due(),
                     merchant.getAccount_number());
             
-        preparedStatement.executeUpdate();
-        
-        }catch(Exception ex){
+            preparedStatement.executeUpdate();
+
+            ResultSet set = preparedStatement.getResultSet();
+            if (set.next()) {
+                merchant.setUser_id(set.getString("USERID"));
+            }
+        } catch (Exception ex) {
             Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
             UtilitiesDB.closeConnection(preparedStatement, con, MerchantDB.class.getName());
