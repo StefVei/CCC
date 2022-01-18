@@ -12,7 +12,9 @@ import hy360.ccc.model.Employee;
 import hy360.ccc.db.CitizenDB;
 import hy360.ccc.model.Citizen;
 import hy360.ccc.db.MerchantDB;
+import hy360.ccc.db.UserDB;
 import hy360.ccc.model.Merchant;
+import hy360.ccc.model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -59,52 +61,21 @@ public class Login extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         
-        Company company = CompanyDB.getCompany("USERNAME", request.getParameter("username"));
-        Employee employee = EmployeeDB.getEmployee("USERNAME", request.getParameter("username"));
-        Citizen citizen = CitizenDB.getCitizen("USERNAME", request.getParameter("username"));
-        Merchant merchant = MerchantDB.getMerchant("USERNAME", request.getParameter("username"));
+        User user = UserDB.getUser("USERNAME", request.getParameter("username"));
 
-        if (company != null){
-            if( !company.getPassword().equals(request.getParameter("password"))){
+        if(user != null){
+            if( !user.getPassword().equals(request.getParameter("password"))){
                 response.setStatus(200);
                 response.getWriter().print("Wrong Credentials");
             } else {
                 response.setStatus(200);
-                str = gson.toJson(company);
-                response.getWriter().print(str);
-            }
-//        }else if (employee != null){
-//            if( !employee.getPassword().equals(request.getParameter("password"))){
-//                response.setStatus(200);
-//                response.getWriter().print("Wrong Credentials");
-//            } else {
-//                response.setStatus(200);
-//                str = gson.toJson(employee);
-//                response.getWriter().print(str);
-//            }
-        }else if (citizen != null) {
-            if( !citizen.getPassword().equals(request.getParameter("password"))){
-                response.setStatus(200);
-                response.getWriter().print("Wrong Credentials");
-            } else {
-                response.setStatus(200);
-                str = gson.toJson(citizen);
-                response.getWriter().print(str); 
-            }
-        }else if (merchant != null){
-            if( !merchant.getPassword().equals(request.getParameter("password"))){
-               response.setStatus(200);
-               response.getWriter().print("Wrong Credentials");
-            } else {
-                response.setStatus(200);
-                str = gson.toJson(merchant);
+                str = gson.toJson(user);
                 response.getWriter().print(str);
             }
         }else{
             response.setStatus(200);
             response.getWriter().print("Wrong Credentials");
         }
-        
     }
 
     /**
