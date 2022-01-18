@@ -9,13 +9,13 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import useStyles from './styles';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { cccClient } from '../network';
 
 function ManageProducts() {
   const navigate = useNavigate();
-  const { state } = useLocation();
-  const { userid } = state;
+  // const { state } = useLocation();
+  // const { userid } = state;
   const styles = useStyles();
   const [products, setProducts] = useState([]);
 
@@ -68,10 +68,7 @@ function ManageProducts() {
         </TableContainer>
       </Box>
       <Box p={1} sx={3} display="flex" justifyContent="center" alignItems="center">
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={() => navigate('/Citizen', { state: { userid: userid } })}>
+        <Button variant="outlined" color="primary" onClick={() => navigate(-1)}>
           Back
         </Button>
       </Box>
