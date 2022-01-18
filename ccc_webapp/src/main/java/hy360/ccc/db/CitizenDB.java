@@ -35,14 +35,15 @@ public class CitizenDB {
             con = CccDB.getConnection();
 
             preparedStatement = con.prepareStatement("INSERT INTO citizens "
-                    + "( `AMKA`, `VAT`, `FIRST_NAME`, `LAST_NAME`, `BIRTH_DATE`, `GENDER`,"
+                    + "(`USERID`, `AMKA`, `VAT`, `FIRST_NAME`, `LAST_NAME`, `BIRTH_DATE`, `GENDER`,"
                     + " `EMAIL`, `ADDRESS`, `PHONE`, `AMOUNT_DUE`,"
                     + " `CREDIT_LIMIT`, `CREDIT_BALANCE`, `ACCOUNT_DUE_DATE` )"
                     + " VALUES (? ,? ,? ,? ,? ,?"
                     + ", ?, ?, ?, ?"
-                    + ", ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
+                    + ", ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
 
             UtilitiesDB.setValues(preparedStatement,
+                    citizen.getUser_id(),
                     citizen.getAmka(),
                     citizen.getVat(),
                     citizen.getFirst_name(),
