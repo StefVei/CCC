@@ -6,6 +6,11 @@ const useStyles = makeStyles({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItem: 'center'
+  },
+  textContainer: {
+    display: 'flex',
+    padding: '2.5%',
+    flexDirection: 'column'
   }
 });
 

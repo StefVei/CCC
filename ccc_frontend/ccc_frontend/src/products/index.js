@@ -8,7 +8,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-// import Modal from '@mui/material/Modal';
 import useStyles from './styles';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { cccClient } from '../network';
@@ -18,13 +17,7 @@ function ManageProducts() {
   const { state } = useLocation();
   const { userid } = state;
   const styles = useStyles();
-  // const [name, setName] = useState('');
-  // const [price, setPrice] = useState('');
-  // const [quantity, setQuantity] = useState(0);
   const [products, setProducts] = useState([]);
-  // const [open, setOpen] = useState(false);
-  // const handleOpen = () => setOpen(true);
-  // const handleClose = () => setOpen(false);
 
   useEffect(() => {
     getProducts();

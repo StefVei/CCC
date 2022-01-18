@@ -24,7 +24,8 @@ public class Product {
         merchant_id = "";
     }
     
-    public Product(String name, String price, String quantity, String merchant_id){
+    public Product(String product_id, String name, String price, String quantity, String merchant_id){
+        this.product_id=product_id;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
@@ -87,7 +88,8 @@ public class Product {
     @Override
     public String toString(){
         StringBuilder ss = new StringBuilder();
-        ss.append("name: ").append(name).append("\n")
+        ss.append("product_id: ").append(product_id).append("\n")
+                .append("name: ").append(name).append("\n")
                 .append("price: ").append(price).append("\n")
                 .append("quantity: ").append(quantity).append("\n")
                 .append("merchant_id: ").append(merchant_id).append("\n");

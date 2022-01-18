@@ -6,7 +6,9 @@ package Servlets.Transactions;
 
 import com.google.gson.Gson;
 import hy360.ccc.db.CitizenDB;
+import hy360.ccc.db.CitizenTradesDB;
 import hy360.ccc.db.CompanyDB;
+import hy360.ccc.db.CompanyTradesDB;
 import hy360.ccc.db.EmployeeDB;
 import hy360.ccc.db.MerchantDB;
 import hy360.ccc.db.TransactionDB;
@@ -88,34 +90,33 @@ public class MakeTransaction extends HttpServlet {
         double balance, cost, limit;
         String credit_balance, products_cost, credit_limit;
         String citizen_or_employee, isPending;
-        String merchant_id, citizen_id, employee_id;
-
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-
-        Transaction transaction = new Transaction();
+        String merchant_id, citizen_id, employee_id, company_id, transaction_id;
 
         LocalDate date = java.time.LocalDate.now();
 
+        Transaction transaction = new Transaction();
+
         merchant_id = request.getParameter("merchantId");
         products_cost = request.getParameter("amount");
+
+        transaction.setDate(date.toString());
+        transaction.setAmount(products_cost);
+
+        TransactionDB.addTransaction(transaction);
+        transaction_id = transaction.getTransaction_id();
 
         citizen_or_employee = request.getParameter("isCitizen");
         if (citizen_or_employee.equals("true")) {
             citizen_id = request.getParameter("citizenId");
             credit_balance = CitizenDB.getCitizen("USERID", citizen_id).getCredit_balance();
             credit_limit = CitizenDB.getCitizen("USERID", citizen_id).getCredit_limit();
-            transaction.setCitizen_id(citizen_id);
-            transaction.setMerchant_cit_id(merchant_id);
-
+            CitizenTradesDB.addTrade(citizen_id, merchant_id, transaction_id);
         } else {
             employee_id = request.getParameter("employeeId");
-            String company_id = EmployeeDB.getEmployee("EMPLOYEE_ID", employee_id).getCompany_id();
+            company_id = request.getParameter("companyId");
             credit_balance = CompanyDB.getCompany("USERID", company_id).getCredit_balance();
             credit_limit = CompanyDB.getCompany("USERID", company_id).getCredit_limit();
-            transaction.setCompany_id(company_id);
-            transaction.setEmployee_id(String.valueOf(employee_id));
-            transaction.setMerchant_comp_id(merchant_id);
+            CompanyTradesDB.addTrade(transaction_id, merchant_id, company_id, employee_id);
 
         }
 
@@ -132,7 +133,9 @@ public class MakeTransaction extends HttpServlet {
                 CitizenDB.updateCitizen(cit);
             } else {
                 employee_id = request.getParameter("employeeId");
-                Employee em = EmployeeDB.getEmployee("EMPLOYEE_ID", employee_id);
+                company_id = request.getParameter("companyId");
+
+                Employee em = EmployeeDB.getEmployee(company_id, employee_id);
                 Company comp = CompanyDB.getCompany("USERID", em.getCompany_id());
                 double new_balance = Double.valueOf(comp.getCredit_balance());
                 new_balance = new_balance - cost;
@@ -169,11 +172,9 @@ public class MakeTransaction extends HttpServlet {
                 // ANYTHING ELSE
         }
 
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
-        transaction.setDate(date.toString());
-        transaction.setAmount(products_cost);
-
-        TransactionDB.addTransaction(transaction);
         response.setStatus(200);
         str = gson.toJson(transaction);
         response.getWriter().print(str);

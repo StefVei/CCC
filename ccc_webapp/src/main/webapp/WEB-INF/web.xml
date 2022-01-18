@@ -44,6 +44,10 @@
         <servlet-name>getAllProducts</servlet-name>
         <servlet-class>Servlets.Product.getAllProducts</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>GetCitizen</servlet-name>
+        <servlet-class>Citizen.GetCitizen</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>OpenCompanyAccount</servlet-name>
         <url-pattern>/OpenCompanyAccount</url-pattern>
@@ -87,6 +91,10 @@
     <servlet-mapping>
         <servlet-name>getAllProducts</servlet-name>
         <url-pattern>/getAllProducts</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetCitizen</servlet-name>
+        <url-pattern>/GetCitizen</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

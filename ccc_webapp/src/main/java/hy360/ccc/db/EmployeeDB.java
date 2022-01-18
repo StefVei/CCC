@@ -33,18 +33,18 @@ public class EmployeeDB {
         try {
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement("INSERT INTO employees ( "
-                    + "BIRTH_DATE, EMAIL, ADDRESS, FIRST_NAME, LAST_NAME,"
-                    + " PHONE, GENDER, COMPANY_USERID) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                    + " FIRST_NAME, LAST_NAME, BIRTH_DATE, GENDER,"
+                    + " EMAIL, ADDRESS, PHONE, COMPANY_USERID) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                     preparedStatement.RETURN_GENERATED_KEYS);
 
             UtilitiesDB.setValues(preparedStatement,
-                    employee.getBirth_date(),
-                    employee.getEmail(),
-                    employee.getAddress(),
                     employee.getFirst_name(),
                     employee.getLast_name(),
-                    employee.getPhone(),
+                    employee.getBirth_date(),
                     employee.getGender(),
+                    employee.getEmail(),
+                    employee.getAddress(),
+                    employee.getPhone(),                    
                     employee.getCompany_id()
             );
 
@@ -68,9 +68,9 @@ public class EmployeeDB {
         Connection con = null;
         try {
             con = CccDB.getConnection();
-            String del = "DELETE FROM employees WHERE EMPLOYEE_ID = ? ";
+            String del = "DELETE FROM employees WHERE EMPLOYEE_ID = ?";
             preparedStatement = con.prepareStatement(del);
-            preparedStatement.setInt(1, Integer.valueOf(employee.getEmployee_id()));
+            preparedStatement.setInt(1, Integer.valueOf(employee.getEmployee_id()) );
             preparedStatement.executeUpdate();
         } catch (Exception ex) {
             Logger.getLogger(EmployeeDB.class.getName()).log(Level.SEVERE, null, ex);
@@ -87,19 +87,18 @@ public class EmployeeDB {
                     + "SET FIRST_NAME = ? "
                     + "SET LAST_NAME = ? "
                     + "SET BIRTH_DATE = ? "
-                    + "SET PHONE = ? "
+                    + " SET GENDER = ? "
                     + "SET EMAIL = ? "
                     + "SET ADDRESS = ? "
-                    + " SET GENDER = ? "
-                    + "WHERE employee_ID = ?";
+                    + "SET PHONE = ? "
+                    + "WHERE EMPLOYEE_ID = ? AND COMPANY_USERID";
 
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement(updateemployee_sql);
             UtilitiesDB.setValues(preparedStatement, employee.getFirst_name(),
-                    employee.getLast_name(), employee.getBirth_date(),
-                    employee.getPhone(), employee.getEmail(),
-                    employee.getAddress(), employee.getGender(),
-                    employee.getEmployee_id());
+                    employee.getLast_name(), employee.getBirth_date(), employee.getGender(),
+                     employee.getEmail(), employee.getAddress(), employee.getPhone(),
+                    employee.getEmployee_id(), employee.getCompany_id());
             preparedStatement.executeUpdate();
         } catch (Exception ex) {
             Logger.getLogger(EmployeeDB.class.getName()).log(Level.SEVERE, null, ex);
@@ -108,20 +107,17 @@ public class EmployeeDB {
         }
     }
 
-    public static Employee getEmployee(String columnToSearch, String value) {
-        Employee employee = null;
+    public static Employee getEmployee(String employee_id, String company_id) {
+        Employee employee = new Employee();
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
+            String sql_getemployee = "SELECT * FROM employees WHERE EMPLOYEE_ID = ? AND COMPANY_USERID";
             con = CccDB.getConnection();
 
-            StringBuilder insQuery = new StringBuilder();
+            preparedStatement = con.prepareStatement(sql_getemployee);
+            UtilitiesDB.setValues(preparedStatement, employee_id, company_id);
 
-            insQuery.append("SELECT * FROM companies ")
-                    .append(" WHERE").append(" ").append(columnToSearch).append(" = ")
-                    .append("'").append(value).append("';");
-
-            preparedStatement = con.prepareStatement(insQuery.toString());
             preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
 
@@ -140,6 +136,7 @@ public class EmployeeDB {
 
                 employee.setGender(gender);
                 employee.setEmployee_id(res.getString("EMPLOYEE_ID"));
+                employee.setCompany_id(res.getString("COMPANY_USERID"));
             }
 
         } catch (Exception ex) {

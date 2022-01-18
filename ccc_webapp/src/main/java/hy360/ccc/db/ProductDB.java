@@ -59,14 +59,14 @@ public class ProductDB {
     
     }
     
-    public static void deleteProduct(Product product) {
+    public static void deleteProduct(String product_id) {
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try{
             con = CccDB.getConnection();
-            String del = "DELETE FROM merchants WHERE PROUCT_ID = ?";
+            String del = "DELETE FROM products WHERE PROUCT_ID = ?";
             preparedStatement = con.prepareStatement(del);
-            preparedStatement.setInt(1, Integer.valueOf(product.getProduct_id()));
+            preparedStatement.setString(1, product_id);
             preparedStatement.executeUpdate();
         }catch(Exception ex){
             Logger.getLogger(ProductDB.class.getName()).log(Level.SEVERE,null, ex);
@@ -80,7 +80,7 @@ public class ProductDB {
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
-            String mer_sql = "UPDATE merchants "
+            String mer_sql = "UPDATE products "
                     + "SET NAME = ? "
                     + "SET PRICE = ? "
                     + "SET QUANTITY = ? "                    
@@ -118,7 +118,7 @@ public class ProductDB {
                 pro.setName(res.getString("NAME"));
                 pro.setPrice(res.getString("PRICE"));
                 pro.setQuantity(res.getString("QUANTITY"));
-                pro.setMerchant_id(res.getString("MERCHANT_ID"));
+                pro.setMerchant_id(res.getString("MERCHANT_USERID"));
             }
 
         } catch (Exception ex) {
@@ -164,6 +164,44 @@ public class ProductDB {
         return products;
 
     }
+
+    /**
+     *
+     * @return all the products in the db
+     */
+    public static List<Product> getAllProducts() {
+
+        List<Product> products = new ArrayList<Product>();
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+        try {
+            String sql_getmer = "SELECT * FROM products";
+            con = CccDB.getConnection();
+
+            preparedStatement = con.prepareStatement(sql_getmer);
+            preparedStatement.executeQuery();
+            ResultSet res = preparedStatement.getResultSet();
+
+            while (res.next() == true) {
+                Product pro = new Product();
+                pro.setProduct_id(res.getString("PRODUCT_ID"));
+                pro.setName(res.getString("NAME"));
+                pro.setPrice(res.getString("PRICE"));
+                pro.setQuantity(res.getString("QUANTITY"));
+                pro.setMerchant_id(res.getString("MERCHANT_USERID"));
+                products.add(pro);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(ProductDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, ProductDB.class.getName());
+        }
+
+        return products;
+
+    }
+
 
 
 }

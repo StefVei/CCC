@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Typography, Button, Box } from '@mui/material';
+import { Typography, Box, Button } from '@mui/material';
 import useStyles from './styles';
 import { useNavigate, useLocation } from 'react-router-dom';
 // import { cccClient } from '../network';
@@ -26,7 +26,15 @@ function Citizen() {
           variant="contained"
           color="primary"
           onClick={() => navigate('/Products', { state: { userid: userid } })}>
-          Products
+          Available Products
+        </Button>
+      </Box>
+      <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate('/CitizenInfo', { state: { userid: userid } })}>
+          Personal Info
         </Button>
       </Box>
     </div>

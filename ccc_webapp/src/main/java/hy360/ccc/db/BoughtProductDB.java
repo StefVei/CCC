@@ -41,8 +41,8 @@ public class BoughtProductDB {
             ListIterator<String> it = products.listIterator();
             while(it.hasNext()){
                 preparedStatement = con.prepareStatement("INSERT INTO bought_product"+
-                    " TRANSACTION_ID, BOUGHT_PRODUCT_ID ) "+"VALUES (?, ?)");
-                UtilitiesDB.setValues(preparedStatement, transaction_id, it.next());
+                    " TRANSACTION_ID, PRODUCT_ID, MERCHANT_ID, TOTAL ) "+"VALUES (?, ?, ?, ?)");
+                UtilitiesDB.setValues(preparedStatement, transaction_id, it.next());//ALLAGH EDW
                 preparedStatement.executeUpdate();
             }
         }catch(Exception ex){
@@ -64,15 +64,17 @@ public class BoughtProductDB {
         List<BoughtProduct> products = new ArrayList<>();
         try{
             con = CccDB.getConnection();
-            String sql_select = "SELECT * FROM BOUGHT_PRODUCT WHERE TRANSACTION_ID = ?";
+            String sql_select = "SELECT * FROM BOUGHT_PRODUCT WHERE TRANSACTION_ID = ? AND PRODUCT_ID = ? AND MERCHANT_USERID = ?";
             preparedStatement = con.prepareStatement(sql_select);
             UtilitiesDB.setValues(preparedStatement, transaction_id);
             preparedStatement.executeUpdate();
             ResultSet res = preparedStatement.getResultSet();
             while(res.next() == true){
                 BoughtProduct prod = new BoughtProduct();
-                prod.setProduct_id(res.getString("BOUGHT_PRODUCT_ID"));
+                prod.setProduct_id(res.getString("PRODUCT_ID"));
                 prod.setTransaction_id(res.getString("TRANSACTION_ID"));
+                prod.setMerchant_id(res.getString("MERCHANT_USERID"));
+                prod.setTotal(res.getString("TOTAL"));
                 products.add(prod);
             }
         }catch(Exception ex){
