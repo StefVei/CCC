@@ -8,14 +8,20 @@ package hy360.ccc.model;
  *
  * @author panagiotisk
  */
-public class Citizen extends Customer{
+public class Citizen extends User{
     private String amka;
     private String vat;
     private String first_name;
     private String last_name;
     private String birth_date;
     private String gender;
-    private String citizen_id;
+    private String email;
+    private String address;
+    private String phone;
+    private String amount_due;
+    private String credit_limit;
+    private String credit_balance;
+    private String account_due_date;
 
     
     
@@ -26,11 +32,19 @@ public class Citizen extends Customer{
         last_name = "";
         birth_date = "";
         gender = "O";
-        citizen_id = "";
+        email="";
+        address="";
+        phone="";
+        amount_due="";
+        credit_limit = "";
+        credit_balance = "";
+        account_due_date = "";
     }
 
     public Citizen(String amka, String vat, String first_name, 
-            String last_name, String birth_date, String gender){
+            String last_name, String birth_date, String gender,
+            String email, String address, String phone, String amount_due,
+            String credit_limit, String credit_balance, String account_due_date){
 
         this.amka = amka;
         this.vat = vat;
@@ -38,29 +52,63 @@ public class Citizen extends Customer{
         this.last_name = last_name;
         this.birth_date = birth_date;
         this.gender = gender;
-
+        this.email=email;
+        this.address=address;
+        this.phone=phone;
+        this.amount_due=amount_due;
+        this.credit_limit = credit_limit;
+        this.credit_balance = credit_balance;
+        this.account_due_date = account_due_date;
     }
     
-    public Citizen(String username, String password, String phone,
-            String email, String address, String amount_due, String account_number, 
-            String account_due, String account_due_date,
-            String amka, String vat, String first_name, 
-            String last_name, String credit_limit, String credit_balance,
-            String birth_date, String gender) {
+    public Citizen(
+            String userid, String username, String password, String account_number,
+            String amka, String vat, String first_name, String last_name, String birth_date,
+            String gender, String email, String address, String phone, String amount_due,
+            String credit_limit, String credit_balance, String account_due_date) {
 
-        super(username, password, phone, email, address, amount_due, account_number,
-                credit_limit, credit_balance, account_due_date);
+        super(userid, username, password, account_number);
 
         this.amka = amka;
         this.vat = vat;
         this.first_name = first_name;
         this.last_name = last_name;
         this.birth_date = birth_date;
+        this.gender = gender;
+        this.email=email;
+        this.address=address;
+        this.phone=phone;
+        this.amount_due=amount_due;
+        this.credit_limit = credit_limit;
+        this.credit_balance = credit_balance;
+        this.account_due_date = account_due_date;
 
     }
     
     
-    
+    @Override
+    public void checkFields() throws Exception{
+        
+        super.checkFields();
+        
+        if( amka == null || first_name.trim().isEmpty()
+            || vat == null || vat.trim().isEmpty()   
+            || first_name == null || first_name.trim().isEmpty()
+            || last_name == null || last_name.trim().isEmpty()
+            || birth_date == null || birth_date.trim().isEmpty()
+            || gender == null || gender.trim().isEmpty()
+            || email == null || email.trim().isEmpty()
+            || address == null || address.trim().isEmpty()
+            || phone == null || phone.trim().isEmpty()
+            || amount_due == null || amount_due.trim().isEmpty()
+            || credit_limit == null || credit_limit.trim().isEmpty()
+            || credit_balance == null || credit_balance.trim().isEmpty()
+            || account_due_date == null || account_due_date.trim().isEmpty())
+        {
+            
+            throw new Exception("Missing Fields");
+        }
+    }
     
 
     /**
@@ -122,6 +170,62 @@ public class Citizen extends Customer{
     public void setGender(String gender) {
         this.gender = gender;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAmount_due() {
+        return amount_due;
+    }
+
+    public void setAmount_due(String amount_due) {
+        this.amount_due = amount_due;
+    }
+
+    public String getCredit_limit() {
+        return credit_limit;
+    }
+
+    public void setCredit_limit(String credit_limit) {
+        this.credit_limit = credit_limit;
+    }
+
+    public String getCredit_balance() {
+        return credit_balance;
+    }
+
+    public void setCredit_balance(String credit_balance) {
+        this.credit_balance = credit_balance;
+    }
+
+    public String getAccount_due_date() {
+        return account_due_date;
+    }
+
+    public void setAccount_due_date(String account_due_date) {
+        this.account_due_date = account_due_date;
+    }
     
     
     
@@ -133,25 +237,18 @@ public class Citizen extends Customer{
                 .append("first_name: ").append(first_name).append("\n")
                 .append("last_name: ").append(last_name).append("\n")
                 .append("birth_date: ").append(birth_date).append("\n")
-                .append("gender: ").append(gender).append("\n");
+                .append("gender: ").append(gender).append("\n")
+                .append("email: ").append(email).append("\n")
+                .append("address: ").append(address).append("\n")
+                .append("phone: ").append(phone).append("\n")
+                .append("amount_due: ").append(amount_due).append("\n")
+                .append("credit_limit: ").append(credit_limit).append("\n")
+                .append("credit_balance: ").append(credit_balance).append("\n")
+                .append("account_due_date:").append(account_due_date).append("\n");
 
        
         return super.toString() + ss.toString();
 
-    }
-
-    /**
-     * @return the citizen_id
-     */
-    public String getCitizen_id() {
-        return citizen_id;
-    }
-
-    /**
-     * @param citizen_id the citizen_id to set
-     */
-    public void setCitizen_id(String citizen_id) {
-        this.citizen_id = citizen_id;
     }
 
 }

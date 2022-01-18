@@ -34,11 +34,11 @@ public class CitizenDB {
 
             preparedStatement = con.prepareStatement("INSERT INTO citizens "
                     + "( `AMKA`, `VAT`, `FIRST_NAME`, `LAST_NAME`, `BIRTH_DATE`, `GENDER`,"
-                    + " `USERNAME`, `PASSWORD`, `PHONE`, `EMAIL`, `ADDRESS`, `AMOUNT_DUE`,"
-                    + " `ACCOUNT_NUMBER`, `CREDIT_LIMIT`, `CREDIT_BALANCE`, `ACCOUNT_DUE_DATE` )"
+                    + " `EMAIL`, `ADDRESS`, `PHONE`, `AMOUNT_DUE`,"
+                    + " `CREDIT_LIMIT`, `CREDIT_BALANCE`, `ACCOUNT_DUE_DATE` )"
                     + " VALUES (? ,? ,? ,? ,? ,?"
-                    + ", ?, ?, ?, ?, ?, ?"
-                    + ", ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
+                    + ", ?, ?, ?, ?"
+                    + ", ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
 
             UtilitiesDB.setValues(preparedStatement,
                     citizen.getAmka(),
@@ -47,13 +47,13 @@ public class CitizenDB {
                     citizen.getLast_name(),
                     citizen.getBirth_date(),
                     citizen.getGender(),
-                    citizen.getUserName(),
-                    citizen.getPassword(),
-                    citizen.getPhone(),
+                    
+                    
                     citizen.getEmail(),
                     citizen.getAddress(),
+                    citizen.getPhone(),
                     citizen.getAmount_due(),
-                    citizen.getAccount_number(),
+                    
                     citizen.getCredit_limit(),
                     citizen.getCredit_balance(),
                     citizen.getAccount_due_date());
@@ -111,20 +111,19 @@ public class CitizenDB {
             ResultSet res = preparedStatement.getResultSet();
             if (res.next() == true) {
                 cit = new Citizen();
-                cit.setUser_id(res.getString("USERID"));
+                
                 cit.setAmka(res.getString("AMKA"));
                 cit.setVat(res.getString("VAT"));
                 cit.setFirst_name(res.getString("FIRST_NAME"));
                 cit.setLast_name(res.getString("LAST_NAME"));
                 cit.setBirth_date(res.getString("BIRTH_DATE"));
                 cit.setGender(res.getString("GENDER"));
-                cit.setUserName(res.getString("USERNAME"));
-                cit.setPassword(res.getString("PASSWORD"));
+                
                 cit.setEmail(res.getString("EMAIL"));
                 cit.setAddress(res.getString("ADDRESS"));
                 cit.setPhone(res.getString("PHONE"));
                 cit.setAmount_due(res.getString("AMOUNT_DUE"));
-                cit.setAccount_number(res.getString("ACCOUNT_NUMBER"));
+                
                 cit.setCredit_limit(res.getString("CREDIT_LIMIT"));
                 cit.setCredit_balance(res.getString("CREDIT_BALANCE"));
                 cit.setAccount_due_date(res.getString("ACCOUNT_DUE_DATE"));
@@ -146,13 +145,17 @@ public class CitizenDB {
         Connection con = null;
         try {
             String update_cit_sql = "UPDATE citizens "
+                    
+                    + "SET FIRST_NAME = ? "
                     + "SET LAST_NAME = ? "
-                    + "SET PHONE = ? "
+                    + "SET BIRTH_DATE = ? "
+                    + "SET GENDER = ? "
+                    
                     + "SET EMAIL = ? "
                     + "SET ADDRESS = ? "
-                    + " SET GENDER = ? "
-                    + "SET PASSWORD = ? "
+                    + "SET PHONE = ? "
                     + "SET AMOUNT_DUE = ? "
+                    
                     + "SET CREDIT_LIMIT = ? "
                     + "SET CREDIT_BALANCE = ? "
                     + "SET ACCOUNT_DUE_DATE = ? "
@@ -160,11 +163,11 @@ public class CitizenDB {
 
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement(update_cit_sql);
-            UtilitiesDB.setValues(preparedStatement, cit.getLast_name(),
-                    cit.getPhone(), cit.getEmail(),
-                    cit.getAddress(), cit.getGender(), cit.getPassword(),
-                    cit.getAmount_due(), cit.getCredit_limit(), cit.getCredit_balance(),
-                    cit.getAccount_due_date(), cit.getUser_id());
+            UtilitiesDB.setValues(preparedStatement,
+                    cit.getFirst_name(), cit.getLast_name(), cit.getBirth_date(), cit.getGender(),
+                    cit.getEmail(), cit.getAddress(), cit.getPhone(), cit.getAmount_due(), 
+                    cit.getCredit_limit(), cit.getCredit_balance(), cit.getAccount_due_date(), 
+                    cit.getUser_id());
             preparedStatement.executeUpdate();
         } catch (Exception ex) {
             Logger.getLogger(CitizenDB.class.getName()).log(Level.SEVERE, null, ex);

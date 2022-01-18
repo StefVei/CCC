@@ -80,7 +80,7 @@ public class ProductDB {
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
-            String mer_sql = "UPDATE merchants "
+            String mer_sql = "UPDATE products "
                     + "SET NAME = ? "
                     + "SET PRICE = ? "
                     + "SET QUANTITY = ? "                    
@@ -118,7 +118,7 @@ public class ProductDB {
                 pro.setName(res.getString("NAME"));
                 pro.setPrice(res.getString("PRICE"));
                 pro.setQuantity(res.getString("QUANTITY"));
-                pro.setMerchant_id(res.getString("MERCHANT_ID"));
+                pro.setMerchant_id(res.getString("MERCHANT_USERID"));
             }
 
         } catch (Exception ex) {

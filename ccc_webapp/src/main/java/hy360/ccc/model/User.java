@@ -15,10 +15,6 @@ public class User implements Serializable{
     private String userid;
     private String username;
     private String password;
-    private String phone;
-    private String email;
-    private String address;
-    private String amount_due;
     private String account_number;
 
     
@@ -26,28 +22,17 @@ public class User implements Serializable{
         this.userid = "";
         this.username = "";
         this.password = "";
-        this.phone = "";
-        this.email = "";
-        this.address = "";
-        this.amount_due = "";
         this.account_number = "";
     }
     
     public User(
+            String userid,
             String username,
             String password,
-            String phone,
-            String email,
-            String address,
-            String amount_due,
             String account_number){
-        
+        this.userid=userid;
         this.username = username;
         this.password = password;
-        this.phone = phone;
-        this.email = email;
-        this.address = address;
-        this.amount_due = amount_due;
         this.account_number = account_number;  
     }
     
@@ -60,10 +45,6 @@ public class User implements Serializable{
         
         if(username == null || username.trim().isEmpty()
             || password == null || password.trim().isEmpty()
-            || phone == null || phone.trim().isEmpty()
-            || email == null || email.trim().isEmpty()
-            || address == null || address.trim().isEmpty()
-            || amount_due == null || amount_due.trim().isEmpty()
             || account_number == null || account_number.trim().isEmpty() ) {
 
             throw new Exception("Missing Fields");
@@ -94,39 +75,7 @@ public class User implements Serializable{
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getAmount_due() {
-        return amount_due;
-    }
-
-    public void setAmount_due(String amount_due) {
-        this.amount_due = amount_due;
-    }
-
+    
     public String getAccount_number() {
         return account_number;
     }
@@ -146,10 +95,6 @@ public class User implements Serializable{
         ss.append("userid: ").append(userid).append("\n")
                 .append("username: ").append(username).append("\n")
                 .append("password: ").append(password).append("\n")
-                .append("phone :").append(phone).append("\n")
-                .append("email :").append(email).append("\n")
-                .append("address :").append(address).append("\n")
-                .append("amount_due: ").append(amount_due).append("\n")
                 .append("account_number: " ).append(account_number).append("\n");
         
         return ss.toString();
