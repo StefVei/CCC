@@ -11,6 +11,7 @@ import Company from './company';
 import Citizen from './citizen';
 import Merchant from './merchant';
 import Employee from './employee';
+import ListCustomers from './merchant/ListCustomers';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/Citizen" element={<Citizen />} />
           <Route path="/Merchant" element={<Merchant />} />
           <Route path="/Employee" element={<Employee />} />
+          <Route path="/ListCustomers" element={<ListCustomers />} />
           <Route element={<div>Oops! Page not found!</div>} />
         </Routes>
       </BrowserRouter>

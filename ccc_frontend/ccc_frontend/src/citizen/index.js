@@ -1,32 +1,37 @@
-import React , {useState} from 'react';
-import { Typography } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Typography, Box, TextField } from '@mui/material';
 import useStyles from './styles';
 // import { useNavigate } from 'react-router-dom';
-// import { cccClient } from '../network';
+import { cccClient } from '../network';
 
 function Citizen() {
   //   const navigate = useNavigate();
   const styles = useStyles();
-  const [firstName, getFirstName] = useState('');
-  const [lastName, getLastName] = useState('');
-  const [amka, getAmka] = useState('');
-  const [vat, getVat] = useState('');
-  const [birthDate, getBirthDate] = useState('');
-  const [gender, getGender] = useState('');
-  const [phone, getPhone] = useState('');
-  const [address, getAddress] = useState('');
-  const [amountDue, getAmountDue] = useState('');
-  const [creditLimit, getCreditLimit] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [amka, setAmka] = useState('');
+  const [vat, setVat] = useState('');
+  const [birthDate, setBirthDate] = useState('');
+  const [gender, setGender] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
+  const [amountDue, setAmountDue] = useState('');
+  const [creditLimit, setCreditLimit] = useState('');
+  const [creditBalance, setCreditBalance] = useState('');
+  const [dueDate, setDueDate] = useState('');
 
+  useEffect(() => {
+    getCitizen();
+  }, []);
 
+  const getCitizen = async () => {
+    let userid = 4;
 
-
-  const getCitizens = async () => {
     await cccClient
-      .post('getCitizens', `userid=${userid}`)
+      .post('getCitizen', `userid=${userid}`)
       .then(function (response) {
         console.log(response);
-        setProducts(response.data);
       })
       .catch(function (err) {
         console.log(err);
@@ -42,48 +47,121 @@ function Citizen() {
         <Box pt={3}>
           <TextField
             label="FirstName:"
-            variant="readOnly"
-            value={firstName}
-            onChange={(e) => getFirstName(e.target.value)}
+            variant="outlined"
+            defaultValue={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
             required
           />{' '}
         </Box>
         <Box pt={3}>
           <TextField
             label="LastName:"
-            variant="readOnly"
-            value={price}
-            onChange={(e) => getLastName(e.target.value)}
+            variant="outlined"
+            disabled
+            defaultValue={lastName}
+            onChange={(e) => setLastName(e.target.value)}
             required
           />{' '}
         </Box>
         <Box pt={3}>
           <TextField
             label="Amka :"
-            variant="readOnly"
-            type="number"
-            value={quantity}
-            onChange={(e) => getAmka(e.target.value)}
+            variant="outlined"
+            defaultValue={amka}
+            onChange={(e) => setAmka(e.target.value)}
             required
           />{' '}
         </Box>
         <Box pt={3}>
           <TextField
-            label="Amka :"
-            variant="readOnly"
-            type="number"
-            value={quantity}
-            onChange={(e) => getAmka(e.target.value)}
+            label="VAT :"
+            variant="outlined"
+            defaultValue={vat}
+            onChange={(e) => setVat(e.target.value)}
             required
           />{' '}
         </Box>
         <Box pt={3}>
           <TextField
-            label="Amka :"
-            variant="readOnly"
-            type="number"
-            value={quantity}
-            onChange={(e) => getAmka(e.target.value)}
+            label="BirthDate :"
+            variant="outlined"
+            defaultValue={birthDate}
+            onChange={(e) => setBirthDate(e.target.value)}
+            required
+          />{' '}
+        </Box>
+        <Box pt={3}>
+          <TextField
+            label="Gender :"
+            variant="outlined"
+            type="string"
+            defaultValue={gender}
+            onChange={(e) => setGender(e.target.value)}
+            required
+          />{' '}
+        </Box>
+        <Box pt={3}>
+          <TextField
+            label="Email :"
+            variant="outlined"
+            defaultValue={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />{' '}
+        </Box>
+        <Box pt={3}>
+          <TextField
+            label="Address :"
+            variant="outlined"
+            type="string"
+            defaultValue={address}
+            onChange={(e) => setAddress(e.target.value)}
+            required
+          />{' '}
+        </Box>
+        <Box pt={3}>
+          <TextField
+            label="Phone :"
+            variant="outlined"
+            defaultValue={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            required
+          />{' '}
+        </Box>
+        <Box pt={3}>
+          <TextField
+            label="Amount Due :"
+            variant="outlined"
+            defaultValue={amountDue}
+            onChange={(e) => setAmountDue(e.target.value)}
+            required
+          />{' '}
+        </Box>
+        <Box pt={3}>
+          <TextField
+            label="Credit limit :"
+            variant="outlined"
+            defaultValue={creditLimit}
+            onChange={(e) => setCreditLimit(e.target.value)}
+            required
+          />{' '}
+        </Box>
+        <Box pt={3}>
+          <TextField
+            label="Credit balance :"
+            variant="outlined"
+            defaultValue={creditBalance}
+            onChange={(e) => setCreditBalance(e.target.value)}
+            required
+          />{' '}
+        </Box>
+        <Box pt={3}>
+          <TextField
+            label="Account due date :"
+            variant="outlined"
+            type="date"
+            defaultValue={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
             required
           />{' '}
         </Box>
