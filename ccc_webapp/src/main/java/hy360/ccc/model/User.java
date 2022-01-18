@@ -16,6 +16,7 @@ public class User implements Serializable{
     private String username;
     private String password;
     private String account_number;
+    private String user_type;
 
     
     public User(){
@@ -99,6 +100,20 @@ public class User implements Serializable{
         
         return ss.toString();
                 
+    }
+
+    /**
+     * @return the user_type
+     */
+    public String getUser_type() {
+        return user_type;
+    }
+
+    /**
+     * @param user_type the user_type to set
+     */
+    public void setUser_type(String user_type) {
+        this.user_type = user_type;
     }
     
    
