@@ -89,7 +89,7 @@ public class CompanyDB {
      * @return a Company with all the fields
      */
     public static Company getCompany(String columnToSearch, String value) {
-
+        
         PreparedStatement preparedStatement = null;
         Connection con = null;
         Company comp = null;
