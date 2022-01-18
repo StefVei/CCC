@@ -9,9 +9,6 @@ import hy360.ccc.model.Transaction;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,8 +43,11 @@ public class TransactionDB {
                     );
             
             preparedStatement.executeUpdate();
-            
 
+            ResultSet set = preparedStatement.getGeneratedKeys();
+            if (set.next()) {
+                transaction.setTransaction_id(set.getString(1));
+            }
             
             
         }catch(Exception ex){
