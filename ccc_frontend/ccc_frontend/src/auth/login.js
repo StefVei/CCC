@@ -28,7 +28,6 @@ function Login() {
           // }
           navigate('/Merchant', { state: { userid: response.data.userid } });
         }
-        console.log(response);
       })
       .catch(function (error) {
         console.log(error);
