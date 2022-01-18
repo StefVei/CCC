@@ -123,16 +123,16 @@ public class ReturnProducts extends HttpServlet {
         if (customer_type.equals("true")) {
             citizen_id = request.getParameter("citizenId");
             customer_amount_due = CitizenDB.getCitizen("USERID", citizen_id).getAmount_due();
-            transaction.setCitizen_id(citizen_id);
-            transaction.setMerchant_cit_id(merchant_id);
+            //transaction.setCitizen_id(citizen_id);
+            //transaction.setMerchant_cit_id(merchant_id);
 
         } else {
             employee_id = request.getParameter("employeeId");
             company_id = EmployeeDB.getEmployee("EMPLOYEE_ID", employee_id).getCompany_id();
             customer_amount_due = CompanyDB.getCompany("USERID", company_id).getAmount_due();
-            transaction.setCompany_id(company_id);
-            transaction.setEmployee_id(String.valueOf(employee_id));
-            transaction.setMerchant_comp_id(merchant_id);
+            //transaction.setCompany_id(company_id);
+            //transaction.setEmployee_id(String.valueOf(employee_id));
+            //transaction.setMerchant_comp_id(merchant_id);
 
         }
         
