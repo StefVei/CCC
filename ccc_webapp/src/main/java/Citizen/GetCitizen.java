@@ -2,29 +2,23 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Servlets.Register;
+package Citizen;
 
-import Utils_db.UtilitiesDB;
 import com.google.gson.Gson;
-import hy360.ccc.db.CompanyDB;
-import hy360.ccc.db.UserDB;
-import hy360.ccc.model.Company;
-import hy360.ccc.model.User;
+import hy360.ccc.db.CitizenDB;
+import hy360.ccc.model.Citizen;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDate;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author panos
+ * @author tetan
  */
-@WebServlet(name = "OpenCompanyAccount", urlPatterns = {"/OpenCompanyAccount"})
-public class OpenCompanyAccount extends HttpServlet {
+public class GetCitizen extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,10 +31,18 @@ public class OpenCompanyAccount extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                
-        
-        try (PrintWriter out = response.getWriter()) {
-
+        response.setContentType("text/html;charset=UTF-8");
+        try ( PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet GetCitizen</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet GetCitizen at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
     }
 
@@ -70,41 +72,17 @@ public class OpenCompanyAccount extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-
+        
         Gson gson = new Gson();
         String str;
         
+        Citizen citizen = CitizenDB.getCitizen("USERID", request.getParameter("userid"));
+
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-
-        Company comp = new Company();
-        User user = comp;
-                
-        String acc_number = UtilitiesDB.getNewAccountNumber();
-        LocalDate date = java.time.LocalDate.now();
-        date = date.plusYears(5);
-
-        comp.setAccount_due_date(date.toString());
-        comp.setPhone(request.getParameter("phone"));
-        comp.setEmail(request.getParameter("email"));
-        comp.setAddress(request.getParameter("address"));
-        comp.setName(request.getParameter("name"));
-        comp.setAmount_due("0");
-        comp.setCredit_balance(request.getParameter("creditBalance"));
-        comp.setCredit_limit("5000");
-        comp.setEstablishment_date(date.minusYears(5).toString());
         
-        user.setUser_type("C");
-        user.setUserName(request.getParameter("username"));
-        user.setPassword(request.getParameter("password"));
-        user.setAccount_number(acc_number);
-
-        UserDB.addUser(user);
-        CompanyDB.addCompany(comp);
-
         response.setStatus(200);
-        str = gson.toJson(comp);
+        str = gson.toJson(citizen);
         response.getWriter().print(str);
     }
 

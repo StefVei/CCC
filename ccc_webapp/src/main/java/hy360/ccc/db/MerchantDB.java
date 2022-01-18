@@ -32,11 +32,12 @@ public class MerchantDB {
         try{
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement("INSERT INTO merchants "
-                    + "( `FIRST_NAME`, `LAST_NAME`, `BIRTH_DATE`, `GENDER`, `SUPPLY`, `GAIN`, "
+                    + "(`USERID`, `FIRST_NAME`, `LAST_NAME`, `BIRTH_DATE`, `GENDER`, `SUPPLY`, `GAIN`, "
                     + " `PURCHASES_TOTAL`, `EMAIL`, `ADDRESS`, `PHONE`, `AMOUNT_DUE`)"
-                    + " VALUES (? ,? ,? ,? ,? ,? , ?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
+                    + " VALUES (? ,? ,? ,? ,? ,? , ?, ?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
             
             UtilitiesDB.setValues(preparedStatement,
+                    merchant.getUser_id(),
                     merchant.getFirst_name(),
                     merchant.getLast_name(),
                     merchant.getBirth_date(),
