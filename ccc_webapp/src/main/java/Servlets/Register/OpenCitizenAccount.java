@@ -116,7 +116,6 @@ public class OpenCitizenAccount extends HttpServlet {
         user.setUser_type("I");
 
         UserDB.addUser(user);
-        System.out.println("user id is " + user.getUser_id());
         CitizenDB.addCitizen(cit);
 
         response.setStatus(200);

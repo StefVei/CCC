@@ -123,7 +123,7 @@ public class MakeTransaction extends HttpServlet {
         balance = Integer.valueOf(credit_balance);
         limit = Integer.valueOf(credit_limit);
         cost = Integer.valueOf(products_cost);
-        if (balance > cost) {
+        if (balance > cost && limit == balance) {
             transaction.setPending("N");
             if (citizen_or_employee.equals("true")) { // CITIZEN
                 citizen_id = request.getParameter("citizenId");
