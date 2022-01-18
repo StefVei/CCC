@@ -40,6 +40,14 @@
         <servlet-name>getProducts</servlet-name>
         <servlet-class>Servlets.Product.getProducts</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>getAllCitizens</servlet-name>
+        <servlet-class>Servlets.Merchant.getAllCitizens</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>getAllCompanies</servlet-name>
+        <servlet-class>Servlets.Merchant.getAllCompanies</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>OpenCompanyAccount</servlet-name>
         <url-pattern>/OpenCompanyAccount</url-pattern>
@@ -79,6 +87,14 @@
     <servlet-mapping>
         <servlet-name>getProducts</servlet-name>
         <url-pattern>/getProducts</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>getAllCitizens</servlet-name>
+        <url-pattern>/getAllCitizens</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>getAllCompanies</servlet-name>
+        <url-pattern>/getAllCompanies</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

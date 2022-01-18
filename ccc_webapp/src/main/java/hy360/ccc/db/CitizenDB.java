@@ -9,6 +9,8 @@ import hy360.ccc.model.Citizen;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -101,7 +103,7 @@ public class CitizenDB {
 
             StringBuilder insQuery = new StringBuilder();
 
-            insQuery.append("SELECT * FROM companies ")
+            insQuery.append("SELECT * FROM citizens ")
                     .append(" WHERE").append(" ").append(columnToSearch).append(" = ")
                     .append("'").append(value).append("';");
 
@@ -136,6 +138,48 @@ public class CitizenDB {
         }
 
         return cit;
+
+    }
+
+    public static List<Citizen> getAllCitizens() {
+        List<Citizen> citizens = new ArrayList<>();
+
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+        try {
+            String getCitizens = "SELECT * FROM citizens";
+            con = CccDB.getConnection();
+            preparedStatement = con.prepareStatement(getCitizens);
+            preparedStatement.executeQuery();
+            ResultSet res = preparedStatement.getResultSet();
+
+            while (res.next() == true) {
+                Citizen cit = new Citizen();
+                cit.setAmka(res.getString("AMKA"));
+                cit.setVat(res.getString("VAT"));
+                cit.setFirst_name(res.getString("FIRST_NAME"));
+                cit.setLast_name(res.getString("LAST_NAME"));
+                cit.setBirth_date(res.getString("BIRTH_DATE"));
+                cit.setGender(res.getString("GENDER"));
+
+                cit.setEmail(res.getString("EMAIL"));
+                cit.setAddress(res.getString("ADDRESS"));
+                cit.setPhone(res.getString("PHONE"));
+                cit.setAmount_due(res.getString("AMOUNT_DUE"));
+
+                cit.setCredit_limit(res.getString("CREDIT_LIMIT"));
+                cit.setCredit_balance(res.getString("CREDIT_BALANCE"));
+                cit.setAccount_due_date(res.getString("ACCOUNT_DUE_DATE"));
+                citizens.add(cit);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(CitizenDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, CitizenDB.class.getName());
+        }
+
+        return citizens;
 
     }
 
