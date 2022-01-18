@@ -59,14 +59,14 @@ public class ProductDB {
     
     }
     
-    public static void deleteProduct(Product product) {
+    public static void deleteProduct(String product_id) {
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try{
             con = CccDB.getConnection();
-            String del = "DELETE FROM merchants WHERE PROUCT_ID = ?";
+            String del = "DELETE FROM products WHERE PROUCT_ID = ?";
             preparedStatement = con.prepareStatement(del);
-            preparedStatement.setInt(1, Integer.valueOf(product.getProduct_id()));
+            preparedStatement.setString(1, product_id);
             preparedStatement.executeUpdate();
         }catch(Exception ex){
             Logger.getLogger(ProductDB.class.getName()).log(Level.SEVERE,null, ex);
