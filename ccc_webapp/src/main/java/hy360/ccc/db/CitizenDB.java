@@ -40,7 +40,7 @@ public class CitizenDB {
                     + " `CREDIT_LIMIT`, `CREDIT_BALANCE`, `ACCOUNT_DUE_DATE` )"
                     + " VALUES (?, ? ,? ,? ,? ,? ,?"
                     + ", ?, ?, ?, ?"
-                    + ", ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
+                    + ", ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
 
             UtilitiesDB.setValues(preparedStatement,
                     citizen.getUser_id(),

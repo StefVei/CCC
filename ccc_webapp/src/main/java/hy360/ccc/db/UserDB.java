@@ -47,6 +47,42 @@ public class UserDB {
         }
 
     }
+    
+    public static User getUser(String columnToSearch, String value) {
+
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+        User user = null;
+        try {
+            con = CccDB.getConnection();
+
+            StringBuilder insQuery = new StringBuilder();
+
+            insQuery.append("SELECT * FROM users ")
+                    .append(" WHERE").append(" ").append(columnToSearch).append(" = ")
+                    .append("'").append(value).append("';");
+
+            preparedStatement = con.prepareStatement(insQuery.toString());
+            preparedStatement.executeQuery();
+
+            ResultSet res = preparedStatement.getResultSet();
+            if (res.next() == true) {
+                user = new User();
+                
+                user.setUser_type(res.getString("USER_TYPE"));
+                user.setUserName(res.getString("USERNAME"));
+                user.setPassword(res.getString("PASSWORD"));
+                user.setUser_id(res.getString("USERID"));
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(CitizenDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, CitizenDB.class.getName());
+        }
+
+        return user;
+
+    }
 
     public static void deleteUser(User user) {
         PreparedStatement preparedStatement = null;

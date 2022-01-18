@@ -18,11 +18,11 @@ function Login() {
         if (response.data === 'Wrong Credentials') {
           alert(response.data);
         } else {
-          if (response.data.establishment_date) {
+          if (response.data.user_type === 'C') {
             navigate('/Company', { state: { userid: response.data.userid } });
-          } else if (response.data.vat) {
+          } else if (response.data.user_type === 'I') {
             navigate('/Citizen', { state: { userid: response.data.userid } });
-          } else {
+          } else if (response.data.user_type === 'M') {
             navigate('/Merchant', { state: { userid: response.data.userid } });
           }
         }

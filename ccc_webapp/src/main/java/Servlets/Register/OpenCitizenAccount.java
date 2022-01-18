@@ -90,10 +90,7 @@ public class OpenCitizenAccount extends HttpServlet {
         date = date.plusYears(5);
         String acc_number = UtilitiesDB.getNewAccountNumber();
 
-        cit.setAccount_number(acc_number);
         cit.setAccount_due_date(date.toString());
-        cit.setUserName(request.getParameter("username"));
-        cit.setPassword(request.getParameter("password"));
         cit.setPhone(request.getParameter("phone"));
         cit.setEmail(request.getParameter("email"));
         cit.setAddress(request.getParameter("address"));
@@ -109,12 +106,14 @@ public class OpenCitizenAccount extends HttpServlet {
         String gender = "male".equals(request.getParameter("gender")) ? "M"
                 : "female".equals(request.getParameter("gender")) ? "F"
                 : "O";
-
         cit.setGender(gender);
+        
+        user.setUser_type("I");
+        user.setUserName(request.getParameter("username"));
+        user.setPassword(request.getParameter("password"));
+        user.setAccount_number(acc_number);
 
         user = (User) cit;
-        user.setUser_type("I");
-
         UserDB.addUser(user);
         CitizenDB.addCitizen(cit);
 
