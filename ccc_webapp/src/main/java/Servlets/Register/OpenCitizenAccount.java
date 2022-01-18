@@ -7,7 +7,9 @@ package Servlets.Register;
 import Utils_db.UtilitiesDB;
 import com.google.gson.Gson;
 import hy360.ccc.db.CitizenDB;
+import hy360.ccc.db.UserDB;
 import hy360.ccc.model.Citizen;
+import hy360.ccc.model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
@@ -82,6 +84,7 @@ public class OpenCitizenAccount extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         Citizen cit = new Citizen();
+        User user = new User();
 
         LocalDate date = java.time.LocalDate.now();
         date = date.plusYears(5);
@@ -109,6 +112,11 @@ public class OpenCitizenAccount extends HttpServlet {
 
         cit.setGender(gender);
 
+        user = (User) cit;
+        user.setUser_type("I");
+
+        UserDB.addUser(user);
+        System.out.println("user id is " + user.getUser_id());
         CitizenDB.addCitizen(cit);
 
         response.setStatus(200);

@@ -61,28 +61,16 @@ public class UtilitiesDB {
 
             con = CccDB.getConnection();
             String sql1 = "SELECT ACCOUNT_NUMBER "
-                    + "FROM citizens";
+                    + "FROM users";
             preparedStatement = con.prepareStatement(sql1);
             preparedStatement.executeQuery();
             ResultSet res1 = preparedStatement.getResultSet();
 
-            preparedStatement = con.prepareStatement("SELECT ACCOUNT_NUMBER FROM merchants");
-            preparedStatement.executeQuery();
-            ResultSet res2 = preparedStatement.getResultSet();
-
-            preparedStatement = con.prepareStatement("SELECT ACCOUNT_NUMBER FROM companies");
-            preparedStatement.executeQuery();
-            ResultSet res3 = preparedStatement.getResultSet();
 
             while (res1.next() == true) {
                 AccountNumbers.add(res1.getString("ACCOUNT_NUMBER"));
             }
-            while (res2.next() == true) {
-                AccountNumbers.add(res2.getString("ACCOUNT_NUMBER"));
-            }
-            while (res3.next() == true) {
-                AccountNumbers.add(res3.getString("ACCOUNT_NUMBER"));
-            }
+
 
 
         } catch (Exception ex) {
