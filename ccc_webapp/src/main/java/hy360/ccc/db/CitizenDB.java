@@ -101,7 +101,7 @@ public class CitizenDB {
 
             StringBuilder insQuery = new StringBuilder();
 
-            insQuery.append("SELECT * FROM companies ")
+            insQuery.append("SELECT * FROM citizens ")
                     .append(" WHERE").append(" ").append(columnToSearch).append(" = ")
                     .append("'").append(value).append("';");
 

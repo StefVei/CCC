@@ -14,19 +14,17 @@ function Login() {
     await cccClient
       .post('Login', `username=${Username}&password=${Password}`)
       .then(function (response) {
+        console.log('🚀 ~ file: login.js ~ line 17 ~ response', response);
         if (response.data === 'Wrong Credentials') {
           alert(response.data);
         } else {
-          // if (response.data.companyid) {
-          //   navigate('/Company');
-          // } else if (response.data.employeeid) {
-          //   navigate('/Employee');
-          // } else if (response.data.citizenid) {
-          //   navigate('/Citizen');
-          // } else {
-          //   navigate('/Merchant');
-          // }
-          navigate('/Merchant', { state: { userid: response.data.userid } });
+          if (response.data.establishment_date) {
+            navigate('/Company', { state: { userid: response.data.userid } });
+          } else if (response.data.vat) {
+            navigate('/Citizen', { state: { userid: response.data.userid } });
+          } else {
+            navigate('/Merchant', { state: { userid: response.data.userid } });
+          }
         }
       })
       .catch(function (error) {

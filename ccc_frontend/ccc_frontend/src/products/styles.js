@@ -3,9 +3,9 @@ import { makeStyles } from '@mui/styles';
 const useStyles = makeStyles({
   container: {
     display: 'flex',
-    flexDirection: 'column',
+    alignItem: 'center',
     justifyContent: 'center',
-    alignItem: 'center'
+    flexDirection: 'column'
   }
 });
 

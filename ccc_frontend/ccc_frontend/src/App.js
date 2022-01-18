@@ -12,6 +12,7 @@ import Citizen from './citizen';
 import Employee from './employee';
 import Merchant from './merchant';
 import ManageProducts from './merchant/manageProducts';
+import Products from './products';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/Employee" element={<Employee />} />
           <Route path="/Merchant" element={<Merchant />} />
           <Route path="/ManageProducts" element={<ManageProducts />} />
+          <Route path="/Products" element={<Products />} />
           <Route element={<div>Oops! Page not found!</div>} />
         </Routes>
       </BrowserRouter>
