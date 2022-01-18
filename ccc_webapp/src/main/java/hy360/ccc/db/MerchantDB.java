@@ -33,25 +33,21 @@ public class MerchantDB {
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement("INSERT INTO merchants "
                     + "( `FIRST_NAME`, `LAST_NAME`, `BIRTH_DATE`, `GENDER`, `SUPPLY`, `GAIN`, "
-                    + " `PURCHASES_TOTAL`, `USERNAME`, `PASSWORD`, `PHONE`, `EMAIL`, `ADDRESS`, `AMOUNT_DUE`,"
-                    + " `ACCOUNT_NUMBER` )"
-                    + " VALUES (? ,? ,? ,? ,? ,? , ?, ?, ?, ?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
+                    + " `PURCHASES_TOTAL`, `EMAIL`, `ADDRESS`, `PHONE`, `AMOUNT_DUE`)"
+                    + " VALUES (? ,? ,? ,? ,? ,? , ?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
             
             UtilitiesDB.setValues(preparedStatement,
-                    merchant.getUserName(),
-                    merchant.getPassword(),
-                    merchant.getPhone(),
-                    merchant.getEmail(),
-                    merchant.getAddress(),
-                    merchant.getAmount_due(),
-                    merchant.getAccount_number(),
                     merchant.getFirst_name(),
                     merchant.getLast_name(),
                     merchant.getBirth_date(),
                     merchant.getGender(),
                     merchant.getSupply(),
                     merchant.getGain(),
-                    merchant.getPurchases_total());
+                    merchant.getPurchases_total(),
+                    merchant.getEmail(),
+                    merchant.getAddress(),
+                    merchant.getPhone(),                    
+                    merchant.getAmount_due());
             
         preparedStatement.executeUpdate();
         
@@ -88,26 +84,27 @@ public class MerchantDB {
                     + "SET FIRST_NAME = ? "
                     + "SET LAST_NAME = ? "
                     + "SET BIRTH_DATE = ? "
-                    + "SET PHONE = ? "
+                    + "SET GENDER = ? "
+                    
+                    
                     + "SET SUPPLY = ? "
                     + "SET GAIN = ? "
                     + "SET PURCHASES_TOTAL = ? "
-                    + "SET GENDER = ? "
-                    + "SET USERNAME = ? "
-                    + "SET PASSWORD = ? "
+                    
+                    
                     + "SET EMAIL = ? "
                     + "SET ADDRESS = ? "
+                    + "SET PHONE = ? "
                     + "SET AMOUNT_DUE = ?"
                     + "WHERE USERID = ?";
 
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement(mer_sql);
             UtilitiesDB.setValues(preparedStatement, merchant.getFirst_name(),
-                    merchant.getLast_name(), merchant.getBirth_date(),
-                    merchant.getPhone(), merchant.getSupply(), merchant.getGain(),
-                    merchant.getPurchases_total(), merchant.getGender(),
-                    merchant.getUserName(), merchant.getPassword(), merchant.getEmail(),
-                    merchant.getAddress(), merchant.getAmount_due(), merchant.getUser_id());
+                    merchant.getLast_name(), merchant.getBirth_date(), merchant.getGender(),
+                    merchant.getSupply(), merchant.getGain(), merchant.getPurchases_total(), 
+                    merchant.getEmail(), merchant.getAddress(), merchant.getPhone(), 
+                    merchant.getAmount_due(), merchant.getUser_id());
             preparedStatement.executeUpdate();
 
         } catch (Exception ex) {
@@ -140,13 +137,11 @@ public class MerchantDB {
                 mer.setSupply(res.getString("SUPPLY"));
                 mer.setGain(res.getString("GAIN"));
                 mer.setPurchases_total(res.getString("PURCHASES_TOTAL"));
-                mer.setPhone(res.getString("PHONE"));
+                
                 mer.setEmail(res.getString("EMAIL"));
-                mer.setUserName(res.getString("USERNAME"));
-                mer.setPassword(res.getString("PASSWORD"));
                 mer.setAddress(res.getString("ADDRESS"));
+                mer.setPhone(res.getString("PHONE"));
                 mer.setAmount_due(res.getString("AMOUNT_DUE"));
-                mer.setAccount_number(res.getString("ACCOUNT_NUMBER"));
 
                 mer.setUser_id(res.getString("USERID"));
             }

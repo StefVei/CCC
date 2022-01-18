@@ -35,25 +35,25 @@ public class CompanyDB {
 
             preparedStatement = con.prepareStatement("INSERT INTO companies "
                     + "(`NAME`, `ESTABLISHMENT_DATE`,"
-                    + " `USERNAME`, `PASSWORD`, `PHONE`, `EMAIL`, `ADDRESS`, `AMOUNT_DUE`,"
-                    + " `ACCOUNT_NUMBER`, `CREDIT_LIMIT`, `CREDIT_BALANCE`, `ACCOUNT_DUE_DATE` )"
+                    + " `EMAIL`, `ADDRESS`, `PHONE`, `AMOUNT_DUE`,"
+                    + " `CREDIT_LIMIT`, `CREDIT_BALANCE`, `ACCOUNT_DUE_DATE` )"
                     + " VALUES (?, ?,"
-                    + "?, ?, ?, ?, ?, ?,"
-                    + "?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
+                    + "?, ?, ?, ?,"
+                    + "?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
 
             UtilitiesDB.setValues(preparedStatement,
                     company.getName(),
                     company.getEstablishment_date(),
-                    company.getUserName(),
-                    company.getPassword(),
-                    company.getPhone(),
+                    
+                    
                     company.getEmail(),
                     company.getAddress(),
+                    company.getPhone(),
                     company.getAmount_due(),
-                    company.getAccount_number(),
+                    
                     company.getCredit_limit(),
                     company.getCredit_balance(),
-                    company.getAccount_number());
+                    company.getAccount_due_date());
 
             preparedStatement.executeUpdate();
             
@@ -110,18 +110,16 @@ public class CompanyDB {
                 comp = new Company();
                 comp.setUser_id(res.getString("USERID"));
                 comp.setEstablishment_date(res.getString("ESTABLISHMENT_DATE"));
-                //comp.setLogotype(res.getString("LOGOTYPE"));
                 comp.setName(res.getString("NAME"));
-                comp.setAddress(res.getString("ADDRESS"));
-                comp.setUserName(res.getString("USERNAME"));
-                comp.setPassword(res.getString("PASSWORD"));
+                
                 comp.setEmail(res.getString("EMAIL"));
+                comp.setAddress(res.getString("ADDRESS"));
                 comp.setPhone(res.getString("PHONE"));
+                comp.setAmount_due(res.getString("AMOUNT_DUE"));
+                
                 comp.setCredit_limit(res.getString("CREDIT_LIMIT"));
                 comp.setCredit_balance(res.getString("CREDIT_BALANCE"));
                 comp.setAccount_due_date(res.getString("ACCOUNT_DUE_DATE"));
-                comp.setAmount_due(res.getString("AMOUNT_DUE"));
-                comp.setAccount_number(res.getString("ACCOUNT_NUMBER"));
             }
 
         } catch (Exception ex) {
@@ -141,11 +139,12 @@ public class CompanyDB {
             String updatecomp_sql = "UPDATE companies "
                     + "SET NAME = ? "
                     + "SET ESTABLISHMENT_DATE = ? "
+                    
                     + "SET EMAIL = ? "
                     + "SET ADDRESS = ? "
-                    + "SET PASSWORD = ? "
                     + "SET PHONE = ? "
                     + " SET AMOUNT_DUE = ? "
+                    
                     + "SET CREDIT_LIMIT = ? "
                     + "SET CREDIT_BALANCE = ? "
                     + "SET ACCOUNT_DUE_DATE = ? "
@@ -153,11 +152,9 @@ public class CompanyDB {
 
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement(updatecomp_sql);
-            UtilitiesDB.setValues(preparedStatement, comp.getName(),
-                    comp.getEstablishment_date(), comp.getEmail(),
-                    comp.getPassword(), comp.getPhone(),
-                    comp.getAmount_due(), comp.getCredit_limit(),
-                    comp.getCredit_balance(), comp.getAccount_due_date(),
+            UtilitiesDB.setValues(preparedStatement, comp.getName(), comp.getEstablishment_date(),
+                    comp.getEmail(), comp.getAddress(), comp.getPhone(), comp.getAmount_due(), 
+                    comp.getCredit_limit(), comp.getCredit_balance(), comp.getAccount_due_date(),
                     comp.getUser_id());
             preparedStatement.executeUpdate();
         } catch (Exception ex) {
