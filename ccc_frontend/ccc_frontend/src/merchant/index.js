@@ -14,7 +14,7 @@ function Company() {
     <div className={styles.container}>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
         <Typography alignSelf={'center'} variant="h4">
-          Merchant Products
+          Merchant
         </Typography>
       </Box>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">

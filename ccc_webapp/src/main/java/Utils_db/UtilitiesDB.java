@@ -6,9 +6,6 @@ package Utils_db;
 
 
 import hy360.ccc.db.CccDB;
-import hy360.ccc.model.Citizen;
-import hy360.ccc.model.Company;
-import hy360.ccc.model.Merchant;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -53,9 +50,6 @@ public class UtilitiesDB {
 
         PreparedStatement preparedStatement = null;
         Connection con = null;
-        Citizen cit = null;
-        Merchant mer = null;
-        Company comp = null;
         List<String> AccountNumbers = new ArrayList<String>();
         try {
 
@@ -66,12 +60,9 @@ public class UtilitiesDB {
             preparedStatement.executeQuery();
             ResultSet res1 = preparedStatement.getResultSet();
 
-
             while (res1.next() == true) {
                 AccountNumbers.add(res1.getString("ACCOUNT_NUMBER"));
             }
-
-
 
         } catch (Exception ex) {
             Logger.getLogger(UtilitiesDB.class.getName()).log(Level.SEVERE, null, ex);

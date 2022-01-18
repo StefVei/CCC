@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Typography,
   Box,
@@ -18,6 +18,11 @@ function ListCustomers() {
   //   const navigate = useNavigate();
   const [citizens, setCitizens] = useState([]);
   const [companies, setCompanies] = useState([]);
+
+  useEffect(() => {
+    getCitizens();
+    getCompanies();
+  }, []);
 
   const styles = useStyles();
   const getCitizens = async () => {
