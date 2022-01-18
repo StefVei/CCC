@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Εξυπηρετητής: 127.0.0.1
--- Χρόνος δημιουργίας: 18 Ιαν 2022 στις 08:40:46
+-- Χρόνος δημιουργίας: 18 Ιαν 2022 στις 10:00:33
 -- Έκδοση διακομιστή: 10.4.22-MariaDB
 -- Έκδοση PHP: 8.1.1
 
@@ -283,7 +283,7 @@ ALTER TABLE `citizens`
   ADD PRIMARY KEY (`USERID`),
   ADD UNIQUE KEY `AMKA` (`AMKA`),
   ADD UNIQUE KEY `VAT` (`VAT`),
-  ADD UNIQUE KEY `USERID` (`USERID`) USING BTREE;
+  ADD KEY `USERID` (`USERID`) USING BTREE;
 
 --
 -- Ευρετήρια για πίνακα `cm_trades`
@@ -307,8 +307,8 @@ ALTER TABLE `cm_traffics`
 --
 ALTER TABLE `companies`
   ADD PRIMARY KEY (`USERID`),
-  ADD UNIQUE KEY `USERID` (`USERID`) USING BTREE,
-  ADD UNIQUE KEY `NAME` (`NAME`);
+  ADD UNIQUE KEY `NAME` (`NAME`),
+  ADD KEY `USERID` (`USERID`) USING BTREE;
 
 --
 -- Ευρετήρια για πίνακα `employees`
@@ -329,6 +329,7 @@ ALTER TABLE `merchants`
 --
 ALTER TABLE `products`
   ADD PRIMARY KEY (`PRODUCT_ID`,`MERCHANT_USERID`),
+  ADD UNIQUE KEY `NAME` (`NAME`),
   ADD KEY `MERCHANT_USERID` (`MERCHANT_USERID`) USING BTREE;
 
 --
