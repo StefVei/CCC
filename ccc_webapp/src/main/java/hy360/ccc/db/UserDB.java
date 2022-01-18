@@ -26,7 +26,7 @@ public class UserDB {
         try {
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement("INSERT INTO users "
-                    + "( `USERNAME`, `PASSWORD`, `ACCOUNT_NUMBER`, `USERTYPE`"
+                    + "( `USERNAME`, `PASSWORD`, `ACCOUNT_NUMBER`, `USER_TYPE` )"
                     + " VALUES (? ,? ,? ,? )", PreparedStatement.RETURN_GENERATED_KEYS);
 
             UtilitiesDB.setValues(preparedStatement, user.getUserName(),

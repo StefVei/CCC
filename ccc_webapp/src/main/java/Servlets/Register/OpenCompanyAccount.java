@@ -7,7 +7,9 @@ package Servlets.Register;
 import Utils_db.UtilitiesDB;
 import com.google.gson.Gson;
 import hy360.ccc.db.CompanyDB;
+import hy360.ccc.db.UserDB;
 import hy360.ccc.model.Company;
+import hy360.ccc.model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
@@ -77,15 +79,13 @@ public class OpenCompanyAccount extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         Company comp = new Company();
-        
+        User user = comp;
+                
         String acc_number = UtilitiesDB.getNewAccountNumber();
         LocalDate date = java.time.LocalDate.now();
         date = date.plusYears(5);
 
-        comp.setAccount_number(acc_number);
         comp.setAccount_due_date(date.toString());
-        comp.setUserName(request.getParameter("username"));
-        comp.setPassword(request.getParameter("password"));
         comp.setPhone(request.getParameter("phone"));
         comp.setEmail(request.getParameter("email"));
         comp.setAddress(request.getParameter("address"));
@@ -95,7 +95,14 @@ public class OpenCompanyAccount extends HttpServlet {
         comp.setCredit_limit("5000");
         comp.setEstablishment_date(date.minusYears(5).toString());
         
+        user.setUser_type("C");
+        user.setUserName(request.getParameter("username"));
+        user.setPassword(request.getParameter("password"));
+        user.setAccount_number(acc_number);
+
+        UserDB.addUser(user);
         CompanyDB.addCompany(comp);
+
         response.setStatus(200);
         str = gson.toJson(comp);
         response.getWriter().print(str);

@@ -36,14 +36,15 @@ public class CompanyDB {
             String generatedColumns[] = {"COMPANY_ID"};
 
             preparedStatement = con.prepareStatement("INSERT INTO companies "
-                    + "(`NAME`, `ESTABLISHMENT_DATE`,"
+                    + "(`USERID`, `NAME`, `ESTABLISHMENT_DATE`,"
                     + " `EMAIL`, `ADDRESS`, `PHONE`, `AMOUNT_DUE`,"
                     + " `CREDIT_LIMIT`, `CREDIT_BALANCE`, `ACCOUNT_DUE_DATE` )"
                     + " VALUES (?, ?,"
                     + "?, ?, ?, ?,"
-                    + "?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
+                    + "?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
 
             UtilitiesDB.setValues(preparedStatement,
+                    company.getUser_id(),
                     company.getName(),
                     company.getEstablishment_date(),
                     
