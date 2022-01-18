@@ -34,7 +34,7 @@ public class ProductDB {
         try{
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement("INSERT INTO products "
-                    + "( `NAME`, `PRICE`, `QUANTITY`, `MERCHANT_USERID`"
+                    + "( `NAME`, `PRICE`, `QUANTITY`, `MERCHANT_USERID` )"
                     + " VALUES (? ,? ,? ,?)", PreparedStatement.RETURN_GENERATED_KEYS);
             
             UtilitiesDB.setValues(preparedStatement,

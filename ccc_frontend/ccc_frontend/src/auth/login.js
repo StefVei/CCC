@@ -17,15 +17,16 @@ function Login() {
         if (response.data === 'Wrong Credentials') {
           alert(response.data);
         } else {
-          if (response.data.companyid) {
-            navigate('/Company');
-          } else if (response.data.employeeid) {
-            navigate('/Employee');
-          } else if (response.data.citizenid) {
-            navigate('/Citizen');
-          } else {
-            navigate('/Merchant');
-          }
+          // if (response.data.companyid) {
+          //   navigate('/Company');
+          // } else if (response.data.employeeid) {
+          //   navigate('/Employee');
+          // } else if (response.data.citizenid) {
+          //   navigate('/Citizen');
+          // } else {
+          //   navigate('/Merchant');
+          // }
+          navigate('/Merchant', { state: { userid: response.data.userid } });
         }
         console.log(response);
       })
