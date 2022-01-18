@@ -25,17 +25,17 @@ public class Employee {
         last_name = "";
         birth_date = "";
         gender = "";
-        address = "";
         email = "";
-        employee_id = "";
-
+        address = "";
+        phone="";
+        company_id = "";
     }
     
     
     public Employee(String employee_id, String first_name, String last_name,
             String birth_date, String gender, String email,
-            String address, String phone) {
-        this.employee_id = employee_id;
+            String address, String phone, String company_id) {
+        this.employee_id=employee_id;
         this.first_name = first_name;
         this.last_name = last_name;
         this.birth_date = birth_date;
@@ -43,19 +43,19 @@ public class Employee {
         this.email = email;
         this.address = address;
         this.phone = phone;
+        this.company_id=company_id;
     }
 
     public void checkFields() throws Exception {
 
         if (first_name == null || first_name.trim().isEmpty()
                 || last_name == null || last_name.trim().isEmpty()
-                || phone == null || phone.trim().isEmpty()
-                || company_id == null || company_id.trim().isEmpty()
                 || birth_date == null || birth_date.trim().isEmpty()
                 || gender == null || gender.trim().isEmpty()
                 || email == null || email.trim().isEmpty()
                 || address == null || address.trim().isEmpty()
-                || phone == null || phone.trim().isEmpty()) {
+                || phone == null || phone.trim().isEmpty()
+                || company_id == null || company_id.trim().isEmpty()) {
 
             throw new Exception("Missing Fields");
         }
@@ -128,9 +128,6 @@ public class Employee {
         this.gender = gender;
     }
 
-
-    
-
     public String getPhone() {
         return phone;
     }
@@ -139,26 +136,7 @@ public class Employee {
         this.phone = phone;
     }
 
-        
-    
-    @Override
-    public String toString(){
-        StringBuilder ss = new StringBuilder();
-        ss.append("first_name: ").append(first_name).append("\n")
-                .append("last_name: ").append(last_name).append("\n")
-                .append("gender: ").append(gender).append("\n")
-                .append("email: ").append(email).append("\n")
-                .append("birth_date: ").append(birth_date).append("\n")
-                .append("phone: ").append(phone).append("\n")
-                .append("company_id: ").append(company_id).append("\n")
-                .append("employee_id: ").append(employee_id).append("\n")
-                .append("address:").append(address).append("\n")
-                .append("phone: ").append(phone).append("\n");
-        return ss.toString();
-    }
-
-
-    /**
+     /**
      * @return the company_id
      */
     public String getCompany_id() {
@@ -171,4 +149,20 @@ public class Employee {
     public void setCompany_id(String company_id) {
         this.company_id = company_id;
     }
+    
+    @Override
+    public String toString(){
+        StringBuilder ss = new StringBuilder();
+        ss.append("employee_id: ").append(employee_id).append("\n")
+                .append("first_name: ").append(first_name).append("\n")
+                .append("last_name: ").append(last_name).append("\n")
+                .append("birth_date: ").append(birth_date).append("\n")
+                .append("gender: ").append(gender).append("\n")
+                .append("email: ").append(email).append("\n")
+                .append("address:").append(address).append("\n")
+                .append("phone: ").append(phone).append("\n")
+                .append("company_id: ").append(company_id).append("\n");
+        return ss.toString();
+    }
+
 }

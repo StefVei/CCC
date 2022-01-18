@@ -8,29 +8,62 @@ package hy360.ccc.model;
  *
  * @author sckou
  */
-public class Company extends Customer{
+public class Company extends User{
     
     private String name;
     private String establishment_date;
+    private String email;
+    private String address;
+    private String phone;
+    private String amount_due;
+    private String credit_limit;
+    private String credit_balance;
+    private String account_due_date;
+    
     
     public Company(){
         name = "";
         establishment_date = "";
+        email="";
+        address="";
+        phone="";
+        amount_due="";
+        credit_limit = "";
+        credit_balance = "";
+        account_due_date = "";
     }
     
-    public Company(String name, String establishment_date)
+    public Company(String name, String establishment_date,
+            String email, String address, String phone, String amount_due,
+            String credit_limit, String credit_balance, String account_due_date)
     {
         this.name = name;
         this.establishment_date = establishment_date;
+        this.email=email;
+        this.address=address;
+        this.phone=phone;
+        this.amount_due=amount_due;
+        this.credit_limit = credit_limit;
+        this.credit_balance = credit_balance;
+        this.account_due_date = account_due_date;
     }
     
-    public Company(String name, String establishment_date, String credit_limit,
-            String credit_balance, String account_due_date) {
+    public Company(String userid, String username, String password, String account_number,
+            String name, String establishment_date,
+            String email, String address, String phone, String amount_due,
+            String credit_limit, String credit_balance, String account_due_date) {
         
-        super(credit_limit, credit_balance, account_due_date);
+        super(userid, username, password, account_number);
         
         this.name = name;
         this.establishment_date = establishment_date;
+        this.email=email;
+        this.address=address;
+        this.phone=phone;
+        this.amount_due=amount_due;
+        this.credit_limit = credit_limit;
+        this.credit_balance = credit_balance;
+        this.account_due_date = account_due_date;
     }
 
     public String getName() {
@@ -48,6 +81,64 @@ public class Company extends Customer{
     public void setEstablishment_date(String establishment_date) {
         this.establishment_date = establishment_date;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAmount_due() {
+        return amount_due;
+    }
+
+    public void setAmount_due(String amount_due) {
+        this.amount_due = amount_due;
+    }
+
+    public String getCredit_limit() {
+        return credit_limit;
+    }
+
+    public void setCredit_limit(String credit_limit) {
+        this.credit_limit = credit_limit;
+    }
+
+    public String getCredit_balance() {
+        return credit_balance;
+    }
+
+    public void setCredit_balance(String credit_balance) {
+        this.credit_balance = credit_balance;
+    }
+
+    public String getAccount_due_date() {
+        return account_due_date;
+    }
+
+    public void setAccount_due_date(String account_due_date) {
+        this.account_due_date = account_due_date;
+    }
+    
+    
     
     /**
      * Return the string representation of the object in rows
@@ -59,7 +150,14 @@ public class Company extends Customer{
     public String toString() {
         StringBuilder ss = new StringBuilder();
         ss.append("name= ").append(name).append("\n")
-                .append("established_date= ").append(establishment_date).append("\n");
+                .append("established_date= ").append(establishment_date).append("\n")
+                .append("email: ").append(email).append("\n")
+                .append("address: ").append(address).append("\n")
+                .append("phone: ").append(phone).append("\n")
+                .append("amount_due: ").append(amount_due).append("\n")
+                .append("credit_limit: ").append(credit_limit).append("\n")
+                .append("credit_balance: ").append(credit_balance).append("\n")
+                .append("account_due_date:").append(account_due_date).append("\n");
         return super.toString() + ss.toString();
     }
 

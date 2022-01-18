@@ -17,6 +17,10 @@ public class Merchant extends User {
     private String supply;
     private String gain;
     private String purchases_total;
+    private String email;
+    private String address;
+    private String phone;
+    private String amount_due;
 
     
     public Merchant(){
@@ -27,11 +31,16 @@ public class Merchant extends User {
         supply = "";
         gain = "";
         purchases_total = "";
+        email="";
+        address="";
+        phone="";
+        amount_due="";
     }
     
     public Merchant(String first_name, 
             String last_name, String birth_date, String gender,
-            String supply, String gain, String purchases_total ) {
+            String supply, String gain, String purchases_total, String email,
+            String address, String phone, String amount_due) {
         
         this.first_name = first_name;
         this.last_name = last_name;
@@ -40,16 +49,16 @@ public class Merchant extends User {
         this.supply = supply;
         this.gain = gain;
         this.purchases_total = purchases_total;
+        this.email=email;
+        this.address=address;
+        this.phone=phone;
+        this.amount_due=amount_due;
 
     }
     
     public Merchant( String userid,
             String username,
             String password,
-            String phone,
-            String email,
-            String address,
-            String amount_due,
             String account_number,
             String firstname,  
             String lastname, 
@@ -57,9 +66,13 @@ public class Merchant extends User {
             String gender,
             String supply, 
             String gain,
-            String purchases_total){
+            String purchases_total,
+            String email,
+            String address,
+            String phone,
+            String amount_due){
         
-        super(username, password, phone, email, address, amount_due, account_number);
+        super(userid, username, password, account_number);
 
         this.first_name = firstname;
         this.last_name = lastname;
@@ -68,6 +81,10 @@ public class Merchant extends User {
         this.supply = supply;
         this.gain = gain;
         this.purchases_total = purchases_total;
+        this.email=email;
+        this.address=address;
+        this.phone=phone;
+        this.amount_due=amount_due;
     }
     
     
@@ -83,7 +100,11 @@ public class Merchant extends User {
             || gender == null || gender.trim().isEmpty()
             || supply == null || supply.trim().isEmpty()
             || gain == null || gain.trim().isEmpty()
-            || purchases_total == null || purchases_total.trim().isEmpty())
+            || purchases_total == null || purchases_total.trim().isEmpty()
+            || email == null || email.trim().isEmpty()
+            || address == null || address.trim().isEmpty()
+            || phone == null || phone.trim().isEmpty()
+            || amount_due == null || amount_due.trim().isEmpty())
         {
             
             throw new Exception("Missing Fields");
@@ -145,6 +166,40 @@ public class Merchant extends User {
     public void setPurchases_total(String purchases_total) {
         this.purchases_total = purchases_total;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAmount_due() {
+        return amount_due;
+    }
+
+    public void setAmount_due(String amount_due) {
+        this.amount_due = amount_due;
+    }
+    
+    
     
     /**
      * Return the string representation of the object in rows
@@ -161,7 +216,11 @@ public class Merchant extends User {
                 .append("gender: ").append(gender).append("\n")
                 .append("supply: ").append(supply).append("\n")
                 .append("gain: ").append(gain).append("\n")
-                .append("Purchases_total: ").append(purchases_total).append("\n");
+                .append("purchases_total: ").append(purchases_total).append("\n")
+                .append("email: ").append(email).append("\n")
+                .append("address: ").append(address).append("\n")
+                .append("phone: ").append(phone).append("\n")
+                .append("amount_due: ").append(amount_due).append("\n");
         return super.toString() + ss.toString();
     }
 

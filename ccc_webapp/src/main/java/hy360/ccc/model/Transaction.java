@@ -14,47 +14,21 @@ public class Transaction {
     private String pending;
     private String transaction_type;
     private String amount;
-    private String citizen_id;
-    private String company_id;
-    private String merchant_cit_id;
-    private String merchant_comp_id;
-    private String employee_id;
-
-    private String activeFields;
 
     public Transaction() {
         transaction_id = "";
         date = "";
-        pending = "U";
-        transaction_type = "U";
+        pending = "Y";
+        transaction_type = "A";
         amount = "";
-        citizen_id = "";
-        company_id = "";
-        merchant_cit_id = "";
-        merchant_comp_id = "";
-        employee_id = "";
     }
 
-    public Transaction(String tr_id, String date, String pending,
-            String tr_type, String amount, String cit_id, String comp_id,
-            String merchant_cit_id, String merchant_comp_id, String empl_id) {
-        transaction_id = tr_id;
+    public Transaction(String tr_id, String date, String pending, String tr_type, String amount) {
+        this.transaction_id = tr_id;
         this.date = date;
         this.pending = pending;
-        transaction_type = tr_type;
+        this.transaction_type = tr_type;
         this.amount = amount;
-        citizen_id = cit_id;
-        company_id = comp_id;
-        this.merchant_cit_id = merchant_cit_id;
-        this.merchant_comp_id = merchant_comp_id;
-        this.employee_id = empl_id;
-
-        activeFields = "PENDING, TRANSACTION_TYPE, AMOUNT, DATE, ";
-        if (!citizen_id.isEmpty()) {
-            activeFields += "CITIZEN_USERID, MERCHANT_TRADE";
-        } else {
-            activeFields += "EMPLOYEE_ID, COMPANY_USERID, MERCHANT_TRAFFIC";
-        }
     }
     
     
@@ -72,28 +46,6 @@ public class Transaction {
         
     }
     
-    
-    public enum Pay_type{
-        
-        CHARGE("charge"), CREDIT("credit"), UNKNOWN("uknown");
-        private final String value;
-        
-        private Pay_type(String value){
-            this.value = value;
-        }
-        /**
-         * Returns string representation of value
-         *
-         * @return
-         */
-        @Override
-        public String toString() {
-            return this.value;
-        }
-    }
-    
-    
-
     /**
      * @return the transaction_id
      */
@@ -164,76 +116,6 @@ public class Transaction {
         this.amount = amount;
     }
 
-    /**
-     * @return the citizen_id
-     */
-    public String getCitizen_id() {
-        return citizen_id;
-    }
-
-    /**
-     * @param citizen_id the citizen_id to set
-     */
-    public void setCitizen_id(String citizen_id) {
-        this.citizen_id = citizen_id;
-    }
-
-    /**
-     * @return the company_id
-     */
-    public String getCompany_id() {
-        return company_id;
-    }
-
-    /**
-     * @param company_id the company_id to set
-     */
-    public void setCompany_id(String company_id) {
-        this.company_id = company_id;
-    }
-
-    /**
-     * @return the merchant_cit_id
-     */
-    public String getMerchant_cit_id() {
-        return merchant_cit_id;
-    }
-
-    /**
-     * @param merchant_cit_id the merchant_cit_id to set
-     */
-    public void setMerchant_cit_id(String merchant_cit_id) {
-        this.merchant_cit_id = merchant_cit_id;
-    }
-
-    /**
-     * @return the merchant_comp_id
-     */
-    public String getMerchant_comp_id() {
-        return merchant_comp_id;
-    }
-
-    /**
-     * @param merchant_comp_id the merchant_comp_id to set
-     */
-    public void setMerchant_comp_id(String merchant_comp_id) {
-        this.merchant_comp_id = merchant_comp_id;
-    }
-
-    /**
-     * @return the employee_id
-     */
-    public String getEmployee_id() {
-        return employee_id;
-    }
-
-    /**
-     * @param employee_id the employee_id to set
-     */
-    public void setEmployee_id(String employee_id) {
-        this.employee_id = employee_id;
-    }
-
     @Override
     public String toString() {
         StringBuilder ss = new StringBuilder();
@@ -241,22 +123,9 @@ public class Transaction {
                 .append("pay_type: ").append(pending).append("\n")
                 .append("transaction_type:").append(transaction_type).append("\n")
                 .append("amount: ").append(amount).append("\n")
-                .append("date: ").append(date).append("\n")
-                .append("citizen_id : ").append(citizen_id).append("\n")
-                .append("company_id: ").append(company_id).append("\n")
-                .append("merchant_cit_id : ").append(merchant_cit_id).append("\n")
-                .append("merchant_comp_id: ").append(merchant_comp_id).append("\n")
-                .append("employee_id: ").append(employee_id).append("\n");
-
+                .append("date: ").append(date).append("\n");
         return ss.toString();
 
-    }
-
-    /**
-     * @return the activeFields
-     */
-    public String getActiveFields() {
-        return activeFields;
     }
 
 }
