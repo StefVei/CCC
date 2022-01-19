@@ -4,6 +4,7 @@
  */
 package Servlets.Transactions;
 
+import static Servlets.Transactions.TransactionHelper.updateMerchant;
 import com.google.gson.Gson;
 import hy360.ccc.db.BoughtProductDB;
 import hy360.ccc.db.CitizenDB;
@@ -124,10 +125,11 @@ public class MakeTransaction extends HttpServlet {
                 Merchant merchant = MerchantDB.getMerchant("USER_ID", merchant_id);
                 merchant_gain = Double.valueOf(merchant.getGain())+ cost;
                 merchant_supply = Double.valueOf(merchant.getSupply());
-                merchant.setGain(String.valueOf(merchant_gain));
-                merchant.setAmount_due(String.valueOf(merchant_gain * merchant_supply));
-                merchant.setPurchases_total(String.valueOf(Integer.valueOf(merchant.getPurchases_total()) + 1));
-                MerchantDB.updateMerchant(merchant);
+
+                updateMerchant(merchant_id, -1, merchant_gain * merchant_supply,
+                        Integer.valueOf(merchant.getPurchases_total()) + 1,
+                        merchant_gain * merchant_supply);
+
                 
                 product_quantity = Integer.valueOf(buying_product.getQuantity()) - Integer.valueOf(quantity);
                 buying_product.setQuantity(String.valueOf(product_quantity));
@@ -157,11 +159,11 @@ public class MakeTransaction extends HttpServlet {
                 Merchant merchant = MerchantDB.getMerchant("USERID", merchant_id);
                 merchant_gain = Double.valueOf(merchant.getGain()) + cost;
                 merchant_supply = Double.valueOf(merchant.getSupply());
-                merchant.setGain(String.valueOf(merchant_gain));
-                merchant.setAmount_due(String.valueOf(merchant_gain * merchant_supply));
-                merchant.setPurchases_total(String.valueOf(Integer.valueOf(merchant.getPurchases_total()) + 1));
-                MerchantDB.updateMerchant(merchant);
-                
+
+                updateMerchant(merchant_id, -1, merchant_gain,
+                        Integer.valueOf(merchant.getPurchases_total()) + 1,
+                        merchant_gain * merchant_supply);
+
                 product_quantity = Integer.valueOf(buying_product.getQuantity()) - Integer.valueOf(quantity);
                 buying_product.setQuantity(String.valueOf(product_quantity));
                 ProductDB.updateProduct(buying_product);
@@ -205,10 +207,11 @@ public class MakeTransaction extends HttpServlet {
                 Merchant merchant = MerchantDB.getMerchant("USERID", merchant_id);
                 merchant_gain = Double.valueOf(merchant.getGain()) + cost;
                 merchant_supply = Double.valueOf(merchant.getSupply());
-                merchant.setGain(String.valueOf(merchant_gain));
-                merchant.setAmount_due(String.valueOf(merchant_gain * merchant_supply));
-                merchant.setPurchases_total(String.valueOf(Integer.valueOf(merchant.getPurchases_total()) + 1));
-                MerchantDB.updateMerchant(merchant);
+
+                updateMerchant(merchant_id, -1, merchant_gain,
+                        Integer.valueOf(merchant.getPurchases_total()) + 1,
+                        merchant_gain * merchant_supply);
+
                 
                 product_quantity = Integer.valueOf(buying_product.getQuantity()) - Integer.valueOf(quantity);
                 buying_product.setQuantity(String.valueOf(product_quantity));
@@ -238,10 +241,10 @@ public class MakeTransaction extends HttpServlet {
                 Merchant merchant = MerchantDB.getMerchant("USERID", merchant_id);
                 merchant_gain = Double.valueOf(merchant.getGain()) + cost;
                 merchant_supply = Double.valueOf(merchant.getSupply());
-                merchant.setGain(String.valueOf(merchant_gain));
-                merchant.setAmount_due(String.valueOf(merchant_gain * merchant_supply));
-                merchant.setPurchases_total(String.valueOf(Integer.valueOf(merchant.getPurchases_total()) + 1));
-                MerchantDB.updateMerchant(merchant);
+
+                updateMerchant(merchant_id, -1, merchant_gain * merchant_supply,
+                        Integer.valueOf(merchant.getPurchases_total()) + 1,
+                        merchant_gain * merchant_supply);
                 
                 product_quantity = Integer.valueOf(buying_product.getQuantity()) - Integer.valueOf(quantity);
                 buying_product.setQuantity(String.valueOf(product_quantity));
