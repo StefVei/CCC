@@ -107,16 +107,16 @@ public class EmployeeDB {
         }
     }
 
-    public static Employee getEmployee(String employee_id, String company_id) {
+    public static Employee getEmployee(String employee_id) {
         Employee employee = new Employee();
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
-            String sql_getemployee = "SELECT * FROM employees WHERE EMPLOYEE_ID = ? AND COMPANY_USERID";
+            String sql_getemployee = "SELECT * FROM employees WHERE EMPLOYEE_ID = ?";
             con = CccDB.getConnection();
 
             preparedStatement = con.prepareStatement(sql_getemployee);
-            UtilitiesDB.setValues(preparedStatement, employee_id, company_id);
+            UtilitiesDB.setValues(preparedStatement, employee_id);
 
             preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
