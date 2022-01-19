@@ -61,7 +61,7 @@ function MerchantRegister() {
         <Typography alignSelf={'center'} variant="h4">
           Register Merchant
         </Typography>
-        <Box pt={3}>
+        <Box p={3}>
           <TextField
             label="Username:"
             variant="filled"
@@ -70,7 +70,7 @@ function MerchantRegister() {
             required
           />{' '}
         </Box>
-        <Box pt={3}>
+        <Box p={3}>
           <TextField
             label="Password:"
             type="password"
@@ -80,7 +80,7 @@ function MerchantRegister() {
             required
           />
         </Box>
-        <Box pt={3}>
+        <Box p={3}>
           <TextField
             label="Phone:"
             variant="filled"
@@ -90,7 +90,7 @@ function MerchantRegister() {
             inputProps={{ maxLength: 10 }}
           />
         </Box>
-        <Box pt={3}>
+        <Box p={3}>
           <TextField
             label="Email:"
             variant="filled"
@@ -99,7 +99,7 @@ function MerchantRegister() {
             required
           />{' '}
         </Box>
-        <Box pt={3}>
+        <Box p={3}>
           <TextField
             label="Address:"
             variant="filled"
@@ -108,7 +108,7 @@ function MerchantRegister() {
             required
           />{' '}
         </Box>
-        <Box pt={3}>
+        <Box p={3}>
           <TextField
             label="First Name:"
             variant="filled"
@@ -117,7 +117,7 @@ function MerchantRegister() {
             required
           />{' '}
         </Box>
-        <Box pt={3}>
+        <Box p={3}>
           <TextField
             label="Last Name:"
             variant="filled"
@@ -126,7 +126,7 @@ function MerchantRegister() {
             required
           />{' '}
         </Box>
-        <Box pt={3}>
+        <Box p={3}>
           <FormControl component="fieldset">
             <FormLabel component="legend">Gender</FormLabel>
             <RadioGroup
@@ -141,7 +141,7 @@ function MerchantRegister() {
             </RadioGroup>
           </FormControl>
         </Box>
-        <Box pt={3}>
+        <Box p={3}>
           <LocalizationProvider dateAdapter={AdapterDay}>
             <DesktopDatePicker
               label="Birth Date"
@@ -152,12 +152,20 @@ function MerchantRegister() {
           </LocalizationProvider>
         </Box>
         <div className={styles.buttonContainer}>
-          <Button type="submit" variant="contained" color="primary" onClick={() => handleSubmit()}>
-            Signup
-          </Button>
-          <Button variant="outlined" color="primary" onClick={() => navigate('/')}>
-            Cancel
-          </Button>
+          <Box p={3}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              onClick={() => handleSubmit()}>
+              Signup
+            </Button>
+          </Box>
+          <Box p={3}>
+            <Button variant="outlined" color="primary" onClick={() => navigate('/')}>
+              Cancel
+            </Button>
+          </Box>
         </div>
       </div>
     </div>

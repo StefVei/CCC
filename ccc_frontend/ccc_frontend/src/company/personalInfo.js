@@ -27,7 +27,6 @@ function CompanyInfo() {
     await cccClient
       .post('getCompany', `userid=${userid}`)
       .then(function (response) {
-        console.log('🚀 ~ file: personalInfo.js ~ line 34 ~ response', response);
         setName(response.data.name);
         setEstablishmentDate(response.data.establishment_date);
         setEmail(response.data.email);
