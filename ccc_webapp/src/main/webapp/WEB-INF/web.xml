@@ -25,6 +25,10 @@
         <servlet-class>Servlets.Transactions.MakeTransaction</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>makePendings</servlet-name>
+        <servlet-class>Servlets.Transactions.makePendings</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>CompleteTransaction</servlet-name>
         <servlet-class>Servlets.Transactions.CompleteTransaction</servlet-class>
     </servlet>
@@ -91,6 +95,10 @@
     <servlet-mapping>
         <servlet-name>MakeTransaction</servlet-name>
         <url-pattern>/MakeTransaction</url-pattern>
+    </servlet-mapping>
+     <servlet-mapping>
+        <servlet-name>makePendings</servlet-name>
+        <url-pattern>/makePendings</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>CompleteTransaction</servlet-name>
