@@ -25,6 +25,7 @@ function ManageProducts() {
   const [products, setProducts] = useState([]);
   const [maxQuantity, setMaxQuantity] = useState(0);
   const [productid, setProductid] = useState(0);
+  const [merchantId, setMerchantId] = useState(0);
 
   useEffect(() => {
     getProducts();
@@ -37,6 +38,7 @@ function ManageProducts() {
     setOpen(true);
     setMaxQuantity(prop.quantity);
     setProductid(prop.product_id);
+    setMerchantId(prop.merchant_id);
   };
   const handleClose = () => {
     setTotalPrice(0);
@@ -47,7 +49,7 @@ function ManageProducts() {
     await cccClient
       .post(
         'MakeTrasnaction',
-        `productId=${productid}&quantityOfBuyingProduct=${quantity}&userId=${userid}`
+        `productId=${productid}&quantityOfBuyingProduct=${quantity}&userId=${userid}&merchantId=${merchantId}`
       )
       .then(function (response) {
         setProducts(response.data);
