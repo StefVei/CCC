@@ -4,6 +4,7 @@
  */
 package Servlets.Transactions;
 
+import static Servlets.Transactions.TransactionHelper.updateMerchant;
 import com.google.gson.Gson;
 import hy360.ccc.db.CitizenDB;
 import static hy360.ccc.db.CitizenTradesDB.addTrade;
@@ -117,11 +118,11 @@ public class ReturnProducts extends HttpServlet {
         Merchant merchant = MerchantDB.getMerchant("USERID", merchant_id);
         merchant_gain = Double.valueOf(merchant.getGain())-(Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity));
         merchant_supply = Double.valueOf(merchant.getSupply());
-        merchant.setGain(String.valueOf(merchant_gain));
-        merchant.setAmount_due(String.valueOf(merchant_gain * merchant_supply));
-        merchant.setPurchases_total(String.valueOf(Integer.valueOf(merchant.getPurchases_total()) - 1));
-        MerchantDB.updateMerchant(merchant);
-        
+
+        updateMerchant(merchant_id, merchant_supply, merchant_gain,
+                Integer.valueOf(merchant.getPurchases_total()) - 1,
+                merchant_gain * merchant_supply);
+
         if (customer_type.equals("true")) {
             citizen_id = request.getParameter("citizenId");
 
