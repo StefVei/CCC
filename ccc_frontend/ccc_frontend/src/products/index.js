@@ -72,10 +72,19 @@ function ManageProducts() {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Product id</TableCell>
-                <TableCell align="left">Name</TableCell>
-                <TableCell align="left">Quantity</TableCell>
-                <TableCell align="left">Price</TableCell>
+                <TableCell>
+                  {' '}
+                  <Typography variant="h6">Product id</Typography>
+                </TableCell>
+                <TableCell align="left">
+                  <Typography variant="h6">Name</Typography>
+                </TableCell>
+                <TableCell align="left">
+                  <Typography variant="h6">Quantity</Typography>
+                </TableCell>
+                <TableCell align="left">
+                  <Typography variant="h6">Price</Typography>
+                </TableCell>
                 <TableCell></TableCell>
               </TableRow>
             </TableHead>
@@ -88,7 +97,7 @@ function ManageProducts() {
                   <TableCell align="left">{row.name}</TableCell>
                   <TableCell align="left">{row.quantity}</TableCell>
                   <TableCell align="left">{row.price}&nbsp;€</TableCell>
-                  <TableCell align="left">
+                  <TableCell align="right">
                     <Button
                       type="primary"
                       variant="contained"
