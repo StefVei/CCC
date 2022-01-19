@@ -6,7 +6,9 @@ package Servlets.Transactions;
 
 import com.google.gson.Gson;
 import hy360.ccc.db.CitizenDB;
+import static hy360.ccc.db.CitizenTradesDB.addTrade;
 import hy360.ccc.db.CompanyDB;
+import hy360.ccc.db.CompanyTradesDB;
 import hy360.ccc.db.EmployeeDB;
 import hy360.ccc.db.MerchantDB;
 import hy360.ccc.db.ProductDB;
@@ -122,18 +124,16 @@ public class ReturnProducts extends HttpServlet {
         
         if (customer_type.equals("true")) {
             citizen_id = request.getParameter("citizenId");
+
             customer_amount_due = CitizenDB.getCitizen("USERID", citizen_id).getAmount_due();
-            //transaction.setCitizen_id(citizen_id);
-            //transaction.setMerchant_cit_id(merchant_id);
+            addTrade(citizen_id, merchant_id, transaction.getTransaction_id());
 
         } else {
             employee_id = request.getParameter("employeeId");
-            company_id = EmployeeDB.getEmployee("EMPLOYEE_ID", employee_id).getCompany_id();
-            customer_amount_due = CompanyDB.getCompany("USERID", company_id).getAmount_due();
-            //transaction.setCompany_id(company_id);
-            //transaction.setEmployee_id(String.valueOf(employee_id));
-            //transaction.setMerchant_comp_id(merchant_id);
-
+            String company_name = request.getParameter("Name");
+            Company mycompany = CompanyDB.getCompany("NAME", company_name);
+            customer_amount_due = mycompany.getAmount_due();
+            CompanyTradesDB.addTrade(transaction.getTransaction_id(), merchant_id, mycompany.getUser_id(), employee_id);
         }
         
         if(Double.valueOf(customer_amount_due)== 0){
@@ -148,6 +148,7 @@ public class ReturnProducts extends HttpServlet {
                 employee_id = request.getParameter("employeeId");
                 Employee em = EmployeeDB.getEmployee("EMPLOYEE_ID", employee_id);
                 Company comp = CompanyDB.getCompany("USERID", em.getCompany_id());
+
                 double new_balance = Double.valueOf(comp.getCredit_balance());
                 new_balance = new_balance + (Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity));
                 comp.setCredit_balance(String.valueOf(new_balance));

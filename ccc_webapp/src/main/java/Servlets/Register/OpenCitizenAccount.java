@@ -84,7 +84,7 @@ public class OpenCitizenAccount extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         Citizen cit = new Citizen();
-        User user = cit;
+        User user = new User();
 
         LocalDate date = java.time.LocalDate.now();
         date = date.plusYears(5);
@@ -113,6 +113,7 @@ public class OpenCitizenAccount extends HttpServlet {
         user.setPassword(request.getParameter("password"));
         user.setAccount_number(acc_number);
 
+        user = (User) cit;
         UserDB.addUser(user);
         CitizenDB.addCitizen(cit);
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Typography } from '@mui/material';
+import { Typography, Modal, TextField } from '@mui/material';
 import { Button, Box } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -17,7 +17,25 @@ function ManageProducts() {
   // const { state } = useLocation();
   // const { userid } = state;
   const styles = useStyles();
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = (prop) => {
+    setName(prop.name);
+    setPrice(prop.price);
+    setQuantity(0);
+    setOpen(true);
+    setMaxQuantity(prop.quantity);
+  };
+  const handleClose = () => {
+    setTotalPrice(0);
+    setOpen(false);
+  };
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState(0);
+  const [quantity, setQuantity] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
   const [products, setProducts] = useState([]);
+  const [maxQuantity, setMaxQuantity] = useState(0);
 
   useEffect(() => {
     getProducts();
@@ -32,6 +50,14 @@ function ManageProducts() {
       .catch(function (err) {
         console.log(err);
       });
+  };
+
+  const calculateTotalPrice = async (e) => {
+    console.log('max quantity is ' + maxQuantity + 'quantity is ' + e);
+    if (e - maxQuantity - 1 != 0 && e > 0) {
+      setTotalPrice(price * e);
+      setQuantity(e);
+    }
   };
 
   return (
@@ -50,6 +76,7 @@ function ManageProducts() {
                 <TableCell align="left">Name</TableCell>
                 <TableCell align="left">Quantity</TableCell>
                 <TableCell align="left">Price</TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -61,6 +88,15 @@ function ManageProducts() {
                   <TableCell align="left">{row.name}</TableCell>
                   <TableCell align="left">{row.quantity}</TableCell>
                   <TableCell align="left">{row.price}&nbsp;€</TableCell>
+                  <TableCell align="left">
+                    <Button
+                      type="primary"
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleOpen(row)}>
+                      Buy
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -72,6 +108,42 @@ function ManageProducts() {
           Back
         </Button>
       </Box>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description">
+        <div className={styles.modalContainer}>
+          <TextField label="Name :" variant="filled" value={name} disabled required />{' '}
+          <TextField
+            label="Price :"
+            variant="filled"
+            type="number"
+            disabled
+            value={price}
+            required
+          />{' '}
+          <TextField
+            label="Quantity:"
+            variant="filled"
+            type="number"
+            value={quantity}
+            onChange={(e) => calculateTotalPrice(e.target.value)}
+            required
+          />{' '}
+          <TextField
+            label="Total price :"
+            variant="filled"
+            type="number"
+            disabled
+            value={totalPrice}
+            required
+          />{' '}
+          <Button type="submit" variant="contained" color="primary">
+            add
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }

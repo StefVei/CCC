@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Εξυπηρετητής: 127.0.0.1
--- Χρόνος δημιουργίας: 18 Ιαν 2022 στις 16:19:27
+-- Χρόνος δημιουργίας: 18 Ιαν 2022 στις 20:24:45
 -- Έκδοση διακομιστή: 10.4.22-MariaDB
 -- Έκδοση PHP: 8.1.1
 
@@ -423,7 +423,7 @@ ALTER TABLE `transactions`
 ALTER TABLE `users`
   ADD PRIMARY KEY (`USERID`),
   ADD UNIQUE KEY `ACCOUNT_NUMBER` (`ACCOUNT_NUMBER`),
-  ADD UNIQUE KEY `LOGIN` (`USERNAME`,`PASSWORD`) USING BTREE;
+  ADD UNIQUE KEY `USERNAME` (`USERNAME`);
 
 --
 -- AUTO_INCREMENT για άχρηστους πίνακες
