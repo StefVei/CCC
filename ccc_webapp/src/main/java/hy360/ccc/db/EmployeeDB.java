@@ -84,21 +84,21 @@ public class EmployeeDB {
         Connection con = null;
         try {
             String updateemployee_sql = "UPDATE employees "
-                    + "SET FIRST_NAME = ? "
-                    + "SET LAST_NAME = ? "
-                    + "SET BIRTH_DATE = ? "
-                    + " SET GENDER = ? "
-                    + "SET EMAIL = ? "
-                    + "SET ADDRESS = ? "
-                    + "SET PHONE = ? "
-                    + "WHERE EMPLOYEE_ID = ? AND COMPANY_USERID";
+                    + "SET FIRST_NAME = ?, "
+                    + " LAST_NAME = ?, "
+                    + " BIRTH_DATE = ?, "
+                    + " GENDER = ?, "
+                    + " EMAIL = ?, "
+                    + " ADDRESS = ?, "
+                    + " PHONE = ?, "
+                    + "WHERE EMPLOYEE_ID = ? ;";
 
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement(updateemployee_sql);
             UtilitiesDB.setValues(preparedStatement, employee.getFirst_name(),
                     employee.getLast_name(), employee.getBirth_date(), employee.getGender(),
                      employee.getEmail(), employee.getAddress(), employee.getPhone(),
-                    employee.getEmployee_id(), employee.getCompany_id());
+                    employee.getEmployee_id());
             preparedStatement.executeUpdate();
         } catch (Exception ex) {
             Logger.getLogger(EmployeeDB.class.getName()).log(Level.SEVERE, null, ex);

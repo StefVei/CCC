@@ -48,11 +48,11 @@ function ManageProducts() {
   const makeTransaction = async (quantity, productid) => {
     await cccClient
       .post(
-        'MakeTrasnaction',
+        'MakeTransaction',
         `productId=${productid}&quantityOfBuyingProduct=${quantity}&userId=${userid}&merchantId=${merchantId}`
       )
-      .then(function (response) {
-        setProducts(response.data);
+      .then(function () {
+        getProducts();
       })
       .catch(function (err) {
         console.log(err);

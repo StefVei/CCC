@@ -43,7 +43,7 @@ public class CompanyTradesDB {
 
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement("INSERT INTO cm_traffics "
-                    + "( `EMPLOYEE_ID`, `COMPANY_USERID`, `MERCHANT_USERID` ,`TRANSACTION_ID`"
+                    + "( `EMPLOYEE_ID`, `COMPANY_USERID`, `MERCHANT_USERID` ,`TRANSACTION_ID` )"
                     + " VALUES (? ,? ,?, ?)");
 
             UtilitiesDB.setValues(preparedStatement, em_id,

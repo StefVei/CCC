@@ -86,18 +86,18 @@ public class MerchantDB {
         Connection con = null;
         try {
             String mer_sql = "UPDATE merchants "
-                    + "SET FIRST_NAME = ? "
-                    + "SET LAST_NAME = ? "
-                    + "SET BIRTH_DATE = ? "
-                    + "SET GENDER = ? "
-                    + "SET SUPPLY = ? "
-                    + "SET GAIN = ? "
-                    + "SET PURCHASES_TOTAL = ? "
-                    + "SET EMAIL = ? "
-                    + "SET ADDRESS = ? "
-                    + "SET PHONE = ? "
-                    + "SET AMOUNT_DUE = ?"
-                    + "WHERE USERID = ?";
+                    + "SET FIRST_NAME = ?, "
+                    + "LAST_NAME = ?, "
+                    + "BIRTH_DATE = ?, "
+                    + "GENDER = ?, "
+                    + "SUPPLY = ?, "
+                    + "GAIN = ?, "
+                    + "PURCHASES_TOTAL = ?, "
+                    + "EMAIL = ?, "
+                    + "ADDRESS = ?, "
+                    + "PHONE = ?, "
+                    + "AMOUNT_DUE = ?"
+                    + "WHERE USERID = ? ;";
 
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement(mer_sql);

@@ -16,7 +16,7 @@ public class TransactionHelper {
     public static void updateMerchant(String mer_id, double supply,
             double gain, double pur_total, double amount_due) {
 
-        Merchant merchant = MerchantDB.getMerchant("USER_ID", mer_id);
+        Merchant merchant = MerchantDB.getMerchant("USERID", mer_id);
         if (gain != -1) {
             merchant.setGain(String.valueOf(gain));
         }

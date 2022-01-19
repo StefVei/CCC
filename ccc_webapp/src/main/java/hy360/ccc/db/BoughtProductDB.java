@@ -27,12 +27,11 @@ public class BoughtProductDB {
      * 
      * @param products_str "transaction_id, product_id1, product_id2"
      */
-    public static void addBoughtProducts(String products_str){
+    public static void addBoughtProducts(String products_str, String tr_id, String mer_id, String totalQuantity) {
             
         List<String> products = Arrays.asList(products_str.split(",[ ]*"));
-        String transaction_id = products.get(0);
-        products.remove(0);
-        
+        String transaction_id = tr_id;
+
         PreparedStatement preparedStatement = null;
         Connection con = null;
     
@@ -40,9 +39,10 @@ public class BoughtProductDB {
             con = CccDB.getConnection();
             ListIterator<String> it = products.listIterator();
             while(it.hasNext()){
-                preparedStatement = con.prepareStatement("INSERT INTO bought_product"+
-                    " TRANSACTION_ID, PRODUCT_ID, MERCHANT_ID, TOTAL ) "+"VALUES (?, ?, ?, ?)");
-                UtilitiesDB.setValues(preparedStatement, transaction_id, it.next());//ALLAGH EDW
+                preparedStatement = con.prepareStatement("INSERT INTO bought_products"
+                        + "( TRANSACTION_ID, PRODUCT_ID, MERCHANT_USERID, TOTAL ) " + "VALUES (?, ?, ?, ?)");
+                UtilitiesDB.setValues(preparedStatement, transaction_id, it.next(),
+                        mer_id, totalQuantity);
                 preparedStatement.executeUpdate();
             }
         }catch(Exception ex){

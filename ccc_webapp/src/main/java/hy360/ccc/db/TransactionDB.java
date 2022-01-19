@@ -32,7 +32,7 @@ public class TransactionDB {
             
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement("INSERT INTO transactions "
-                    + "( `PENDING`, `TRANSACTION_TYPE`, `AMOUNT`, `DATE`"
+                    + "( `PENDING`, `TRANSACTION_TYPE`, `AMOUNT`, `DATE` )"
                     + " VALUES (? ,? ,? ,?)", PreparedStatement.RETURN_GENERATED_KEYS);
             
             UtilitiesDB.setValues(preparedStatement,
@@ -65,11 +65,11 @@ public class TransactionDB {
         try {
 
             String mer_sql = "UPDATE transactions "
-                    + "SET PENDING = ? "
-                    + "SET TRANSACTION_TYPE = ? "
-                    + "SET AMOUNT = ? "
-                    + "SET DATE = ? "
-                    + "WHERE TRANSACTION_ID = ?";
+                    + "SET PENDING = ?, "
+                    + " TRANSACTION_TYPE = ?, "
+                    + " AMOUNT = ?, "
+                    + " DATE = ?, "
+                    + "WHERE TRANSACTION_ID = ? ;";
 
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement(mer_sql);

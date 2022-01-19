@@ -81,15 +81,15 @@ public class ProductDB {
         Connection con = null;
         try {
             String mer_sql = "UPDATE products "
-                    + "SET NAME = ? "
-                    + "SET PRICE = ? "
-                    + "SET QUANTITY = ? "                    
-                    + "WHERE PRODUCT_ID = ? AND MERCHANT_USERID = ?";
+                    + "SET NAME = ?, "
+                    + "PRICE = ?, "
+                    + "QUANTITY = ? "
+                    + "WHERE PRODUCT_ID = ?";
 
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement(mer_sql);
             UtilitiesDB.setValues(preparedStatement, product.getName(),
-                    product.getPrice(), product.getQuantity(), product.getProduct_id(), product.getMerchant_id());
+                    product.getPrice(), product.getQuantity(), product.getProduct_id());
             preparedStatement.executeUpdate();
 
         } catch (Exception ex) {

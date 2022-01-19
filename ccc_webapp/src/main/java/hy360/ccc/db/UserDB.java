@@ -106,7 +106,7 @@ public class UserDB {
         try {
             String updateemployee_sql = "UPDATE users "
                     + "SET PASSWORD = ? "
-                    + "WHERE USERID = ?";
+                    + "WHERE USERID = ? ;";
 
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement(updateemployee_sql);

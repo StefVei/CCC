@@ -145,17 +145,15 @@ public class CompanyDB {
         Connection con = null;
         try {
             String updatecomp_sql = "UPDATE companies "
-                    + "SET NAME = ? "
-                    + "SET ESTABLISHMENT_DATE = ? "
-                    
-                    + "SET EMAIL = ? "
-                    + "SET ADDRESS = ? "
-                    + "SET PHONE = ? "
-                    + " SET AMOUNT_DUE = ? "
-                    
-                    + "SET CREDIT_LIMIT = ? "
-                    + "SET CREDIT_BALANCE = ? "
-                    + "SET ACCOUNT_DUE_DATE = ? "
+                    + "SET NAME = ?, "
+                    + "ESTABLISHMENT_DATE = ?, "
+                    + "EMAIL = ?, "
+                    + "ADDRESS = ?, "
+                    + "PHONE = ?, "
+                    + "AMOUNT_DUE = ?, "
+                    + "CREDIT_LIMIT = ?, "
+                    + "CREDIT_BALANCE = ?, "
+                    + "ACCOUNT_DUE_DATE = ?, "
                     + "WHERE USER_ID = ?";
 
             con = CccDB.getConnection();

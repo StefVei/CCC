@@ -189,25 +189,24 @@ public class CitizenDB {
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
-            String update_cit_sql = "UPDATE citizens "
-                    
-                    + "SET FIRST_NAME = ? "
-                    + "SET LAST_NAME = ? "
-                    + "SET BIRTH_DATE = ? "
-                    + "SET GENDER = ? "
-                    
-                    + "SET EMAIL = ? "
-                    + "SET ADDRESS = ? "
-                    + "SET PHONE = ? "
-                    + "SET AMOUNT_DUE = ? "
-                    
-                    + "SET CREDIT_LIMIT = ? "
-                    + "SET CREDIT_BALANCE = ? "
-                    + "SET ACCOUNT_DUE_DATE = ? "
+
+            String sql = "UPDATE citizens "
+                    + "SET FIRST_NAME = ?, "
+                    + "LAST_NAME = ?, "
+                    + "BIRTH_DATE = ?,"
+                    + " GENDER = ?,"
+                    + " EMAIL = ?,"
+                    + " ADDRESS = ?,"
+                    + " PHONE = ?,"
+                    + " AMOUNT_DUE = ?,"
+                    + " CREDIT_LIMIT = ?,"
+                    + " CREDIT_BALANCE = ?,"
+                    + " ACCOUNT_DUE_DATE = ? "
                     + "WHERE USERID = ?";
 
+
             con = CccDB.getConnection();
-            preparedStatement = con.prepareStatement(update_cit_sql);
+            preparedStatement = con.prepareStatement(sql);
             UtilitiesDB.setValues(preparedStatement,
                     cit.getFirst_name(), cit.getLast_name(), cit.getBirth_date(), cit.getGender(),
                     cit.getEmail(), cit.getAddress(), cit.getPhone(), cit.getAmount_due(), 
