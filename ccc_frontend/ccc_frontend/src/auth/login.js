@@ -35,9 +35,11 @@ function Login() {
   return (
     <div className={styles.container}>
       <div className={styles.textFieldContainer}>
-        <Typography alignSelf={'center'} variant="h4">
-          Login
-        </Typography>
+        <Box p={1} sx={3} display="flex" justifyContent="center" alignItems="center">
+          <Typography alignSelf={'center'} variant="h4">
+            Login
+          </Typography>
+        </Box>
         <Box p={3}>
           <TextField
             label="Username:"
@@ -55,7 +57,6 @@ function Login() {
             onChange={(e) => setPassword(e.target.value)}
           />{' '}
         </Box>
-
         <div className={styles.buttonContainer}>
           <Box p={3}>
             <Button

@@ -82,6 +82,11 @@ function ManageProducts() {
           </Table>
         </TableContainer>
       </Box>
+      <Box p={1} sx={3} display="flex" justifyContent="center" alignItems="center">
+        <Button variant="outlined" color="primary" onClick={() => navigate(-1)}>
+          Back
+        </Button>
+      </Box>
     </div>
   );
 }
