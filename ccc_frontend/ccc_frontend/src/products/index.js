@@ -9,37 +9,53 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import useStyles from './styles';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { cccClient } from '../network';
 
 function ManageProducts() {
   const navigate = useNavigate();
-  // const { state } = useLocation();
-  // const { userid } = state;
+  const { state } = useLocation();
+  const { userid } = state;
   const styles = useStyles();
-
   const [open, setOpen] = useState(false);
-  const handleOpen = (prop) => {
-    setName(prop.name);
-    setPrice(prop.price);
-    setQuantity(0);
-    setOpen(true);
-    setMaxQuantity(prop.quantity);
-  };
-  const handleClose = () => {
-    setTotalPrice(0);
-    setOpen(false);
-  };
   const [name, setName] = useState('');
   const [price, setPrice] = useState(0);
   const [quantity, setQuantity] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [products, setProducts] = useState([]);
   const [maxQuantity, setMaxQuantity] = useState(0);
+  const [productid, setProductid] = useState(0);
 
   useEffect(() => {
     getProducts();
   }, []);
+
+  const handleOpen = (prop) => {
+    setName(prop.name);
+    setPrice(prop.price);
+    setQuantity(0);
+    setOpen(true);
+    setMaxQuantity(prop.quantity);
+    setProductid(prop.product_id);
+  };
+  const handleClose = () => {
+    setTotalPrice(0);
+    setOpen(false);
+  };
+
+  const makeTransaction = async (quantity, productid) => {
+    await cccClient
+      .post(
+        'MakeTrasnaction',
+        `productId=${productid}&quantityOfBuyingProduct=${quantity}&userId=${userid}`
+      )
+      .then(function (response) {
+        setProducts(response.data);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
 
   const getProducts = async () => {
     await cccClient
@@ -52,8 +68,7 @@ function ManageProducts() {
       });
   };
 
-  const calculateTotalPrice = async (e) => {
-    console.log('max quantity is ' + maxQuantity + 'quantity is ' + e);
+  const calculateTotalPrice = (e) => {
     if (e - maxQuantity - 1 != 0 && e > 0) {
       setTotalPrice(price * e);
       setQuantity(e);
@@ -148,8 +163,12 @@ function ManageProducts() {
             value={totalPrice}
             required
           />{' '}
-          <Button type="submit" variant="contained" color="primary">
-            add
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            onClick={() => makeTransaction(quantity, productid)}>
+            Buy
           </Button>
         </div>
       </Modal>
