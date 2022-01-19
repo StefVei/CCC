@@ -19,7 +19,7 @@ function Employee() {
       </Box>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
         <Typography alignSelf={'center'} variant="body">
-          Save those crentetials in order to login.
+          Save these credentials in order to login.
         </Typography>
       </Box>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
