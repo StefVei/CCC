@@ -60,6 +60,10 @@
         <servlet-name>GetCitizen</servlet-name>
         <servlet-class>Citizen.GetCitizen</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>getCompany</servlet-name>
+        <servlet-class>Servlets.Company.getCompany</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>OpenCompanyAccount</servlet-name>
         <url-pattern>/OpenCompanyAccount</url-pattern>
@@ -107,6 +111,10 @@
     <servlet-mapping>
         <servlet-name>GetCitizen</servlet-name>
         <url-pattern>/GetCitizen</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>getCompany</servlet-name>
+        <url-pattern>/getCompany</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

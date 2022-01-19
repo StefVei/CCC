@@ -9,7 +9,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import useStyles from './styles';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { cccClient } from '../network';
 
 function ManageProducts() {
@@ -17,29 +17,47 @@ function ManageProducts() {
   const { state } = useLocation();
   const { userid } = state;
   const styles = useStyles();
-
   const [open, setOpen] = useState(false);
-  const handleOpen = (prop) => {
-    setName(prop.name);
-    setPrice(prop.price);
-    setQuantity(0);
-    setOpen(true);
-    setMaxQuantity(prop.quantity);
-  };
-  const handleClose = () => {
-    setTotalPrice(0);
-    setOpen(false);
-  };
   const [name, setName] = useState('');
   const [price, setPrice] = useState(0);
   const [quantity, setQuantity] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [products, setProducts] = useState([]);
   const [maxQuantity, setMaxQuantity] = useState(0);
+  const [productid, setProductid] = useState(0);
+  const [merchantId, setMerchantId] = useState(0);
 
   useEffect(() => {
     getProducts();
   }, []);
+
+  const handleOpen = (prop) => {
+    setName(prop.name);
+    setPrice(prop.price);
+    setQuantity(0);
+    setOpen(true);
+    setMaxQuantity(prop.quantity);
+    setProductid(prop.product_id);
+    setMerchantId(prop.merchant_id);
+  };
+  const handleClose = () => {
+    setTotalPrice(0);
+    setOpen(false);
+  };
+
+  const makeTransaction = async (quantity, productid) => {
+    await cccClient
+      .post(
+        'MakeTrasnaction',
+        `productId=${productid}&quantityOfBuyingProduct=${quantity}&userId=${userid}&merchantId=${merchantId}`
+      )
+      .then(function (response) {
+        setProducts(response.data);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
 
   const getProducts = async () => {
     await cccClient
@@ -52,8 +70,7 @@ function ManageProducts() {
       });
   };
 
-  const calculateTotalPrice = async (e) => {
-    console.log('max quantity is ' + maxQuantity + 'quantity is ' + e);
+  const calculateTotalPrice = (e) => {
     if (e - maxQuantity - 1 != 0 && e > 0) {
       setTotalPrice(price * e);
       setQuantity(e);
@@ -72,10 +89,19 @@ function ManageProducts() {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Product id</TableCell>
-                <TableCell align="left">Name</TableCell>
-                <TableCell align="left">Quantity</TableCell>
-                <TableCell align="left">Price</TableCell>
+                <TableCell>
+                  {' '}
+                  <Typography variant="h6">Product id</Typography>
+                </TableCell>
+                <TableCell align="left">
+                  <Typography variant="h6">Name</Typography>
+                </TableCell>
+                <TableCell align="left">
+                  <Typography variant="h6">Quantity</Typography>
+                </TableCell>
+                <TableCell align="left">
+                  <Typography variant="h6">Price</Typography>
+                </TableCell>
                 <TableCell></TableCell>
               </TableRow>
             </TableHead>
@@ -88,7 +114,7 @@ function ManageProducts() {
                   <TableCell align="left">{row.name}</TableCell>
                   <TableCell align="left">{row.quantity}</TableCell>
                   <TableCell align="left">{row.price}&nbsp;€</TableCell>
-                  <TableCell align="left">
+                  <TableCell align="right">
                     <Button
                       type="primary"
                       variant="contained"
@@ -104,10 +130,7 @@ function ManageProducts() {
         </TableContainer>
       </Box>
       <Box p={1} sx={3} display="flex" justifyContent="center" alignItems="center">
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={() => navigate('/Citizen', { state: { userid: userid } })}>
+        <Button variant="outlined" color="primary" onClick={() => navigate(-1)}>
           Back
         </Button>
       </Box>
@@ -142,8 +165,12 @@ function ManageProducts() {
             value={totalPrice}
             required
           />{' '}
-          <Button type="submit" variant="contained" color="primary">
-            add
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            onClick={() => makeTransaction(quantity, productid)}>
+            Buy
           </Button>
         </div>
       </Modal>

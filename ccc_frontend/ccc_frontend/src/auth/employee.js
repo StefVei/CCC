@@ -20,8 +20,6 @@ import { cccClient } from '../network';
 function CompanyRegister() {
   const navigate = useNavigate();
   const styles = useStyles();
-  const [Username, setUsername] = useState('');
-  const [Password, setPassword] = useState('');
   const [Phone, setPhone] = useState('');
   const [Email, setEmail] = useState('');
   const [Address, setAddress] = useState('');
@@ -43,13 +41,13 @@ function CompanyRegister() {
     await cccClient
       .post(
         'OpenEmployeeAccount',
-        `username=${Username}&password=${Password}&email=${Email}&address=${Address}&name=${CompanyName}&phone=${Phone}&gender=${Gender}&lastname=${Lastname}&firstname=${Firstname}&birthDate=${BirthDate.toISOString().slice(
+        `email=${Email}&address=${Address}&name=${CompanyName}&phone=${Phone}&gender=${Gender}&lastname=${Lastname}&firstname=${Firstname}&birthDate=${BirthDate.toISOString().slice(
           0,
           10
         )}`
       )
       .then(function (response) {
-        console.log(response);
+        navigate('/Employee', { state: { user: response.data } });
       })
       .catch(function (error) {
         console.log(error);
@@ -62,26 +60,16 @@ function CompanyRegister() {
         <Typography alignSelf={'center'} variant="h4">
           Register Employee
         </Typography>
-        <Box pt={3}>
+        <Box p={3}>
           <TextField
-            label="Username:"
+            label="Company Name:"
             variant="filled"
-            value={Username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={CompanyName}
+            onChange={(e) => setCompanyName(e.target.value)}
             required
           />
         </Box>
-        <Box pt={3}>
-          <TextField
-            label="Password:"
-            type="password"
-            variant="filled"
-            value={Password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </Box>
-        <Box pt={3}>
+        <Box p={3}>
           <TextField
             label="Phone:"
             variant="filled"
@@ -91,7 +79,7 @@ function CompanyRegister() {
             inputProps={{ maxLength: 10 }}
           />
         </Box>
-        <Box pt={3}>
+        <Box p={3}>
           <TextField
             label="Email:"
             variant="filled"
@@ -100,7 +88,7 @@ function CompanyRegister() {
             required
           />
         </Box>
-        <Box pt={3}>
+        <Box p={3}>
           <TextField
             label="Address:"
             variant="filled"
@@ -109,16 +97,7 @@ function CompanyRegister() {
             required
           />
         </Box>
-        <Box pt={3}>
-          <TextField
-            label="Company Name:"
-            variant="filled"
-            value={CompanyName}
-            onChange={(e) => setCompanyName(e.target.value)}
-            required
-          />
-        </Box>
-        <Box pt={3}>
+        <Box p={3}>
           <TextField
             label="First Name:"
             variant="filled"
@@ -127,7 +106,7 @@ function CompanyRegister() {
             required
           />
         </Box>
-        <Box pt={3}>
+        <Box p={3}>
           <TextField
             label="Last Name:"
             variant="filled"
@@ -136,7 +115,7 @@ function CompanyRegister() {
             required
           />
         </Box>
-        <Box pt={3}>
+        <Box p={3}>
           <FormControl component="fieldset">
             <FormLabel component="legend">Gender</FormLabel>
             <RadioGroup
@@ -151,7 +130,7 @@ function CompanyRegister() {
             </RadioGroup>
           </FormControl>
         </Box>
-        <Box pt={3}>
+        <Box p={3}>
           <LocalizationProvider dateAdapter={AdapterDay}>
             <DesktopDatePicker
               label="Birth Date"
@@ -162,12 +141,20 @@ function CompanyRegister() {
           </LocalizationProvider>
         </Box>
         <div className={styles.buttonContainer}>
-          <Button type="submit" variant="contained" color="primary" onClick={() => handleSubmit()}>
-            Signup
-          </Button>
-          <Button variant="outlined" color="primary" onClick={() => navigate('/')}>
-            Cancel
-          </Button>
+          <Box p={2}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              onClick={() => handleSubmit()}>
+              Signup
+            </Button>
+          </Box>
+          <Box p={2}>
+            <Button variant="outlined" color="primary" onClick={() => navigate('/')}>
+              Cancel
+            </Button>
+          </Box>
         </div>
       </div>
     </div>

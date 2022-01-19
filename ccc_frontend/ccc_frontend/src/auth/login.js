@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography } from '@mui/material';
+import { TextField, Button, Typography, Box } from '@mui/material';
 import useStyles from './styles';
 import { useNavigate } from 'react-router-dom';
 import { cccClient } from '../network';
@@ -38,26 +38,39 @@ function Login() {
         <Typography alignSelf={'center'} variant="h4">
           Login
         </Typography>
-        <TextField
-          label="Username:"
-          variant="filled"
-          value={Username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <TextField
-          label="Password:"
-          type="password"
-          variant="filled"
-          value={Password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <Box p={3}>
+          <TextField
+            label="Username:"
+            variant="filled"
+            value={Username}
+            onChange={(e) => setUsername(e.target.value)}
+          />{' '}
+        </Box>
+        <Box p={3}>
+          <TextField
+            label="Password:"
+            type="password"
+            variant="filled"
+            value={Password}
+            onChange={(e) => setPassword(e.target.value)}
+          />{' '}
+        </Box>
+
         <div className={styles.buttonContainer}>
-          <Button type="submit" variant="contained" color="primary" onClick={() => handleSubmit()}>
-            Login
-          </Button>
-          <Button variant="outlined" color="primary" onClick={() => navigate('/')}>
-            Cancel
-          </Button>
+          <Box p={3}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              onClick={() => handleSubmit()}>
+              Login
+            </Button>
+          </Box>
+          <Box p={3}>
+            <Button variant="outlined" color="primary" onClick={() => navigate('/')}>
+              Cancel
+            </Button>
+          </Box>
         </div>
       </div>
     </div>

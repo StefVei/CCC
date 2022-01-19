@@ -187,12 +187,20 @@ function CitizenRegister() {
           </LocalizationProvider>
         </Box>
         <div className={styles.buttonContainer}>
-          <Button type="submit" variant="contained" color="primary" onClick={() => handleSubmit()}>
-            Signup
-          </Button>
-          <Button variant="outlined" color="primary" onClick={() => navigate('/')}>
-            Cancel
-          </Button>
+          <Box p={2}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              onClick={() => handleSubmit()}>
+              Signup
+            </Button>
+          </Box>
+          <Box p={2}>
+            <Button variant="outlined" color="primary" onClick={() => navigate('/')}>
+              Cancel
+            </Button>
+          </Box>
         </div>
       </div>
     </div>

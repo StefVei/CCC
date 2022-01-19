@@ -7,8 +7,10 @@ package Servlets.Register;
 import com.google.gson.Gson;
 import hy360.ccc.db.CompanyDB;
 import hy360.ccc.db.EmployeeDB;
+import hy360.ccc.db.UserDB;
 import hy360.ccc.model.Company;
 import hy360.ccc.model.Employee;
+import hy360.ccc.model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
@@ -104,10 +106,12 @@ public class OpenEmployeeAccount extends HttpServlet {
         employee.setPhone(request.getParameter("phone"));
         employee.setGender(gender);
         employee.setCompany_id(company_id);
-
+        
+        User user = UserDB.getUser("USERID", comp.getUser_id());
+        
         EmployeeDB.addEmployee(employee);
         response.setStatus(200);
-        str = gson.toJson(employee);
+        str = gson.toJson(user);
         response.getWriter().print(str);
 
     }
