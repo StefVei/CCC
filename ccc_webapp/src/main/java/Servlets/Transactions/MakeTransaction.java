@@ -93,7 +93,7 @@ public class MakeTransaction extends HttpServlet {
 
         Transaction transaction = new Transaction();
         String customer_type;
-        String merchant_id, citizen_id, employee_id, product_id, quantity;
+        String merchant_id, citizen_id, employee_id, product_id, user_id, quantity;
         String customer_amount_due;
         double product_quantity, merchant_gain, merchant_supply, credit_balance, credit_limit, cost;
         
@@ -103,6 +103,7 @@ public class MakeTransaction extends HttpServlet {
         merchant_id = request.getParameter("merchantId");
         product_id = request.getParameter("productId");
         quantity = request.getParameter("quantityOfBuyingProduct");
+        user_id = request.getParameter("userid");
         customer_type = request.getParameter("isCitizen");
         
         transaction.setTransaction_type("A");
