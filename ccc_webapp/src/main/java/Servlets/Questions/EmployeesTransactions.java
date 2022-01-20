@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author sckou
  */
-public class EmployeeTransactions extends HttpServlet {
+public class EmployeesTransactions extends HttpServlet {
     
     
     /**
