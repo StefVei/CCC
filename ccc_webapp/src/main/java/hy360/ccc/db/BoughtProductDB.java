@@ -10,9 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,27 +23,22 @@ public class BoughtProductDB {
     
     /**
      * 
-     * @param products_str "transaction_id, product_id1, product_id2"
+     * @param product_id "product_id"
      */
-    public static void addBoughtProducts(String products_str, String tr_id, String mer_id, String totalQuantity) {
+    public static void addBoughtProduct(String product_id, String tr_id, String mer_id, String totalQuantity) {
             
-        List<String> products = Arrays.asList(products_str.split(",[ ]*"));
         String transaction_id = tr_id;
-
         PreparedStatement preparedStatement = null;
         Connection con = null;
-    
-        try{
+        try {
             con = CccDB.getConnection();
-            ListIterator<String> it = products.listIterator();
-            while(it.hasNext()){
-                preparedStatement = con.prepareStatement("INSERT INTO bought_products"
-                        + "( TRANSACTION_ID, PRODUCT_ID, MERCHANT_USERID, TOTAL ) " + "VALUES (?, ?, ?, ?)");
-                UtilitiesDB.setValues(preparedStatement, transaction_id, it.next(),
-                        mer_id, totalQuantity);
+            preparedStatement = con.prepareStatement("INSERT INTO bought_products "
+                    + "( TRANSACTION_ID, PRODUCT_ID, MERCHANT_USERID, TOTAL ) "
+                    + "VALUES (?, ?, ?, ?)");
+            UtilitiesDB.setValues(preparedStatement, transaction_id, product_id,
+                    mer_id, totalQuantity);
                 preparedStatement.executeUpdate();
-            }
-        }catch(Exception ex){
+        } catch (Exception ex) {
             Logger.getLogger(BoughtProductDB.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
             UtilitiesDB.closeConnection(preparedStatement, con, BoughtProductDB.class.getName());

@@ -149,7 +149,7 @@ public class MakeTransaction extends HttpServlet {
                 pro.setProduct_id(product_id);
                 pro.setTotal(quantity);
                 pro.setTransaction_id(transaction.getTransaction_id());
-                BoughtProductDB.addBoughtProducts(pro.getProduct_id(), pro.getTransaction_id(),
+                BoughtProductDB.addBoughtProduct(pro.getProduct_id(), pro.getTransaction_id(),
                         pro.getMerchant_id(), pro.getTotal());
                 
                 CitizenTradesDB.addTrade(citizen_id, merchant_id, transaction.getTransaction_id());
@@ -184,7 +184,7 @@ public class MakeTransaction extends HttpServlet {
                 pro.setProduct_id(product_id);
                 pro.setTotal(quantity);
                 pro.setTransaction_id(transaction.getTransaction_id());
-                BoughtProductDB.addBoughtProducts(pro.getProduct_id(), pro.getTransaction_id(),
+                BoughtProductDB.addBoughtProduct(pro.getProduct_id(), pro.getTransaction_id(),
                         pro.getMerchant_id(), pro.getTotal());
                 addTrade(citizen_id, merchant_id, transaction.getTransaction_id());
                 
@@ -235,7 +235,7 @@ public class MakeTransaction extends HttpServlet {
                 pro.setProduct_id(product_id);
                 pro.setTotal(quantity);
                 pro.setTransaction_id(transaction.getTransaction_id());
-                BoughtProductDB.addBoughtProducts(pro.getProduct_id(), pro.getTransaction_id(),
+                BoughtProductDB.addBoughtProduct(pro.getProduct_id(), pro.getTransaction_id(),
                         pro.getMerchant_id(), pro.getTotal());
                 CompanyTradesDB.addTrade(transaction.getTransaction_id(), merchant_id, mycompany.getUser_id(), employee_id);
                 
@@ -268,7 +268,7 @@ public class MakeTransaction extends HttpServlet {
                 pro.setProduct_id(product_id);
                 pro.setTotal(quantity);
                 pro.setTransaction_id(transaction.getTransaction_id());
-                BoughtProductDB.addBoughtProducts(pro.getProduct_id(), pro.getTransaction_id(),
+                BoughtProductDB.addBoughtProduct(pro.getProduct_id(), pro.getTransaction_id(),
                         pro.getMerchant_id(), pro.getTotal());
                 CompanyTradesDB.addTrade(transaction.getTransaction_id(), merchant_id, mycompany.getUser_id(), employee_id);
                 
