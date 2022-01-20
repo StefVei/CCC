@@ -77,6 +77,8 @@ public class CompanyTradesDB {
         Connection con = null;
         try {
             StringBuilder insQuery = new StringBuilder();
+            con = CccDB.getConnection();
+
 
             insQuery.append("SELECT * FROM cm_traffics ")
                     .append(" WHERE").append(" ").append(columnToSearch).append(" = ")
@@ -96,7 +98,7 @@ public class CompanyTradesDB {
             }
 
         } catch (Exception ex) {
-            Logger.getLogger(TransactionDB.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CompanyTradesDB.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             UtilitiesDB.closeConnection(preparedStatement, con, CompanyTradesDB.class.getName());
         }
@@ -114,11 +116,26 @@ public class CompanyTradesDB {
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
+            con = CccDB.getConnection();
             String sql = "SELECT * FROM cm_traffics"
                     + "WHERE EMPLOYEE_ID in (" + employee_ids + ")";
 
+            preparedStatement = con.prepareStatement(sql);
+            preparedStatement.executeQuery();
+            ResultSet res = preparedStatement.getResultSet();
+
+            while (res.next()) {
+                CM_Traffics tr = new CM_Traffics();
+                tr.setTransaction_id(res.getString("TRANSACTION_ID"));
+                tr.setCompany_id(res.getString("CITIZEN_USERID"));
+                tr.setMerchant_id(res.getString("MERCHANT_USERID"));
+                tr.setEmployee_id(res.getString("EMPLOYEE_ID"));
+                trades.add(tr);
+            }
+
+
         } catch (Exception ex) {
-            Logger.getLogger(TransactionDB.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CompanyTradesDB.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             UtilitiesDB.closeConnection(preparedStatement, con, CompanyTradesDB.class.getName());
         }
@@ -135,6 +152,7 @@ public class CompanyTradesDB {
 
         try {
             StringBuilder insQuery = new StringBuilder();
+            con = CccDB.getConnection();
 
             insQuery.append("SELECT * FROM cm_traffics ")
                     .append(" WHERE TRANSACTION_ID = ")
