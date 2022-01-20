@@ -52,7 +52,9 @@ function ManageProducts() {
                 <TableCell align="left">
                   <Typography variant="h6">Last name</Typography>
                 </TableCell>
-
+                <TableCell align="left">
+                  <Typography variant="h6">Email</Typography>
+                </TableCell>
                 <TableCell></TableCell>
               </TableRow>
             </TableHead>
@@ -63,17 +65,18 @@ function ManageProducts() {
                     {row.first_name}
                   </TableCell>
                   <TableCell align="left">{row.last_name}</TableCell>
+                  <TableCell align="left">{row.email}</TableCell>
                   <TableCell align="right">
                     <Button
                       type="primary"
                       variant="contained"
                       color="primary"
                       onClick={() => {
-                        navigate('/Products', {
-                          state: { userid: userid, merchantid: row.employee_id }
+                        navigate('/Company', {
+                          state: { userid: userid, employeeid: row.employee_id }
                         });
                       }}>
-                      Buy as
+                      Continues as
                     </Button>
                   </TableCell>
                 </TableRow>
