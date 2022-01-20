@@ -62,6 +62,7 @@ public class CompanyTradesDB {
 
     }
 
+
     /**
      *
      * @param columnToSearch column of sql table
@@ -93,6 +94,28 @@ public class CompanyTradesDB {
                 tr.setEmployee_id(res.getString("EMPLOYEE_ID"));
                 trades.add(tr);
             }
+
+        } catch (Exception ex) {
+            Logger.getLogger(TransactionDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, CompanyTradesDB.class.getName());
+        }
+
+        return trades;
+    }
+
+    /**
+     *
+     * @param employee_ids comma separated ids : "id1, id2, id3, id4"
+     * @return
+     */
+    public static List<CM_Traffics> getTradesByEmployees(String employee_ids) {
+        List<CM_Traffics> trades = null;
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+        try {
+            String sql = "SELECT * FROM cm_traffics"
+                    + "WHERE EMPLOYEE_ID in (" + employee_ids + ")";
 
         } catch (Exception ex) {
             Logger.getLogger(TransactionDB.class.getName()).log(Level.SEVERE, null, ex);
