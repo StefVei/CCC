@@ -36,6 +36,13 @@ function CitizenInfo() {
     setOpen(false);
     setAmount(0);
   };
+
+  const handleAmount = (e) => {
+    if (amountDue - e >= 0 && e >= 0) {
+      setAmount(e);
+    }
+  };
+
   const makePayment = async () => {
     await cccClient
       .post('makePendings', `paymentAmount=${amount}&userType='I'&citizenId=${userid}`)
@@ -228,7 +235,7 @@ function CitizenInfo() {
             variant="filled"
             value={amount}
             type="number"
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={(e) => handleAmount(e.target.value)}
           />{' '}
           <Button type="submit" variant="contained" color="primary" onClick={() => makePayment()}>
             Pay
