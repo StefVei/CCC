@@ -15,9 +15,9 @@ public class Company extends User{
     private String email;
     private String address;
     private String phone;
-    private String amount_due;
-    private String credit_limit;
-    private String credit_balance;
+    private double amount_due;
+    private double credit_limit;
+    private double credit_balance;
     private String account_due_date;
     
     
@@ -27,16 +27,15 @@ public class Company extends User{
         email="";
         address="";
         phone="";
-        amount_due="";
-        credit_limit = "";
-        credit_balance = "";
+        amount_due = 0;
+        credit_limit = 0;
+        credit_balance = 0;
         account_due_date = "";
     }
     
     public Company(String name, String establishment_date,
-            String email, String address, String phone, String amount_due,
-            String credit_limit, String credit_balance, String account_due_date)
-    {
+            String email, String address, String phone, double amount_due,
+            double credit_limit, double credit_balance, String account_due_date) {
         this.name = name;
         this.establishment_date = establishment_date;
         this.email=email;
@@ -50,8 +49,8 @@ public class Company extends User{
     
     public Company(String userid, String username, String password, String account_number,
             String name, String establishment_date,
-            String email, String address, String phone, String amount_due,
-            String credit_limit, String credit_balance, String account_due_date) {
+            String email, String address, String phone, double amount_due,
+            double credit_limit, double credit_balance, String account_due_date) {
         
         super(userid, username, password, account_number);
         
@@ -106,27 +105,27 @@ public class Company extends User{
         this.phone = phone;
     }
 
-    public String getAmount_due() {
+    public double getAmount_due() {
         return amount_due;
     }
 
-    public void setAmount_due(String amount_due) {
+    public void setAmount_due(double amount_due) {
         this.amount_due = amount_due;
     }
 
-    public String getCredit_limit() {
+    public double getCredit_limit() {
         return credit_limit;
     }
 
-    public void setCredit_limit(String credit_limit) {
+    public void setCredit_limit(double credit_limit) {
         this.credit_limit = credit_limit;
     }
 
-    public String getCredit_balance() {
+    public double getCredit_balance() {
         return credit_balance;
     }
 
-    public void setCredit_balance(String credit_balance) {
+    public void setCredit_balance(double credit_balance) {
         this.credit_balance = credit_balance;
     }
 

@@ -94,16 +94,16 @@ public class ReturnProducts extends HttpServlet {
         
         Transaction transaction = new Transaction();
         String customer_type;
-        String merchant_id, citizen_id, company_id, employee_id, product_id, quantity;
-        String customer_amount_due;
-        double product_quantity, merchant_gain, merchant_supply ;
+        String merchant_id, citizen_id, company_id, employee_id, product_id;
+        double merchant_gain, merchant_supply, customer_amount_due;
+        int quantity, product_quantity;
         
         
         LocalDate date = java.time.LocalDate.now();
         
         merchant_id = request.getParameter("merchantId");
         product_id = request.getParameter("productId");
-        quantity = request.getParameter("quantityOfReturningProduct");
+        quantity = Integer.valueOf(request.getParameter("quantityOfReturningProduct"));
         customer_type = request.getParameter("isCitizen");
         
         transaction.setTransaction_type("E");
@@ -111,16 +111,16 @@ public class ReturnProducts extends HttpServlet {
         transaction.setDate(date.toString());
         
         Product returning_product = ProductDB.getProduct(product_id, merchant_id);
-        product_quantity = Integer.valueOf(returning_product.getQuantity()) + Integer.valueOf(quantity);
-        returning_product.setQuantity(String.valueOf(product_quantity));
+        product_quantity = returning_product.getQuantity() + quantity;
+        returning_product.setQuantity(product_quantity);
         ProductDB.updateProduct(returning_product);
         
         Merchant merchant = MerchantDB.getMerchant("USERID", merchant_id);
-        merchant_gain = Double.valueOf(merchant.getGain())-(Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity));
-        merchant_supply = Double.valueOf(merchant.getSupply());
+        merchant_gain = merchant.getGain() - (returning_product.getPrice() * quantity);
+        merchant_supply = merchant.getSupply();
 
         updateMerchant(merchant_id, merchant_supply, merchant_gain,
-                Integer.valueOf(merchant.getPurchases_total()) - 1,
+                merchant.getPurchases_total() - 1,
                 merchant_gain * merchant_supply);
 
         if (customer_type.equals("true")) {
@@ -141,8 +141,8 @@ public class ReturnProducts extends HttpServlet {
             if (customer_type.equals("true")){
                 citizen_id = request.getParameter("citizenId");
                 Citizen cit = CitizenDB.getCitizen("USERID", citizen_id);
-                double new_balance = Double.valueOf(cit.getCredit_balance()) + (Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity));
-                cit.setCredit_balance(String.valueOf(new_balance));
+                double new_balance = cit.getCredit_balance() + (returning_product.getPrice() * quantity);
+                cit.setCredit_balance(new_balance);
                 CitizenDB.updateCitizen(cit);
             }
             else{
@@ -150,9 +150,9 @@ public class ReturnProducts extends HttpServlet {
                 Employee em = EmployeeDB.getEmployee(employee_id);
                 Company comp = CompanyDB.getCompany("USERID", em.getCompany_id());
 
-                double new_balance = Double.valueOf(comp.getCredit_balance());
-                new_balance = new_balance + (Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity));
-                comp.setCredit_balance(String.valueOf(new_balance));
+                double new_balance = comp.getCredit_balance();
+                new_balance = new_balance + (returning_product.getPrice() * quantity);
+                comp.setCredit_balance(new_balance);
                 CompanyDB.updateCompany(comp);
             }
         }
@@ -160,19 +160,20 @@ public class ReturnProducts extends HttpServlet {
             if (customer_type.equals("true")){
                 citizen_id = request.getParameter("citizenId");
                 Citizen cit = CitizenDB.getCitizen("USERID", citizen_id);
-                double new_balance = Double.valueOf(cit.getCredit_balance()) + (Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity));
-                cit.setCredit_balance(String.valueOf(new_balance));
-                cit.setAmount_due(String.valueOf(Double.valueOf(customer_amount_due)- (Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity))));
+                double new_balance = cit.getCredit_balance() + (returning_product.getPrice() * quantity);
+                cit.setCredit_balance(new_balance);
+                cit.setAmount_due(customer_amount_due - (returning_product.getPrice() * quantity));
                 CitizenDB.updateCitizen(cit);
             }
             else{
                 employee_id = request.getParameter("employeeId");
                 Employee em = EmployeeDB.getEmployee(employee_id);
                 Company comp = CompanyDB.getCompany("USERID", em.getCompany_id());
-                double new_balance = Double.valueOf(comp.getCredit_balance());
-                new_balance = new_balance + (Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity));
-                comp.setCredit_balance(String.valueOf(new_balance));
-                comp.setAmount_due(String.valueOf(Double.valueOf(customer_amount_due)- (Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity))));
+                double new_balance = comp.getCredit_balance();
+                new_balance = new_balance + (returning_product.getPrice() * quantity);
+                comp.setCredit_balance(new_balance);
+                comp.setAmount_due(customer_amount_due - (returning_product.getPrice()) * quantity);
+
                 CompanyDB.updateCompany(comp);
             }
         }

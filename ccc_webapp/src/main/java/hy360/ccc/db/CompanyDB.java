@@ -123,10 +123,10 @@ public class CompanyDB {
                 comp.setEmail(res.getString("EMAIL"));
                 comp.setAddress(res.getString("ADDRESS"));
                 comp.setPhone(res.getString("PHONE"));
-                comp.setAmount_due(res.getString("AMOUNT_DUE"));
+                comp.setAmount_due(res.getDouble("AMOUNT_DUE"));
                 
-                comp.setCredit_limit(res.getString("CREDIT_LIMIT"));
-                comp.setCredit_balance(res.getString("CREDIT_BALANCE"));
+                comp.setCredit_limit(res.getDouble("CREDIT_LIMIT"));
+                comp.setCredit_balance(res.getDouble("CREDIT_BALANCE"));
                 comp.setAccount_due_date(res.getString("ACCOUNT_DUE_DATE"));
             }
 
@@ -153,8 +153,8 @@ public class CompanyDB {
                     + "AMOUNT_DUE = ?, "
                     + "CREDIT_LIMIT = ?, "
                     + "CREDIT_BALANCE = ?, "
-                    + "ACCOUNT_DUE_DATE = ?, "
-                    + "WHERE USER_ID = ?";
+                    + "ACCOUNT_DUE_DATE = ? "
+                    + "WHERE USERID = ?";
 
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement(updatecomp_sql);
@@ -193,10 +193,10 @@ public class CompanyDB {
                 comp.setEmail(res.getString("EMAIL"));
                 comp.setAddress(res.getString("ADDRESS"));
                 comp.setPhone(res.getString("PHONE"));
-                comp.setAmount_due(res.getString("AMOUNT_DUE"));
+                comp.setAmount_due(res.getDouble("AMOUNT_DUE"));
 
-                comp.setCredit_limit(res.getString("CREDIT_LIMIT"));
-                comp.setCredit_balance(res.getString("CREDIT_BALANCE"));
+                comp.setCredit_limit(res.getDouble("CREDIT_LIMIT"));
+                comp.setCredit_balance(res.getDouble("CREDIT_BALANCE"));
                 comp.setAccount_due_date(res.getString("ACCOUNT_DUE_DATE"));
 
                 companies.add(comp);

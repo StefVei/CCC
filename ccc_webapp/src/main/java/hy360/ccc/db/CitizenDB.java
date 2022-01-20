@@ -114,7 +114,8 @@ public class CitizenDB {
             ResultSet res = preparedStatement.getResultSet();
             if (res.next() == true) {
                 cit = new Citizen();
-                
+
+                cit.setUser_id(res.getString("USERID"));
                 cit.setAmka(res.getString("AMKA"));
                 cit.setVat(res.getString("VAT"));
                 cit.setFirst_name(res.getString("FIRST_NAME"));
@@ -125,10 +126,10 @@ public class CitizenDB {
                 cit.setEmail(res.getString("EMAIL"));
                 cit.setAddress(res.getString("ADDRESS"));
                 cit.setPhone(res.getString("PHONE"));
-                cit.setAmount_due(res.getString("AMOUNT_DUE"));
+                cit.setAmount_due(res.getDouble("AMOUNT_DUE"));
                 
-                cit.setCredit_limit(res.getString("CREDIT_LIMIT"));
-                cit.setCredit_balance(res.getString("CREDIT_BALANCE"));
+                cit.setCredit_limit(res.getDouble("CREDIT_LIMIT"));
+                cit.setCredit_balance(res.getDouble("CREDIT_BALANCE"));
                 cit.setAccount_due_date(res.getString("ACCOUNT_DUE_DATE"));
 
             }
@@ -166,10 +167,10 @@ public class CitizenDB {
                 cit.setEmail(res.getString("EMAIL"));
                 cit.setAddress(res.getString("ADDRESS"));
                 cit.setPhone(res.getString("PHONE"));
-                cit.setAmount_due(res.getString("AMOUNT_DUE"));
+                cit.setAmount_due(res.getDouble("AMOUNT_DUE"));
 
-                cit.setCredit_limit(res.getString("CREDIT_LIMIT"));
-                cit.setCredit_balance(res.getString("CREDIT_BALANCE"));
+                cit.setCredit_limit(res.getDouble("CREDIT_LIMIT"));
+                cit.setCredit_balance(res.getDouble("CREDIT_BALANCE"));
                 cit.setAccount_due_date(res.getString("ACCOUNT_DUE_DATE"));
                 citizens.add(cit);
             }
@@ -191,24 +192,20 @@ public class CitizenDB {
         try {
 
             String sql = "UPDATE citizens "
-                    + "SET FIRST_NAME = ?, "
-                    + "LAST_NAME = ?, "
-                    + "BIRTH_DATE = ?,"
-                    + " GENDER = ?,"
-                    + " EMAIL = ?,"
-                    + " ADDRESS = ?,"
+                    + "SET EMAIL = ?, "
+                    + "ADDRESS = ?,"
                     + " PHONE = ?,"
                     + " AMOUNT_DUE = ?,"
                     + " CREDIT_LIMIT = ?,"
                     + " CREDIT_BALANCE = ?,"
                     + " ACCOUNT_DUE_DATE = ? "
-                    + "WHERE USERID = ?";
+                    + "WHERE USERID = ?;";
 
 
             con = CccDB.getConnection();
+
             preparedStatement = con.prepareStatement(sql);
             UtilitiesDB.setValues(preparedStatement,
-                    cit.getFirst_name(), cit.getLast_name(), cit.getBirth_date(), cit.getGender(),
                     cit.getEmail(), cit.getAddress(), cit.getPhone(), cit.getAmount_due(), 
                     cit.getCredit_limit(), cit.getCredit_balance(), cit.getAccount_due_date(), 
                     cit.getUser_id());

@@ -12,17 +12,17 @@ public class BoughtProduct {
     private String transaction_id;
     private String product_id;
     private String merchant_id;
-    private String total;
+    private double total;
     
     public BoughtProduct(){
         transaction_id = "";
         product_id = "";
         merchant_id = "";
-        total = "";
+        total = 0;
     }
     
     public BoughtProduct(String transaction, String bought_prod,
-            String merchant, String total){
+            String merchant, double total) {
         this.transaction_id = transaction;
         this.product_id = bought_prod;
         this.merchant_id = merchant;
@@ -35,9 +35,8 @@ public class BoughtProduct {
         
         if(transaction_id == null || transaction_id.trim().isEmpty()
             || product_id == null || product_id.trim().isEmpty()
-            || merchant_id == null || merchant_id.trim().isEmpty()
-            || total == null || total.trim().isEmpty()    ){
-            
+                || merchant_id == null || merchant_id.trim().isEmpty()) {
+
             throw new Exception("Missing Fields");
         }
     }
@@ -66,11 +65,11 @@ public class BoughtProduct {
         this.merchant_id = merchant_id;
     }
 
-    public String getTotal() {
+    public double getTotal() {
         return total;
     }
 
-    public void setTotal(String total) {
+    public void setTotal(double total) {
         this.total = total;
     }
     
