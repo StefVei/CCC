@@ -9,15 +9,13 @@ function EmployeeInfo() {
   const { state } = useLocation();
   const { employeeid } = state;
   const styles = useStyles();
-  const [name, setName] = useState('');
-  const [establishmentDate, setEstablishmentDate] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [birthDate, setBirthDate] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [gender, setGender] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
-  const [amountDue, setAmountDue] = useState('');
-  const [creditLimit, setCreditLimit] = useState('');
-  const [creditBalance, setCreditBalance] = useState('');
-  const [dueDate, setDueDate] = useState('');
 
   useEffect(() => {
     getCompany();
@@ -25,18 +23,22 @@ function EmployeeInfo() {
 
   const getCompany = async () => {
     await cccClient
-      .post('getEmployee', `employeeid=${employeeid}`)
+      .post('getEmployee', `employeeId=${employeeid}`)
       .then(function (response) {
         console.log('🚀 ~ file: personalInfo.js ~ line 30 ~ response', response);
-        setName(response.data.name);
-        setEstablishmentDate(response.data.establishment_date);
+        setFirstName(response.data.first_name);
+        setLastName(response.data.last_name);
         setEmail(response.data.email);
+        setBirthDate(response.data.birth_date);
+        if (response.data.gender === 'F') {
+          setGender('Female');
+        } else if (response.data.gender === 'M') {
+          setGender('Male');
+        } else {
+          setGender('Unknown');
+        }
         setPhone(response.data.phone);
         setAddress(response.data.address);
-        setAmountDue(response.data.amount_due);
-        setCreditBalance(response.data.credit_balance);
-        setCreditLimit(response.data.credit_limit);
-        setDueDate(response.data.account_due_date);
       })
       .catch(function (err) {
         console.log(err);
@@ -47,27 +49,27 @@ function EmployeeInfo() {
     <div className={styles.container}>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
         <Typography alignSelf={'center'} variant="h4">
-          Company Info
+          Employee Info
         </Typography>
       </Box>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
         <TextField
-          label="Name :"
+          label="First Name :"
           variant="outlined"
           disabled
           type="string"
-          value={name}
-          onChange={(e) => setAddress(e.target.value)}
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
         />{' '}
       </Box>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
         <TextField
-          label="Establishment Date :"
+          label="Last Name :"
           variant="outlined"
           disabled
           type="string"
-          value={establishmentDate}
-          onChange={(e) => setAddress(e.target.value)}
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
         />{' '}
       </Box>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
@@ -77,6 +79,16 @@ function EmployeeInfo() {
           disabled
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+        />{' '}
+      </Box>
+      <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
+        <TextField
+          label="Gender :"
+          variant="outlined"
+          disabled
+          type="string"
+          value={gender}
+          onChange={(e) => setGender(e.target.value)}
         />{' '}
       </Box>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
@@ -91,47 +103,20 @@ function EmployeeInfo() {
       </Box>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
         <TextField
+          label="BirthDate :"
+          variant="outlined"
+          disabled
+          value={birthDate}
+          onChange={(e) => setBirthDate(e.target.value)}
+        />{' '}
+      </Box>
+      <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
+        <TextField
           label="Phone :"
           variant="outlined"
           disabled
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
-        />{' '}
-      </Box>
-      <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
-        <TextField
-          label="Amount Due :"
-          variant="outlined"
-          disabled
-          value={amountDue}
-          onChange={(e) => setAmountDue(e.target.value)}
-        />{' '}
-      </Box>
-      <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
-        <TextField
-          label="Credit limit :"
-          variant="outlined"
-          disabled
-          value={creditLimit}
-          onChange={(e) => setCreditLimit(e.target.value)}
-        />{' '}
-      </Box>
-      <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
-        <TextField
-          label="Credit balance :"
-          variant="outlined"
-          disabled
-          value={creditBalance}
-          onChange={(e) => setCreditBalance(e.target.value)}
-        />{' '}
-      </Box>
-      <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
-        <TextField
-          label="Account due date :"
-          variant="outlined"
-          disabled
-          value={dueDate}
-          onChange={(e) => setDueDate(e.target.value)}
         />{' '}
       </Box>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">

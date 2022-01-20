@@ -22,7 +22,7 @@ function Company() {
           variant="contained"
           color="primary"
           onClick={() =>
-            navigate('/Products', { state: { userid: userid, employeeid: employeeid } })
+            navigate('/Products', { state: { userid: userid, employeeId: employeeid } })
           }>
           Available Products
         </Button>
