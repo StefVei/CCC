@@ -41,9 +41,10 @@ function CompanyInfo() {
 
   const makePayment = async () => {
     await cccClient
-      .post('makePendings', `paymentAmount=${amount}&userType='C'&companyId=${userid}`)
+      .post('makePendings', `paymentAmount=${amount}&userType=C&companyId=${userid}`)
       .then(() => {
         getCompany();
+        handleClose();
       })
       .catch(function (err) {
         console.log(err);

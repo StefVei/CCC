@@ -48,6 +48,7 @@ function CitizenInfo() {
       .post('makePendings', `paymentAmount=${amount}&userType=I&citizenId=${userid}`)
       .then(() => {
         getCitizen();
+        handleClose();
       })
       .catch(function (err) {
         console.log(err);
