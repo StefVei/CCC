@@ -12,9 +12,11 @@ import hy360.ccc.db.CitizenTradesDB;
 import static hy360.ccc.db.CitizenTradesDB.addTrade;
 import hy360.ccc.db.CompanyDB;
 import hy360.ccc.db.CompanyTradesDB;
+import hy360.ccc.db.EmployeeDB;
 
 import hy360.ccc.db.MerchantDB;
 import hy360.ccc.db.ProductDB;
+import hy360.ccc.db.TransactionDB;
 import hy360.ccc.model.BoughtProduct;
 import hy360.ccc.model.Citizen;
 import hy360.ccc.model.Company;
@@ -100,12 +102,18 @@ public class MakeTransaction extends HttpServlet {
         
         LocalDate date = java.time.LocalDate.now();
         
-        merchant_id = request.getParameter("merchantId");
         product_id = request.getParameter("productId");
         quantity = request.getParameter("quantityOfBuyingProduct");
-        user_id = request.getParameter("userid");
-        customer_type = request.getParameter("isCitizen");
+        user_id = request.getParameter("userId");
+        employee_id = request.getParameter("employeeId");
+        merchant_id = request.getParameter("merchantId");
+
+        customer_type = "false";
         
+        if (employee_id == null) {
+            customer_type = "true";
+        }
+
         transaction.setTransaction_type("A");
         transaction.setDate(date.toString());
         
@@ -114,16 +122,16 @@ public class MakeTransaction extends HttpServlet {
         
         
         if (customer_type.equals("true")) {
-            citizen_id = request.getParameter("citizenId");
+            citizen_id = user_id;
             credit_balance = Double.valueOf(CitizenDB.getCitizen("USERID", citizen_id).getCredit_balance());
             credit_limit = Double.valueOf(CitizenDB.getCitizen("USERID", citizen_id).getCredit_limit());
             customer_amount_due = CitizenDB.getCitizen("USERID", citizen_id).getAmount_due();
             if (credit_balance >= cost && credit_balance == credit_limit) {
                 transaction.setPending("Y");
                 transaction.setAmount(String.valueOf(cost));
-                
-                
-                Merchant merchant = MerchantDB.getMerchant("USER_ID", merchant_id);
+                TransactionDB.addTransaction(transaction);
+
+                Merchant merchant = MerchantDB.getMerchant("USERID", merchant_id);
                 merchant_gain = Double.valueOf(merchant.getGain())+ cost;
                 merchant_supply = Double.valueOf(merchant.getSupply());
 
@@ -141,7 +149,8 @@ public class MakeTransaction extends HttpServlet {
                 pro.setProduct_id(product_id);
                 pro.setTotal(quantity);
                 pro.setTransaction_id(transaction.getTransaction_id());
-                BoughtProductDB.addBoughtProducts(pro.getTransaction_id()+" "+pro.getProduct_id()+" "+pro.getMerchant_id());
+                BoughtProductDB.addBoughtProduct(pro.getProduct_id(), pro.getTransaction_id(),
+                        pro.getMerchant_id(), pro.getTotal());
                 
                 CitizenTradesDB.addTrade(citizen_id, merchant_id, transaction.getTransaction_id());
                 
@@ -155,7 +164,8 @@ public class MakeTransaction extends HttpServlet {
             else if(credit_balance >= cost && credit_balance != credit_limit){
                 transaction.setPending("Y");
                 transaction.setAmount(String.valueOf(cost));
-                
+                TransactionDB.addTransaction(transaction);
+
                 
                 Merchant merchant = MerchantDB.getMerchant("USERID", merchant_id);
                 merchant_gain = Double.valueOf(merchant.getGain()) + cost;
@@ -174,8 +184,8 @@ public class MakeTransaction extends HttpServlet {
                 pro.setProduct_id(product_id);
                 pro.setTotal(quantity);
                 pro.setTransaction_id(transaction.getTransaction_id());
-                BoughtProductDB.addBoughtProducts(pro.getTransaction_id()+" "+pro.getProduct_id()+" "+pro.getMerchant_id());
-                
+                BoughtProductDB.addBoughtProduct(pro.getProduct_id(), pro.getTransaction_id(),
+                        pro.getMerchant_id(), pro.getTotal());
                 addTrade(citizen_id, merchant_id, transaction.getTransaction_id());
                 
                 Citizen cit = CitizenDB.getCitizen("USERID", citizen_id);
@@ -188,22 +198,24 @@ public class MakeTransaction extends HttpServlet {
             else if(credit_balance< cost){
                 transaction.setPending("N");
                 transaction.setAmount(String.valueOf(cost));
-                
+                TransactionDB.addTransaction(transaction);
+
                 addTrade(citizen_id, merchant_id, transaction.getTransaction_id());
             }
         } 
         
         else {
             employee_id = request.getParameter("employeeId");
-            String company_name = request.getParameter("Name");
-            Company mycompany = CompanyDB.getCompany("NAME", company_name);
+            String comp_id = EmployeeDB.getEmployee(employee_id).getCompany_id();
+            Company mycompany = CompanyDB.getCompany("USERID", comp_id);
             customer_amount_due = mycompany.getAmount_due();
             credit_balance = Double.valueOf(mycompany.getCredit_balance());
             credit_limit = Double.valueOf(mycompany.getCredit_limit());
             if ( credit_balance >= cost && credit_balance == credit_limit){
                 transaction.setPending("Y");
                 transaction.setAmount(String.valueOf(cost));
-                
+                TransactionDB.addTransaction(transaction);
+
                 
                 Merchant merchant = MerchantDB.getMerchant("USERID", merchant_id);
                 merchant_gain = Double.valueOf(merchant.getGain()) + cost;
@@ -223,21 +235,21 @@ public class MakeTransaction extends HttpServlet {
                 pro.setProduct_id(product_id);
                 pro.setTotal(quantity);
                 pro.setTransaction_id(transaction.getTransaction_id());
-                BoughtProductDB.addBoughtProducts(pro.getTransaction_id()+" "+pro.getProduct_id()+" "+pro.getMerchant_id());
-                
+                BoughtProductDB.addBoughtProduct(pro.getProduct_id(), pro.getTransaction_id(),
+                        pro.getMerchant_id(), pro.getTotal());
                 CompanyTradesDB.addTrade(transaction.getTransaction_id(), merchant_id, mycompany.getUser_id(), employee_id);
                 
-                Company comp = CompanyDB.getCompany("NAME", company_name);
-                double new_balance = credit_balance - cost ;
+                double new_balance = credit_balance - cost;
                 double new_amount_due = Double.valueOf(customer_amount_due) + cost;
-                comp.setCredit_balance(String.valueOf(new_balance));
-                comp.setAmount_due(String.valueOf(new_amount_due));
-                CompanyDB.updateCompany(comp); 
+                mycompany.setCredit_balance(String.valueOf(new_balance));
+                mycompany.setAmount_due(String.valueOf(new_amount_due));
+                CompanyDB.updateCompany(mycompany);
             }
             else if(credit_balance >= cost && credit_balance != credit_limit){
                 transaction.setPending("Y");
                 transaction.setAmount(String.valueOf(cost));
-                
+                TransactionDB.addTransaction(transaction);
+
                 
                 Merchant merchant = MerchantDB.getMerchant("USERID", merchant_id);
                 merchant_gain = Double.valueOf(merchant.getGain()) + cost;
@@ -256,21 +268,20 @@ public class MakeTransaction extends HttpServlet {
                 pro.setProduct_id(product_id);
                 pro.setTotal(quantity);
                 pro.setTransaction_id(transaction.getTransaction_id());
-                BoughtProductDB.addBoughtProducts(pro.getTransaction_id()+" "+pro.getProduct_id()+" "+pro.getMerchant_id());
-                
+                BoughtProductDB.addBoughtProduct(pro.getProduct_id(), pro.getTransaction_id(),
+                        pro.getMerchant_id(), pro.getTotal());
                 CompanyTradesDB.addTrade(transaction.getTransaction_id(), merchant_id, mycompany.getUser_id(), employee_id);
                 
-                Company comp = CompanyDB.getCompany("NAME", company_name);
                 double new_balance = credit_balance - cost;
                 double new_amount_due = Double.valueOf(customer_amount_due) + (cost - (credit_balance-credit_limit));
-                comp.setCredit_balance(String.valueOf(new_balance));
-                comp.setAmount_due(String.valueOf(new_amount_due));
-                CompanyDB.updateCompany(comp);
+                mycompany.setCredit_balance(String.valueOf(new_balance));
+                mycompany.setAmount_due(String.valueOf(new_amount_due));
+                CompanyDB.updateCompany(mycompany);
             }
             else if(credit_balance< cost){
                 transaction.setPending("N");
                 transaction.setAmount(String.valueOf(cost));
-                
+                TransactionDB.addTransaction(transaction);
                 CompanyTradesDB.addTrade(transaction.getTransaction_id(), merchant_id, mycompany.getUser_id(), employee_id);
             }
         }

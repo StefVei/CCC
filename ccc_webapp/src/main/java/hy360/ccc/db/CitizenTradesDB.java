@@ -28,7 +28,7 @@ public class CitizenTradesDB {
 
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement("INSERT INTO cm_trades "
-                    + "( `CITIZEN_USERID`, `MERCHANT_USERID`, `TRANSACTION_ID`"
+                    + "( `CITIZEN_USERID`, `MERCHANT_USERID`, `TRANSACTION_ID` )"
                     + " VALUES (? ,? ,?)");
 
             UtilitiesDB.setValues(preparedStatement,

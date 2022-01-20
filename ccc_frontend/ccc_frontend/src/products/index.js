@@ -51,8 +51,8 @@ function ManageProducts() {
         'MakeTrasnaction',
         `productId=${productid}&quantityOfBuyingProduct=${quantity}&userId=${userid}&merchantId=${merchantId}&employeeId=${employeeId}`
       )
-      .then(function (response) {
-        setProducts(response.data);
+      .then(function () {
+        getProducts();
       })
       .catch(function (err) {
         console.log(err);

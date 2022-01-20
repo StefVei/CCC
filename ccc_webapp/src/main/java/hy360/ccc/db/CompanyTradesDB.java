@@ -43,7 +43,7 @@ public class CompanyTradesDB {
 
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement("INSERT INTO cm_traffics "
-                    + "( `EMPLOYEE_ID`, `COMPANY_USERID`, `MERCHANT_USERID` ,`TRANSACTION_ID`"
+                    + "( `EMPLOYEE_ID`, `COMPANY_USERID`, `MERCHANT_USERID` ,`TRANSACTION_ID` )"
                     + " VALUES (? ,? ,?, ?)");
 
             UtilitiesDB.setValues(preparedStatement, em_id,
@@ -62,6 +62,7 @@ public class CompanyTradesDB {
 
     }
 
+
     /**
      *
      * @param columnToSearch column of sql table
@@ -76,6 +77,8 @@ public class CompanyTradesDB {
         Connection con = null;
         try {
             StringBuilder insQuery = new StringBuilder();
+            con = CccDB.getConnection();
+
 
             insQuery.append("SELECT * FROM cm_traffics ")
                     .append(" WHERE").append(" ").append(columnToSearch).append(" = ")
@@ -95,7 +98,44 @@ public class CompanyTradesDB {
             }
 
         } catch (Exception ex) {
-            Logger.getLogger(TransactionDB.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CompanyTradesDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, CompanyTradesDB.class.getName());
+        }
+
+        return trades;
+    }
+
+    /**
+     *
+     * @param employee_ids comma separated ids : "id1, id2, id3, id4"
+     * @return
+     */
+    public static List<CM_Traffics> getTradesByEmployees(String employee_ids) {
+        List<CM_Traffics> trades = null;
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+        try {
+            con = CccDB.getConnection();
+            String sql = "SELECT * FROM cm_traffics"
+                    + "WHERE EMPLOYEE_ID in (" + employee_ids + ")";
+
+            preparedStatement = con.prepareStatement(sql);
+            preparedStatement.executeQuery();
+            ResultSet res = preparedStatement.getResultSet();
+
+            while (res.next()) {
+                CM_Traffics tr = new CM_Traffics();
+                tr.setTransaction_id(res.getString("TRANSACTION_ID"));
+                tr.setCompany_id(res.getString("CITIZEN_USERID"));
+                tr.setMerchant_id(res.getString("MERCHANT_USERID"));
+                tr.setEmployee_id(res.getString("EMPLOYEE_ID"));
+                trades.add(tr);
+            }
+
+
+        } catch (Exception ex) {
+            Logger.getLogger(CompanyTradesDB.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             UtilitiesDB.closeConnection(preparedStatement, con, CompanyTradesDB.class.getName());
         }
@@ -112,6 +152,7 @@ public class CompanyTradesDB {
 
         try {
             StringBuilder insQuery = new StringBuilder();
+            con = CccDB.getConnection();
 
             insQuery.append("SELECT * FROM cm_traffics ")
                     .append(" WHERE TRANSACTION_ID = ")

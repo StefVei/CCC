@@ -84,21 +84,21 @@ public class EmployeeDB {
         Connection con = null;
         try {
             String updateemployee_sql = "UPDATE employees "
-                    + "SET FIRST_NAME = ? "
-                    + "SET LAST_NAME = ? "
-                    + "SET BIRTH_DATE = ? "
-                    + " SET GENDER = ? "
-                    + "SET EMAIL = ? "
-                    + "SET ADDRESS = ? "
-                    + "SET PHONE = ? "
-                    + "WHERE EMPLOYEE_ID = ? AND COMPANY_USERID";
+                    + "SET FIRST_NAME = ?, "
+                    + " LAST_NAME = ?, "
+                    + " BIRTH_DATE = ?, "
+                    + " GENDER = ?, "
+                    + " EMAIL = ?, "
+                    + " ADDRESS = ?, "
+                    + " PHONE = ?, "
+                    + "WHERE EMPLOYEE_ID = ? ;";
 
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement(updateemployee_sql);
             UtilitiesDB.setValues(preparedStatement, employee.getFirst_name(),
                     employee.getLast_name(), employee.getBirth_date(), employee.getGender(),
                      employee.getEmail(), employee.getAddress(), employee.getPhone(),
-                    employee.getEmployee_id(), employee.getCompany_id());
+                    employee.getEmployee_id());
             preparedStatement.executeUpdate();
         } catch (Exception ex) {
             Logger.getLogger(EmployeeDB.class.getName()).log(Level.SEVERE, null, ex);
@@ -107,16 +107,16 @@ public class EmployeeDB {
         }
     }
 
-    public static Employee getEmployee(String employee_id, String company_id) {
+    public static Employee getEmployee(String employee_id) {
         Employee employee = new Employee();
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
-            String sql_getemployee = "SELECT * FROM employees WHERE EMPLOYEE_ID = ? AND COMPANY_USERID";
+            String sql_getemployee = "SELECT * FROM employees WHERE EMPLOYEE_ID = ?";
             con = CccDB.getConnection();
 
             preparedStatement = con.prepareStatement(sql_getemployee);
-            UtilitiesDB.setValues(preparedStatement, employee_id, company_id);
+            UtilitiesDB.setValues(preparedStatement, employee_id);
 
             preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();

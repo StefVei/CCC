@@ -9,6 +9,8 @@ import hy360.ccc.model.Merchant;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -86,18 +88,18 @@ public class MerchantDB {
         Connection con = null;
         try {
             String mer_sql = "UPDATE merchants "
-                    + "SET FIRST_NAME = ? "
-                    + "SET LAST_NAME = ? "
-                    + "SET BIRTH_DATE = ? "
-                    + "SET GENDER = ? "
-                    + "SET SUPPLY = ? "
-                    + "SET GAIN = ? "
-                    + "SET PURCHASES_TOTAL = ? "
-                    + "SET EMAIL = ? "
-                    + "SET ADDRESS = ? "
-                    + "SET PHONE = ? "
-                    + "SET AMOUNT_DUE = ?"
-                    + "WHERE USERID = ?";
+                    + "SET FIRST_NAME = ?, "
+                    + "LAST_NAME = ?, "
+                    + "BIRTH_DATE = ?, "
+                    + "GENDER = ?, "
+                    + "SUPPLY = ?, "
+                    + "GAIN = ?, "
+                    + "PURCHASES_TOTAL = ?, "
+                    + "EMAIL = ?, "
+                    + "ADDRESS = ?, "
+                    + "PHONE = ?, "
+                    + "AMOUNT_DUE = ?"
+                    + "WHERE USERID = ? ;";
 
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement(mer_sql);
@@ -163,6 +165,36 @@ public class MerchantDB {
         }
 
         return mer;
+
+    }
+    
+    public static List<String> getGoodMerchants() {
+        List<String> merchants = null;
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+
+        try {
+            String sql_getmer = "SELECT FIRST_NAME, LAST_NAME FROM merchants"
+                    + "WHERE AMOUNT_DUE = 0;";
+            con = CccDB.getConnection();
+
+            preparedStatement = con.prepareStatement(sql_getmer);
+            preparedStatement.executeQuery();
+            ResultSet res = preparedStatement.getResultSet();
+
+            merchants = new ArrayList<>();
+            while (res.next() == true) {
+                String mr = res.getString("FIRST_NAME")+" "+ res.getString("LAST_NAME");
+                merchants.add(mr);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, MerchantDB.class.getName());
+        }
+
+        return merchants;
 
     }
 

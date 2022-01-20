@@ -57,6 +57,14 @@
         <servlet-class>Servlets.Product.getAllProducts</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>EmployeesTransactions</servlet-name>
+        <servlet-class>Servlets.Questions.EmployeesTransactions</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TransactionsList</servlet-name>
+        <servlet-class>Servlets.Questions.TransactionsList</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>GetCitizen</servlet-name>
         <servlet-class>Citizen.GetCitizen</servlet-class>
     </servlet>
@@ -119,6 +127,14 @@
     <servlet-mapping>
         <servlet-name>getAllProducts</servlet-name>
         <url-pattern>/getAllProducts</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EmployeesTransactions</servlet-name>
+        <url-pattern>/EmployeesTransactions</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TransactionsList</servlet-name>
+        <url-pattern>/TransactionsList</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>GetCitizen</servlet-name>

@@ -147,7 +147,7 @@ public class ReturnProducts extends HttpServlet {
             }
             else{
                 employee_id = request.getParameter("employeeId");
-                Employee em = EmployeeDB.getEmployee("EMPLOYEE_ID", employee_id);
+                Employee em = EmployeeDB.getEmployee(employee_id);
                 Company comp = CompanyDB.getCompany("USERID", em.getCompany_id());
 
                 double new_balance = Double.valueOf(comp.getCredit_balance());
@@ -167,7 +167,7 @@ public class ReturnProducts extends HttpServlet {
             }
             else{
                 employee_id = request.getParameter("employeeId");
-                Employee em = EmployeeDB.getEmployee("EMPLOYEE_ID", employee_id);
+                Employee em = EmployeeDB.getEmployee(employee_id);
                 Company comp = CompanyDB.getCompany("USERID", em.getCompany_id());
                 double new_balance = Double.valueOf(comp.getCredit_balance());
                 new_balance = new_balance + (Double.valueOf(returning_product.getPrice()) * Integer.valueOf(quantity));
