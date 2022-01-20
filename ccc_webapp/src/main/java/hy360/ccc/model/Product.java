@@ -11,20 +11,20 @@ package hy360.ccc.model;
 public class Product {
     private String product_id;
     private String name;
-    private String price;
-    private String quantity;
+    private double price;
+    private int quantity;
     private String merchant_id;
     
     
     public Product(){
         product_id = "";
         name = "";
-        price = "";
-        quantity = "";
+        price = 0;
+        quantity = 0;
         merchant_id = "";
     }
     
-    public Product(String product_id, String name, String price, String quantity, String merchant_id){
+    public Product(String product_id, String name, double price, int quantity, String merchant_id) {
         this.product_id=product_id;
         this.name = name;
         this.price = price;
@@ -35,8 +35,6 @@ public class Product {
     public void checkFields() throws Exception {
 
         if (name == null || name.trim().isEmpty()
-                || price == null || price.trim().isEmpty()
-                || quantity == null || quantity.trim().isEmpty()
                 || merchant_id == null || merchant_id.trim().isEmpty()) {
 
             throw new Exception("Missing Fields");
@@ -59,19 +57,19 @@ public class Product {
         this.name = name;
     }
 
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public String getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(String quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 

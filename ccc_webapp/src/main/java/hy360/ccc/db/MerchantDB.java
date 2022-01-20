@@ -148,13 +148,13 @@ public class MerchantDB {
                 mer.setLast_name(res.getString("LAST_NAME"));
                 mer.setBirth_date(res.getString("BIRTH_DATE"));
                 mer.setGender(res.getString("GENDER"));
-                mer.setSupply(res.getString("SUPPLY"));
-                mer.setGain(res.getString("GAIN"));
-                mer.setPurchases_total(res.getString("PURCHASES_TOTAL"));
+                mer.setSupply(res.getDouble("SUPPLY"));
+                mer.setGain(res.getDouble("GAIN"));
+                mer.setPurchases_total(res.getInt("PURCHASES_TOTAL"));
                 mer.setEmail(res.getString("EMAIL"));
                 mer.setAddress(res.getString("ADDRESS"));
                 mer.setPhone(res.getString("PHONE"));
-                mer.setAmount_due(res.getString("AMOUNT_DUE"));
+                mer.setAmount_due(res.getDouble("AMOUNT_DUE"));
                 mer.setUser_id(res.getString("USERID"));
             }
 

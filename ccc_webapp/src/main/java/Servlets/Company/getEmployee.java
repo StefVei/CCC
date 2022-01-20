@@ -2,15 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Servlets.Register;
+package Servlets.Company;
 
-
-import Utils_db.UtilitiesDB;
 import com.google.gson.Gson;
-import hy360.ccc.db.MerchantDB;
-import hy360.ccc.db.UserDB;
-import hy360.ccc.model.Merchant;
-import hy360.ccc.model.User;
+import hy360.ccc.db.EmployeeDB;
+import hy360.ccc.model.Employee;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -22,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author panagiotisk
  */
-public class OpenMerchantAccount extends HttpServlet {
+public class getEmployee extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +37,10 @@ public class OpenMerchantAccount extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet OpenMerchantAccount</title>");
+            out.println("<title>Servlet getEmployee</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet OpenMerchantAccount at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet getEmployee at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -80,39 +76,12 @@ public class OpenMerchantAccount extends HttpServlet {
         Gson gson = new Gson();
         String str;
 
+        Employee em = EmployeeDB.getEmployee(request.getParameter("employeeId"));
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        Merchant merchant = new Merchant();
-        User user = merchant;
-        
-        String acc_number = UtilitiesDB.getNewAccountNumber();
-
-        merchant.setFirst_name(request.getParameter("firstname"));
-        merchant.setLast_name(request.getParameter("lastname"));
-        merchant.setBirth_date(request.getParameter("birthDate"));
-        merchant.setPhone(request.getParameter("phone"));
-        merchant.setEmail(request.getParameter("email"));
-        merchant.setAddress(request.getParameter("address"));
-        merchant.setSupply(0.15);
-        merchant.setAmount_due(0);
-        merchant.setGain(0.0);
-        merchant.setPurchases_total(0);
-        String gender = "male".equals(request.getParameter("gender")) ? "M"
-                : "female".equals(request.getParameter("gender")) ? "F"
-                : "O";
-        merchant.setGender(gender);
-        
-        user.setUser_type("M");
-        user.setUserName(request.getParameter("username"));
-        user.setPassword(request.getParameter("password"));
-        user.setAccount_number(acc_number);
-
-        UserDB.addUser(user);
-        MerchantDB.addMerchant(merchant);
-
         response.setStatus(200);
-        str = gson.toJson(merchant);
+        str = gson.toJson(em);
         response.getWriter().print(str);
 
     }

@@ -14,12 +14,11 @@ function Login() {
     await cccClient
       .post('Login', `username=${Username}&password=${Password}`)
       .then(function (response) {
-        console.log('🚀 ~ file: login.js ~ line 17 ~ response', response);
         if (response.data === 'Wrong Credentials') {
           alert(response.data);
         } else {
           if (response.data.user_type === 'C') {
-            navigate('/Company', { state: { userid: response.data.userid } });
+            navigate('/ChooseEmployees', { state: { userid: response.data.userid } });
           } else if (response.data.user_type === 'I') {
             navigate('/Citizen', { state: { userid: response.data.userid } });
           } else if (response.data.user_type === 'M') {
@@ -35,9 +34,11 @@ function Login() {
   return (
     <div className={styles.container}>
       <div className={styles.textFieldContainer}>
-        <Typography alignSelf={'center'} variant="h4">
-          Login
-        </Typography>
+        <Box p={1} sx={3} display="flex" justifyContent="center" alignItems="center">
+          <Typography alignSelf={'center'} variant="h4">
+            Login
+          </Typography>
+        </Box>
         <Box p={3}>
           <TextField
             label="Username:"
@@ -55,7 +56,6 @@ function Login() {
             onChange={(e) => setPassword(e.target.value)}
           />{' '}
         </Box>
-
         <div className={styles.buttonContainer}>
           <Box p={3}>
             <Button

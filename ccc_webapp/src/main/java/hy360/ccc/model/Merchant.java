@@ -14,13 +14,13 @@ public class Merchant extends User {
     private String last_name;
     private String birth_date;
     private String gender;
-    private String supply;
-    private String gain;
-    private String purchases_total;
+    private double supply;
+    private double gain;
+    private int purchases_total;
     private String email;
     private String address;
     private String phone;
-    private String amount_due;
+    private double amount_due;
 
     
     public Merchant(){
@@ -28,19 +28,19 @@ public class Merchant extends User {
         last_name = "";
         birth_date = "";
         gender = "O";
-        supply = "";
-        gain = "";
-        purchases_total = "";
+        supply = 0;
+        gain = 0;
+        purchases_total = 0;
         email="";
         address="";
         phone="";
-        amount_due="";
+        amount_due = 0;
     }
     
     public Merchant(String first_name, 
             String last_name, String birth_date, String gender,
-            String supply, String gain, String purchases_total, String email,
-            String address, String phone, String amount_due) {
+            double supply, double gain, int purchases_total, String email,
+            String address, String phone, double amount_due) {
         
         this.first_name = first_name;
         this.last_name = last_name;
@@ -64,13 +64,13 @@ public class Merchant extends User {
             String lastname, 
             String birth_date,
             String gender,
-            String supply, 
-            String gain,
-            String purchases_total,
+            double supply,
+            double gain,
+            int purchases_total,
             String email,
             String address,
             String phone,
-            String amount_due){
+            double amount_due) {
         
         super(userid, username, password, account_number);
 
@@ -98,14 +98,10 @@ public class Merchant extends User {
             || last_name == null || last_name.trim().isEmpty()
             || birth_date == null || birth_date.trim().isEmpty()
             || gender == null || gender.trim().isEmpty()
-            || supply == null || supply.trim().isEmpty()
-            || gain == null || gain.trim().isEmpty()
-            || purchases_total == null || purchases_total.trim().isEmpty()
-            || email == null || email.trim().isEmpty()
-            || address == null || address.trim().isEmpty()
+                || email == null || email.trim().isEmpty()
+                || address == null || address.trim().isEmpty()
             || phone == null || phone.trim().isEmpty()
-            || amount_due == null || amount_due.trim().isEmpty())
-        {
+) {
             
             throw new Exception("Missing Fields");
         }
@@ -143,27 +139,27 @@ public class Merchant extends User {
         this.gender = gender;
     }
 
-    public String getSupply() {
+    public double getSupply() {
         return supply;
     }
 
-    public void setSupply(String supply) {
+    public void setSupply(double supply) {
         this.supply = supply;
     }
 
-    public String getGain() {
+    public double getGain() {
         return gain;
     }
 
-    public void setGain(String gain) {
+    public void setGain(double gain) {
         this.gain = gain;
     }
 
-    public String getPurchases_total() {
+    public int getPurchases_total() {
         return purchases_total;
     }
 
-    public void setPurchases_total(String purchases_total) {
+    public void setPurchases_total(int purchases_total) {
         this.purchases_total = purchases_total;
     }
 
@@ -191,11 +187,11 @@ public class Merchant extends User {
         this.phone = phone;
     }
 
-    public String getAmount_due() {
+    public double getAmount_due() {
         return amount_due;
     }
 
-    public void setAmount_due(String amount_due) {
+    public void setAmount_due(double amount_due) {
         this.amount_due = amount_due;
     }
     

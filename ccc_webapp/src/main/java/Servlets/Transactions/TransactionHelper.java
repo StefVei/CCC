@@ -14,20 +14,20 @@ import hy360.ccc.model.Merchant;
 public class TransactionHelper {
 
     public static void updateMerchant(String mer_id, double supply,
-            double gain, double pur_total, double amount_due) {
+            double gain, int pur_total, double amount_due) {
 
         Merchant merchant = MerchantDB.getMerchant("USERID", mer_id);
         if (gain != -1) {
-            merchant.setGain(String.valueOf(gain));
+            merchant.setGain(gain);
         }
         if (amount_due != -1) {
-            merchant.setAmount_due(String.valueOf(amount_due));
+            merchant.setAmount_due(amount_due);
         }
         if (pur_total != -1) {
-            merchant.setPurchases_total(String.valueOf(pur_total));
+            merchant.setPurchases_total(pur_total);
         }
         if (supply != -1) {
-            merchant.setSupply(String.valueOf(supply));
+            merchant.setSupply(supply);
         }
 
         MerchantDB.updateMerchant(merchant);
