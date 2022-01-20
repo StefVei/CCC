@@ -89,20 +89,53 @@ public class TransactionsList extends HttpServlet {
         String start = request.getParameter("From");
         String end = request.getParameter("To");
         User myuser = UserDB.getUser("USERID", request.getParameter("userId"));
-        List<Transaction> tr_baseDates = TransactionDB.getTransactionsByDates(start, end);       
+        List<Transaction> tr_baseDates = TransactionDB.getTransactionsByDates(start, end);
+        List<Transaction> mylist = null;       
         if(myuser.getUser_type().equals("I"))
         {
             List<CM_Trades> trade_baseUser = CitizenTradesDB.getTrades("CITIZEN_USERID",myuser.getUser_id());
+            mylist = new ArrayList<>();
+            for(Transaction tr : tr_baseDates){
+                for(CM_Trades trade : trade_baseUser){
+                  if(tr.getTransaction_id() == trade.getTransaction_id())
+                      mylist.add(tr);
+                }
+            }
         }
         else if(myuser.getUser_type().equals("M"))
         {
             List<CM_Trades> trade_baseUser = CitizenTradesDB.getTrades("MERCHANT_USERID",myuser.getUser_id());
+            mylist = new ArrayList<>();
+            for(Transaction tr1 : tr_baseDates){
+                for(CM_Trades trade : trade_baseUser){
+                  if(tr1.getTransaction_id() == trade.getTransaction_id())
+                      mylist.add(tr1);
+                }
+            }
             List<CM_Traffics> traffic_baseUser = CompanyTradesDB.getTrades("MERCHANT_USERID",myuser.getUser_id());
+            for(Transaction tr2 : tr_baseDates){
+                for(CM_Traffics traffic : traffic_baseUser){
+                  if(tr2.getTransaction_id() == traffic.getTransaction_id())
+                      mylist.add(tr2);
+                }
+            }
         }
         else if(myuser.getUser_type().equals("C"))
         {
             List<CM_Traffics> traffic_baseUser = CompanyTradesDB.getTrades("COMPANY_USERID",myuser.getUser_id());
+            mylist = new ArrayList<>();
+            for(Transaction tr2 : tr_baseDates){
+                for(CM_Traffics traffic : traffic_baseUser){
+                  if(tr2.getTransaction_id() == traffic.getTransaction_id())
+                      mylist.add(tr2);
+                }
+            }
         }
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setStatus(200);
+        str = gson.toJson(mylist);
+        response.getWriter().print(str);
     
     }
 }
