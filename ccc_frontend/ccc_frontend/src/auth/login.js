@@ -14,7 +14,6 @@ function Login() {
     await cccClient
       .post('Login', `username=${Username}&password=${Password}`)
       .then(function (response) {
-        console.log('🚀 ~ file: login.js ~ line 17 ~ response', response);
         if (response.data === 'Wrong Credentials') {
           alert(response.data);
         } else {

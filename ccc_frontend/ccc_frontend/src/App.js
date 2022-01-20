@@ -12,6 +12,7 @@ import CompanyInfo from './company/personalInfo';
 import ChooseEmployees from './company/chooseEmployee';
 import Citizen from './citizen';
 import CitizenInfo from './citizen/personalInfo';
+import CitizenTransactionHistory from './citizen/transactionHistory';
 import Employee from './employee';
 import EmployeeInfo from './employee/personalInfo';
 import Merchant from './merchant';
@@ -35,6 +36,7 @@ function App() {
           <Route path="/ChooseEmployees" element={<ChooseEmployees />} />
           <Route path="/Citizen" element={<Citizen />} />
           <Route path="/CitizenInfo" element={<CitizenInfo />} />
+          <Route path="/CitizenTransactionHistory" element={<CitizenTransactionHistory />} />
           <Route path="/Employee" element={<Employee />} />
           <Route path="/EmployeeInfo" element={<EmployeeInfo />} />
           <Route path="/Merchant" element={<Merchant />} />

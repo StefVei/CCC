@@ -9,25 +9,26 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import useStyles from './styles';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { cccClient } from '../network';
 
-function ManageProducts() {
+function TransactionHistory() {
   const navigate = useNavigate();
   const { state } = useLocation();
+  const { transactions, setTransactions } = useState([]);
   const { userid } = state;
   const styles = useStyles();
-  const [employees, setEmployees] = useState([]);
 
   useEffect(() => {
-    getEmployees();
+    getTransactions();
   }, []);
 
-  const getEmployees = async () => {
+  const getTransactions = async () => {
     await cccClient
-      .post('getEmployees', `userid=${userid}`)
+      .post('GetCitizenTransaction', `userId=${userid}`)
       .then(function (response) {
-        setEmployees(response.data);
+        console.log('🚀 ~ file: transactionHistory.js ~ line 30 ~ response', response);
+        setTransactions(response.data);
       })
       .catch(function (err) {
         console.log(err);
@@ -38,7 +39,7 @@ function ManageProducts() {
     <div className={styles.container}>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
         <Typography alignSelf={'center'} variant="h4">
-          Choose Employee
+          Transactions
         </Typography>
       </Box>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
@@ -47,38 +48,39 @@ function ManageProducts() {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  <Typography variant="h6">First name</Typography>
+                  {' '}
+                  <Typography variant="h6">Product id</Typography>
                 </TableCell>
                 <TableCell align="left">
-                  <Typography variant="h6">Last name</Typography>
+                  <Typography variant="h6">Name</Typography>
                 </TableCell>
                 <TableCell align="left">
-                  <Typography variant="h6">Email</Typography>
+                  <Typography variant="h6">Quantity</Typography>
                 </TableCell>
-                <TableCell></TableCell>
+                <TableCell align="left">
+                  <Typography variant="h6">Price</Typography>
+                </TableCell>
+                {/* <TableCell></TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
-              {employees.map((row) => (
+              {transactions?.map((row) => (
                 <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell component="th" scope="row">
-                    {row.first_name}
+                    {row.product_id}
                   </TableCell>
-                  <TableCell align="left">{row.last_name}</TableCell>
-                  <TableCell align="left">{row.email}</TableCell>
-                  <TableCell align="right">
+                  <TableCell align="left">{row.name}</TableCell>
+                  <TableCell align="left">{row.quantity}</TableCell>
+                  <TableCell align="left">{row.price}&nbsp;€</TableCell>
+                  {/* <TableCell align="right">
                     <Button
                       type="primary"
                       variant="contained"
                       color="primary"
-                      onClick={() => {
-                        navigate('/Company', {
-                          state: { userid: userid, employeeId: row.employee_id }
-                        });
-                      }}>
-                      Continues as
+                      onClick={() => handleOpen(row)}>
+                      Buy
                     </Button>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               ))}
             </TableBody>
@@ -94,4 +96,4 @@ function ManageProducts() {
   );
 }
 
-export default ManageProducts;
+export default TransactionHistory;
