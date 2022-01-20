@@ -78,8 +78,8 @@ public class addProduct extends HttpServlet {
         Product product = new Product();
 
         product.setName(request.getParameter("name"));
-        product.setPrice(request.getParameter("price"));
-        product.setQuantity(request.getParameter("quantity"));
+        product.setPrice(Double.valueOf(request.getParameter("price")));
+        product.setQuantity(Integer.valueOf(request.getParameter("quantity")));
         product.setMerchant_id(request.getParameter("userid"));
 
         ProductDB.addProduct(product);

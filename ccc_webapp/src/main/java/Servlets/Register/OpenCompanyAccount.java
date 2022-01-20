@@ -90,9 +90,9 @@ public class OpenCompanyAccount extends HttpServlet {
         comp.setEmail(request.getParameter("email"));
         comp.setAddress(request.getParameter("address"));
         comp.setName(request.getParameter("name"));
-        comp.setAmount_due("0");
-        comp.setCredit_balance(request.getParameter("creditBalance"));
-        comp.setCredit_limit("5000");
+        comp.setAmount_due(Double.valueOf(request.getParameter("creditBalance")));
+        comp.setCredit_balance(Double.valueOf(request.getParameter("creditBalance")));
+        comp.setCredit_limit(5000);
         comp.setEstablishment_date(date.minusYears(5).toString());
         
         user.setUser_type("C");

@@ -45,7 +45,7 @@ function CitizenInfo() {
 
   const makePayment = async () => {
     await cccClient
-      .post('makePendings', `paymentAmount=${amount}&userType='I'&citizenId=${userid}`)
+      .post('makePendings', `paymentAmount=${amount}&userType=I&citizenId=${userid}`)
       .then(() => {
         getCitizen();
       })

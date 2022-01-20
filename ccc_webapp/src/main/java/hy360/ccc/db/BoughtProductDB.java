@@ -25,7 +25,7 @@ public class BoughtProductDB {
      * 
      * @param product_id "product_id"
      */
-    public static void addBoughtProduct(String product_id, String tr_id, String mer_id, String totalQuantity) {
+    public static void addBoughtProduct(String product_id, String tr_id, String mer_id, double totalQuantity) {
             
         String transaction_id = tr_id;
         PreparedStatement preparedStatement = null;
@@ -67,7 +67,7 @@ public class BoughtProductDB {
                 prod.setProduct_id(res.getString("PRODUCT_ID"));
                 prod.setTransaction_id(res.getString("TRANSACTION_ID"));
                 prod.setMerchant_id(res.getString("MERCHANT_USERID"));
-                prod.setTotal(res.getString("TOTAL"));
+                prod.setTotal(res.getDouble("TOTAL"));
                 products.add(prod);
             }
         }catch(Exception ex){

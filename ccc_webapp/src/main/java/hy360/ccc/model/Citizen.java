@@ -18,9 +18,9 @@ public class Citizen extends User{
     private String email;
     private String address;
     private String phone;
-    private String amount_due;
-    private String credit_limit;
-    private String credit_balance;
+    private double amount_due;
+    private double credit_limit;
+    private double credit_balance;
     private String account_due_date;
 
     
@@ -35,16 +35,16 @@ public class Citizen extends User{
         email="";
         address="";
         phone="";
-        amount_due="";
-        credit_limit = "";
-        credit_balance = "";
+        amount_due = 0;
+        credit_limit = 0;
+        credit_balance = 0;
         account_due_date = "";
     }
 
     public Citizen(String amka, String vat, String first_name, 
             String last_name, String birth_date, String gender,
-            String email, String address, String phone, String amount_due,
-            String credit_limit, String credit_balance, String account_due_date){
+            String email, String address, String phone, double amount_due,
+            double credit_limit, double credit_balance, String account_due_date) {
 
         this.amka = amka;
         this.vat = vat;
@@ -64,8 +64,8 @@ public class Citizen extends User{
     public Citizen(
             String userid, String username, String password, String account_number,
             String amka, String vat, String first_name, String last_name, String birth_date,
-            String gender, String email, String address, String phone, String amount_due,
-            String credit_limit, String credit_balance, String account_due_date) {
+            String gender, String email, String address, String phone, double amount_due,
+            double credit_limit, double credit_balance, String account_due_date) {
 
         super(userid, username, password, account_number);
 
@@ -99,11 +99,8 @@ public class Citizen extends User{
             || gender == null || gender.trim().isEmpty()
             || email == null || email.trim().isEmpty()
             || address == null || address.trim().isEmpty()
-            || phone == null || phone.trim().isEmpty()
-            || amount_due == null || amount_due.trim().isEmpty()
-            || credit_limit == null || credit_limit.trim().isEmpty()
-            || credit_balance == null || credit_balance.trim().isEmpty()
-            || account_due_date == null || account_due_date.trim().isEmpty())
+                || phone == null || phone.trim().isEmpty()
+                || account_due_date == null || account_due_date.trim().isEmpty())
         {
             
             throw new Exception("Missing Fields");
@@ -195,27 +192,27 @@ public class Citizen extends User{
         this.phone = phone;
     }
 
-    public String getAmount_due() {
+    public double getAmount_due() {
         return amount_due;
     }
 
-    public void setAmount_due(String amount_due) {
+    public void setAmount_due(double amount_due) {
         this.amount_due = amount_due;
     }
 
-    public String getCredit_limit() {
+    public double getCredit_limit() {
         return credit_limit;
     }
 
-    public void setCredit_limit(String credit_limit) {
+    public void setCredit_limit(double credit_limit) {
         this.credit_limit = credit_limit;
     }
 
-    public String getCredit_balance() {
+    public double getCredit_balance() {
         return credit_balance;
     }
 
-    public void setCredit_balance(String credit_balance) {
+    public void setCredit_balance(double credit_balance) {
         this.credit_balance = credit_balance;
     }
 

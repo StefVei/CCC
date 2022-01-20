@@ -85,71 +85,66 @@ public class makePendings extends HttpServlet {
         
         
         String company_id, citizen_id, merchant_id;
-        String pending = request.getParameter("paymentAmount");
         String user = request.getParameter("userType");
-        String myamount_due, mycredit_balance;
+        double myamount_due, mycredit_balance;
         double newcb, newamount;
-        
+        double pmntAmount = Double.valueOf(request.getParameter("paymentAmount"));
+
         if (user.equals("I")) {
+
             citizen_id = request.getParameter("citizenId");
             Citizen cit = CitizenDB.getCitizen("USERID", citizen_id);
-            myamount_due = CitizenDB.getCitizen("USERID", citizen_id).getAmount_due();
+            myamount_due = cit.getAmount_due();
             mycredit_balance = CitizenDB.getCitizen("USERID", citizen_id).getCredit_balance();
-            if(Double.valueOf(pending)>Double.valueOf(myamount_due)){
-                newcb = Double.valueOf(mycredit_balance)+(Double.valueOf(pending)-Double.valueOf(myamount_due));
-                cit.setCredit_balance(String.valueOf(newcb));
-                cit.setAmount_due("0");
-            }
-            else if (Integer.valueOf(pending)<Integer.valueOf(myamount_due)){
-                newcb = Double.valueOf(mycredit_balance)+Double.valueOf(pending);
-                cit.setCredit_balance(String.valueOf(newcb));
-                newamount = Double.valueOf(myamount_due)-Double.valueOf(pending);
-                cit.setAmount_due(String.valueOf(newamount));
-            }
-            else{
-                newcb = Double.valueOf(mycredit_balance)+Double.valueOf(pending);
-                cit.setCredit_balance(String.valueOf(newcb));
-                cit.setAmount_due("0");
-            }
+
+            newcb = mycredit_balance + pmntAmount;
+            System.out.println("new credit balance is " + newcb + '\n' + "User id is "
+                    + citizen_id);
+
+            cit.setCredit_balance(newcb);
+
+            newamount = myamount_due - pmntAmount;
+            cit.setAmount_due(newamount);
+
+            System.out.println("CITIZEN BEFORE update db is " + cit.getUser_id());
+
+
             CitizenDB.updateCitizen(cit);
+
+            //System.out.println("CITIZEN db is " + cit.toString());
+
+            // Citizen cit1 = CitizenDB.getCitizen("USERID", cit.getUser_id());
+
         }	
 	else if (user.equals("C")){
             company_id = request.getParameter("companyId");
             Company comp = CompanyDB.getCompany("USERID", company_id);
             myamount_due = CompanyDB.getCompany("USERID", company_id).getAmount_due();
             mycredit_balance = CompanyDB.getCompany("USERID", company_id).getCredit_balance();
-            if(Double.valueOf(pending)>Double.valueOf(myamount_due)){
-                newcb = Double.valueOf(mycredit_balance)+(Double.valueOf(pending)-Double.valueOf(myamount_due));
-                comp.setCredit_balance(String.valueOf(newcb));
-                comp.setAmount_due("0");
-            }
-            else if (Integer.valueOf(pending)<Integer.valueOf(myamount_due)){
-                newcb = Double.valueOf(mycredit_balance)+Double.valueOf(pending);
-                comp.setCredit_balance(String.valueOf(newcb));
-                newamount = Double.valueOf(myamount_due)-Double.valueOf(pending);
-                comp.setAmount_due(String.valueOf(newamount));
-            }
-            else{
-                newcb = Double.valueOf(mycredit_balance)+Double.valueOf(pending);
-                comp.setCredit_balance(String.valueOf(newcb));
-                comp.setAmount_due("0");
-            }
+
+            newcb = mycredit_balance + pmntAmount;
+
+            System.out.println("new credit balance is " + newcb);
+            comp.setCredit_balance(newcb);
+            newamount = myamount_due - pmntAmount;
+            comp.setAmount_due(newamount);
+
             CompanyDB.updateCompany(comp);
         }
         else if (user.equals("M")){
             merchant_id = request.getParameter("merchantId");
             Merchant mer = MerchantDB.getMerchant("USERID", merchant_id);
             myamount_due = MerchantDB.getMerchant("USERID", merchant_id).getAmount_due();
-            if(Double.valueOf(pending)>Double.valueOf(myamount_due)){
+            if (Double.valueOf(pmntAmount) > Double.valueOf(myamount_due)) {
                 //error message
             }
-            else if (Integer.valueOf(pending)<Integer.valueOf(myamount_due)){
+            else if (pmntAmount < myamount_due) {
                 
-                newamount = Double.valueOf(myamount_due)-Double.valueOf(pending);
-                mer.setAmount_due(String.valueOf(newamount));
+                newamount = myamount_due - pmntAmount;
+                mer.setAmount_due(newamount);
             }
             else{
-                mer.setAmount_due("0");
+                mer.setAmount_due(0);
             }
             MerchantDB.updateMerchant(mer);
 	}

@@ -116,8 +116,8 @@ public class ProductDB {
             if (res.next() == true) {
                 pro.setProduct_id(res.getString("PRODUCT_ID"));
                 pro.setName(res.getString("NAME"));
-                pro.setPrice(res.getString("PRICE"));
-                pro.setQuantity(res.getString("QUANTITY"));
+                pro.setPrice(res.getDouble("PRICE"));
+                pro.setQuantity(res.getInt("QUANTITY"));
                 pro.setMerchant_id(res.getString("MERCHANT_USERID"));
             }
 
@@ -149,8 +149,8 @@ public class ProductDB {
                 Product pro = new Product();
                 pro.setProduct_id(res.getString("PRODUCT_ID"));
                 pro.setName(res.getString("NAME"));
-                pro.setPrice(res.getString("PRICE"));
-                pro.setQuantity(res.getString("QUANTITY"));
+                pro.setPrice(res.getDouble("PRICE"));
+                pro.setQuantity(res.getInt("QUANTITY"));
                 pro.setMerchant_id(res.getString("MERCHANT_USERID"));
                 products.add(pro);
             }
@@ -186,8 +186,8 @@ public class ProductDB {
                 Product pro = new Product();
                 pro.setProduct_id(res.getString("PRODUCT_ID"));
                 pro.setName(res.getString("NAME"));
-                pro.setPrice(res.getString("PRICE"));
-                pro.setQuantity(res.getString("QUANTITY"));
+                pro.setPrice(res.getDouble("PRICE"));
+                pro.setQuantity(res.getInt("QUANTITY"));
                 pro.setMerchant_id(res.getString("MERCHANT_USERID"));
                 products.add(pro);
             }

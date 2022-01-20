@@ -94,10 +94,10 @@ public class OpenMerchantAccount extends HttpServlet {
         merchant.setPhone(request.getParameter("phone"));
         merchant.setEmail(request.getParameter("email"));
         merchant.setAddress(request.getParameter("address"));
-        merchant.setSupply("0.15");
-        merchant.setAmount_due("0");
-        merchant.setGain("0");
-        merchant.setPurchases_total("0");
+        merchant.setSupply(0.15);
+        merchant.setAmount_due(0);
+        merchant.setGain(0.0);
+        merchant.setPurchases_total(0);
         String gender = "male".equals(request.getParameter("gender")) ? "M"
                 : "female".equals(request.getParameter("gender")) ? "F"
                 : "O";

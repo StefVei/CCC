@@ -48,7 +48,7 @@ function ManageProducts() {
   const makeTransaction = async (quantity, productid) => {
     await cccClient
       .post(
-        'MakeTrasnaction',
+        'MakeTransaction',
         `productId=${productid}&quantityOfBuyingProduct=${quantity}&userId=${userid}&merchantId=${merchantId}&employeeId=${employeeId}`
       )
       .then(function () {
