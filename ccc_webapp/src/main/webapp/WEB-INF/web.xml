@@ -72,6 +72,10 @@
         <servlet-name>getCompany</servlet-name>
         <servlet-class>Servlets.Company.getCompany</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>getEmployee</servlet-name>
+        <servlet-class>Servlets.Company.getEmployee</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>OpenCompanyAccount</servlet-name>
         <url-pattern>/OpenCompanyAccount</url-pattern>
@@ -131,6 +135,10 @@
     <servlet-mapping>
         <servlet-name>getCompany</servlet-name>
         <url-pattern>/getCompany</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>getEmployee</servlet-name>
+        <url-pattern>/getEmployee</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
