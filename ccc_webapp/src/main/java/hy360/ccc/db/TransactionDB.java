@@ -9,6 +9,8 @@ import hy360.ccc.model.Transaction;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -86,7 +88,7 @@ public class TransactionDB {
 
     }
 
-    public static Transaction getTransactions(String transaction) {
+    public static Transaction getTransaction(String transaction) {
         Transaction tr = new Transaction();
         PreparedStatement preparedStatement = null;
         Connection con = null;
@@ -114,6 +116,42 @@ public class TransactionDB {
         }
 
         return tr;
+    }
+
+    public static List<Transaction> getTransactionsByDates(String date_less, String date_greater) {
+        List<Transaction> transactions = null;
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+
+        try {
+            String sql_getmer = "SELECT * FROM transactions T "
+                    + "WHERE T.DATE >= ? AND T.DATE <= ?";
+            con = CccDB.getConnection();
+
+            preparedStatement = con.prepareStatement(sql_getmer);
+            UtilitiesDB.setValues(preparedStatement, date_less, date_greater);
+            preparedStatement.executeQuery();
+            ResultSet res = preparedStatement.getResultSet();
+
+            transactions = new ArrayList<>();
+            while (res.next() == true) {
+                Transaction tr = new Transaction();
+                tr.setTransaction_id(res.getString("TRANSACTION_ID"));
+                tr.setPending(res.getString("PENDING"));
+                tr.setTransaction_type(res.getString("TRANSACTION_TYPE"));
+                tr.setAmount(res.getString("AMOUNT"));
+                tr.setDate(res.getString("DATE"));
+                transactions.add(tr);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(TransactionDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, TransactionDB.class.getName());
+        }
+
+        return transactions;
+
     }
     
 }
