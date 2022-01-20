@@ -7,7 +7,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 function Company() {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { userid } = state;
+  const { userid, employeeid } = state;
   const styles = useStyles();
 
   return (
@@ -21,7 +21,9 @@ function Company() {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => navigate('/ChooseEmployees', { state: { userid: userid } })}>
+          onClick={() =>
+            navigate('/Products', { state: { userid: userid, employeeid: employeeid } })
+          }>
           Available Products
         </Button>
       </Box>
@@ -30,7 +32,15 @@ function Company() {
           variant="contained"
           color="primary"
           onClick={() => navigate('/CompanyInfo', { state: { userid: userid } })}>
-          Personal Info
+          Company Info
+        </Button>
+      </Box>
+      <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate('/EmployeeInfo', { state: { employeeid: employeeid } })}>
+          Employee Info
         </Button>
       </Box>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">

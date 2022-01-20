@@ -13,6 +13,7 @@ import ChooseEmployees from './company/chooseEmployee';
 import Citizen from './citizen';
 import CitizenInfo from './citizen/personalInfo';
 import Employee from './employee';
+import EmployeeInfo from './employee/personalInfo';
 import Merchant from './merchant';
 import ManageProducts from './merchant/manageProducts';
 import ListCustomers from './merchant/ListCustomers';
@@ -35,6 +36,7 @@ function App() {
           <Route path="/Citizen" element={<Citizen />} />
           <Route path="/CitizenInfo" element={<CitizenInfo />} />
           <Route path="/Employee" element={<Employee />} />
+          <Route path="/EmployeeInfo" element={<EmployeeInfo />} />
           <Route path="/Merchant" element={<Merchant />} />
           <Route path="/ListCustomers" element={<ListCustomers />} />
           <Route path="/ManageProducts" element={<ManageProducts />} />

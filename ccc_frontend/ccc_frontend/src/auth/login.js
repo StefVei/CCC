@@ -19,7 +19,7 @@ function Login() {
           alert(response.data);
         } else {
           if (response.data.user_type === 'C') {
-            navigate('/Company', { state: { userid: response.data.userid } });
+            navigate('/ChooseEmployees', { state: { userid: response.data.userid } });
           } else if (response.data.user_type === 'I') {
             navigate('/Citizen', { state: { userid: response.data.userid } });
           } else if (response.data.user_type === 'M') {
