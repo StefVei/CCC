@@ -5,12 +5,16 @@
 package hy360.ccc.db;
 
 import Utils_db.UtilitiesDB;
+import hy360.ccc.model.CM_Traffics;
+import hy360.ccc.model.Merchant;
 import hy360.ccc.model.Transaction;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -152,6 +156,31 @@ public class TransactionDB {
 
         return transactions;
 
+    }
+
+    /**
+     *
+     * @param employee_list
+     * @return
+     */
+    public static Map<String, String> getTransactionsByEmployees(String employee_list) {
+        Map<String, String> map = new HashMap<>();
+        int index = 1;
+        List<CM_Traffics> comp_trades_by_employees = CompanyTradesDB.getTradesByEmployees(employee_list);
+        for (CM_Traffics trade : comp_trades_by_employees) {
+            Transaction tr = TransactionDB.getTransaction(trade.getTransaction_id());
+            String company_name = CompanyDB.getCompany("USERID", trade.getCompany_id()).getName();
+            Merchant mer = MerchantDB.getMerchant("MERCHANT_USERID", trade.getMerchant_id());
+            String merchant_name = mer.getFirst_name() + mer.getLast_name();
+            String date = tr.getDate();
+            String amount = tr.getAmount();
+            String type = tr.getTransaction_type();
+            map.put(String.valueOf(index), " { company_name: " + company_name
+                    + "merchant_name: " + merchant_name + "date: " + date
+                    + "amount: " + amount + "type:" + type);
+
+        }
+        return map;
     }
     
 }

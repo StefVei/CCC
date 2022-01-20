@@ -211,5 +211,4 @@ public class CompanyDB {
         return companies;
     }
 
-
 }
