@@ -15,7 +15,7 @@ import { cccClient } from '../network';
 function ManageProducts() {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { userid } = state;
+  const { userid, employeeId } = state;
   const styles = useStyles();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
@@ -48,8 +48,8 @@ function ManageProducts() {
   const makeTransaction = async (quantity, productid) => {
     await cccClient
       .post(
-        'MakeTransaction',
-        `productId=${productid}&quantityOfBuyingProduct=${quantity}&userId=${userid}&merchantId=${merchantId}`
+        'MakeTrasnaction',
+        `productId=${productid}&quantityOfBuyingProduct=${quantity}&userId=${userid}&merchantId=${merchantId}&employeeId=${employeeId}`
       )
       .then(function () {
         getProducts();

@@ -21,7 +21,7 @@ function Company() {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => navigate('/Products', { state: { userid: userid } })}>
+          onClick={() => navigate('/ChooseEmployees', { state: { userid: userid } })}>
           Available Products
         </Button>
       </Box>

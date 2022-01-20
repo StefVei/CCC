@@ -9,6 +9,7 @@ import EmployeeRegister from './auth/employee';
 import Login from './auth/login';
 import Company from './company';
 import CompanyInfo from './company/personalInfo';
+import ChooseEmployees from './company/chooseEmployee';
 import Citizen from './citizen';
 import CitizenInfo from './citizen/personalInfo';
 import Employee from './employee';
@@ -30,6 +31,7 @@ function App() {
           <Route path="/Login" element={<Login />} />
           <Route path="/Company" element={<Company />} />
           <Route path="/CompanyInfo" element={<CompanyInfo />} />
+          <Route path="/ChooseEmployees" element={<ChooseEmployees />} />
           <Route path="/Citizen" element={<Citizen />} />
           <Route path="/CitizenInfo" element={<CitizenInfo />} />
           <Route path="/Employee" element={<Employee />} />

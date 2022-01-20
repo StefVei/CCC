@@ -25,6 +25,10 @@
         <servlet-class>Servlets.Transactions.MakeTransaction</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>makePendings</servlet-name>
+        <servlet-class>Servlets.Transactions.makePendings</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>CompleteTransaction</servlet-name>
         <servlet-class>Servlets.Transactions.CompleteTransaction</servlet-class>
     </servlet>
@@ -76,6 +80,10 @@
         <servlet-name>getEmployee</servlet-name>
         <servlet-class>Servlets.Company.getEmployee</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>getEmployees</servlet-name>
+        <servlet-class>Servlets.Company.getEmployees</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>OpenCompanyAccount</servlet-name>
         <url-pattern>/OpenCompanyAccount</url-pattern>
@@ -99,6 +107,10 @@
     <servlet-mapping>
         <servlet-name>MakeTransaction</servlet-name>
         <url-pattern>/MakeTransaction</url-pattern>
+    </servlet-mapping>
+     <servlet-mapping>
+        <servlet-name>makePendings</servlet-name>
+        <url-pattern>/makePendings</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>CompleteTransaction</servlet-name>
@@ -139,6 +151,10 @@
     <servlet-mapping>
         <servlet-name>getEmployee</servlet-name>
         <url-pattern>/getEmployee</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>getEmployees</servlet-name>
+        <url-pattern>/getEmployees</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

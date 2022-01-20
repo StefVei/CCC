@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Box, TextField, Button } from '@mui/material';
+import { Typography, Box, TextField, Button, Modal } from '@mui/material';
 import useStyles from './styles';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cccClient } from '../network';
@@ -22,10 +22,30 @@ function CitizenInfo() {
   const [creditLimit, setCreditLimit] = useState('');
   const [creditBalance, setCreditBalance] = useState('');
   const [dueDate, setDueDate] = useState('');
+  const [open, setOpen] = useState(false);
+  const [amount, setAmount] = useState(0);
 
   useEffect(() => {
     getCitizen();
   }, []);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+    setAmount(0);
+  };
+  const makePayment = async () => {
+    await cccClient
+      .post('makePendings', `paymentAmount=${amount}&userType='I'&citizenId=${userid}`)
+      .then(() => {
+        getCitizen();
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
 
   const getCitizen = async () => {
     await cccClient
@@ -182,14 +202,39 @@ function CitizenInfo() {
           onChange={(e) => setDueDate(e.target.value)}
         />{' '}
       </Box>
-      <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={() => navigate('/Citizen', { state: { userid: userid } })}>
-          Back
-        </Button>
-      </Box>
+      <div className={styles.buttonContainer}>
+        <Box p={3}>
+          <Button type="primary" variant="contained" color="primary" onClick={() => handleOpen()}>
+            Payment
+          </Button>
+        </Box>
+        <Box p={3}>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={() => navigate('/Citizen', { state: { userid: userid } })}>
+            Back
+          </Button>
+        </Box>
+      </div>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description">
+        <div className={styles.modalContainer}>
+          <TextField
+            label="Amount :"
+            variant="filled"
+            value={amount}
+            type="number"
+            onChange={(e) => setAmount(e.target.value)}
+          />{' '}
+          <Button type="submit" variant="contained" color="primary" onClick={() => makePayment()}>
+            Pay
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }
