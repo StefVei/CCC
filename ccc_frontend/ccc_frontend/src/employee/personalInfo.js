@@ -7,7 +7,7 @@ import { cccClient } from '../network';
 function EmployeeInfo() {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { employeeid } = state;
+  const { employeeId } = state;
   const styles = useStyles();
   const [firstName, setFirstName] = useState('');
   const [birthDate, setBirthDate] = useState('');
@@ -23,7 +23,7 @@ function EmployeeInfo() {
 
   const getCompany = async () => {
     await cccClient
-      .post('getEmployee', `employeeId=${employeeid}`)
+      .post('getEmployee', `employeeId=${employeeId}`)
       .then(function (response) {
         console.log('🚀 ~ file: personalInfo.js ~ line 30 ~ response', response);
         setFirstName(response.data.first_name);

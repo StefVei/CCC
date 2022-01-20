@@ -73,7 +73,7 @@ function ManageProducts() {
                       color="primary"
                       onClick={() => {
                         navigate('/Company', {
-                          state: { userid: userid, employeeid: row.employee_id }
+                          state: { userid: userid, employeeId: row.employee_id }
                         });
                       }}>
                       Continues as
