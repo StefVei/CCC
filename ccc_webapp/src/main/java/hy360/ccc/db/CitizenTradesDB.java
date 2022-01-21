@@ -59,6 +59,7 @@ public class CitizenTradesDB {
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
+            con = CccDB.getConnection();
             StringBuilder insQuery = new StringBuilder();
 
             insQuery.append("SELECT * FROM cm_trades ")

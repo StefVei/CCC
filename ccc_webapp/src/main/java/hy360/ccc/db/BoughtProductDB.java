@@ -60,7 +60,7 @@ public class BoughtProductDB {
             String sql_select = "SELECT * FROM BOUGHT_PRODUCT WHERE TRANSACTION_ID = ?";
             preparedStatement = con.prepareStatement(sql_select);
             UtilitiesDB.setValues(preparedStatement, transaction_id);
-            preparedStatement.executeUpdate();
+            preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
             while(res.next() == true){
                 BoughtProduct prod = new BoughtProduct();
@@ -92,10 +92,10 @@ public class BoughtProductDB {
         BoughtProduct product = null;
         try {
             con = CccDB.getConnection();
-            String sql_select = "SELECT * FROM BOUGHT_PRODUCT WHERE TRANSACTION_ID = ?";
+            String sql_select = "SELECT * FROM BOUGHT_PRODUCTS WHERE TRANSACTION_ID = ?";
             preparedStatement = con.prepareStatement(sql_select);
             UtilitiesDB.setValues(preparedStatement, transaction_id);
-            preparedStatement.executeUpdate();
+            preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
             if (res.next() == true) {
                 product = new BoughtProduct();

@@ -15,7 +15,7 @@ import { cccClient } from '../network';
 function TransactionHistory() {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { transactions, setTransactions } = useState([]);
+  const [transactions, setTransactions] = useState([]);
   const { userid } = state;
   const styles = useStyles();
 
@@ -25,7 +25,7 @@ function TransactionHistory() {
 
   const getTransactions = async () => {
     await cccClient
-      .post('CitizenTransaction', `userId=${userid}`)
+      .post('CitizenTransactions', `userId=${userid}`)
       .then(function (response) {
         console.log('🚀 ~ file: transactionHistory.js ~ line 30 ~ response', response);
         setTransactions(response.data);
@@ -74,8 +74,8 @@ function TransactionHistory() {
                   <TableCell component="th" scope="row">
                     {row.product_name}
                   </TableCell>
-                  <TableCell align="left">{row.product_quantity}</TableCell>
-                  <TableCell align="left">{row.total_price}&nbsp;€</TableCell>
+                  <TableCell align="left">{row.quantity}</TableCell>
+                  <TableCell align="left">{row.amount}&nbsp;€</TableCell>
                   <TableCell align="left">{row.date}</TableCell>
                   <TableCell align="left">{row.merchant_name}</TableCell>
                   <TableCell align="left">{row.type === 'A' ? 'Buyed' : 'Returned'}</TableCell>

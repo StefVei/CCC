@@ -4,6 +4,7 @@
  */
 package Citizen;
 
+import Utils_db.CitizenTransaction;
 import com.google.gson.Gson;
 import hy360.ccc.db.BoughtProductDB;
 import hy360.ccc.db.CitizenTradesDB;
@@ -18,9 +19,7 @@ import hy360.ccc.model.Transaction;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -87,27 +86,25 @@ public class CitizenTransactions extends HttpServlet {
 
         Gson gson = new Gson();
         String str;
-        Map<String, String> map = new HashMap<>();
+        List<CitizenTransaction> list = new ArrayList<>();
         int index = 1;
         String user_id = request.getParameter("userId");
         List<CM_Trades> trades = new ArrayList<>();
         trades = CitizenTradesDB.getTrades("CITIZEN_USERID", user_id);
         for (CM_Trades trade : trades) {
-            Merchant mer = MerchantDB.getMerchant("MERCHANT_USERID",
+            Merchant mer = MerchantDB.getMerchant("USERID",
                     trade.getMerchant_id());
             Transaction tr = TransactionDB.getTransaction(trade.getTransaction_id());
             BoughtProduct br = BoughtProductDB.getBoughtProduct(Integer.valueOf(tr.getTransaction_id()));
             Product pr = ProductDB.getProduct(br.getProduct_id());
-            String merchant_name = mer.getFirst_name() + mer.getLast_name();
+            String merchant_name = mer.getFirst_name() + " " + mer.getLast_name();
             String date = tr.getDate();
             String amount = tr.getAmount();
             String type = tr.getTransaction_type();
             String product_name = pr.getName();
             double quantity = br.getTotal();
-            map.put(String.valueOf(index), " { "
-                    + "merchant_name: " + merchant_name + "date: " + date
-                    + "quantity" + quantity + "amount: " + amount
-                    + "product_name" + product_name + "type:" + type + "}");
+            CitizenTransaction tr_cit = new CitizenTransaction(merchant_name, date, quantity , Double.valueOf(amount), product_name, type);
+            list.add(tr_cit);
             index++;
 
         }
@@ -115,7 +112,7 @@ public class CitizenTransactions extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.setStatus(200);
-        str = gson.toJson(map);
+        str = gson.toJson(list);
         response.getWriter().print(str);
 
     }
