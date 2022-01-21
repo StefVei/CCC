@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import java.util.logging.Level;
@@ -222,13 +223,13 @@ public class MerchantDB {
 
 }
 
-    public static List<String> getBadMerchants() {
-        List<String> merchants = null;
+    public static HashMap<String, Double> getBadMerchants() {
+        HashMap<String, Double> merchants = null;
         PreparedStatement preparedStatement = null;
         Connection con = null;
 
         try {
-            String sql_getmer = "SELECT FIRST_NAME, LAST_NAME FROM merchants"
+            String sql_getmer = "SELECT FIRST_NAME, LAST_NAME, AMOUNT_DUE FROM merchants"
                     + "WHERE AMOUNT_DUE > 0"
                     + "ORDER BY AMOUNT_DUE;";
             con = CccDB.getConnection();
@@ -237,10 +238,11 @@ public class MerchantDB {
             preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
 
-            merchants = new ArrayList<>();
+            merchants = new HashMap<String, Double>();
             while (res.next() == true) {
                 String mr = res.getString("FIRST_NAME")+" "+ res.getString("LAST_NAME");
-                merchants.add(mr);
+                double am = Double.valueOf(res.getString("AMOUNT_DUE"));
+                merchants.put(mr, am);
             }
 
         } catch (Exception ex) {

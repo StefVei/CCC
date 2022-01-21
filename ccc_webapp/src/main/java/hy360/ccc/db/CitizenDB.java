@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -248,8 +249,8 @@ public class CitizenDB {
 
     }
     
-    public static List<String> getBadCitizens() {
-        List<String> citizens = null;
+    public static HashMap<String, Double> getBadCitizens() {
+        HashMap<String, Double> citizens = null;
         PreparedStatement preparedStatement = null;
         Connection con = null;
 
@@ -263,10 +264,11 @@ public class CitizenDB {
             preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
 
-            citizens = new ArrayList<>();
+            citizens = new HashMap<String, Double>();
             while (res.next() == true) {
                 String cit = res.getString("FIRST_NAME")+" "+ res.getString("LAST_NAME");
-                citizens.add(cit);
+                double am = Double.valueOf(res.getString("AMOUNT_DUE"));
+                citizens.put(cit, am);
             }
 
         } catch (Exception ex) {

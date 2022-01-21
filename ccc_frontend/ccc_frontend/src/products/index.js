@@ -51,8 +51,14 @@ function ManageProducts() {
         'MakeTransaction',
         `productId=${productid}&quantityOfBuyingProduct=${quantity}&userId=${userid}&merchantId=${merchantId}&employeeId=${employeeId}`
       )
-      .then(function () {
+      .then(function (response) {
         getProducts();
+        if (response.data === 'Not enought credit balance') {
+          alert('Not enought credit balance');
+        } else {
+          handleClose();
+          alert('Successful buy!');
+        }
       })
       .catch(function (err) {
         console.log(err);

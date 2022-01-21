@@ -11,7 +11,13 @@ import hy360.ccc.db.MerchantDB;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -61,6 +67,30 @@ public class BadUsers {
         processRequest(request, response);
     }
 
+    // function to sort hashmap by values
+    public static HashMap<String, Double> sortByValue(HashMap<String, Double> hm)
+    {
+        // Create a list from elements of HashMap
+        List<Map.Entry<String, Double> > list =
+               new LinkedList<Map.Entry<String, Double> >(hm.entrySet());
+ 
+        // Sort the list
+        Collections.sort(list, new Comparator<Map.Entry<String, Double> >() {
+            public int compare(Map.Entry<String, Double> o1,
+                               Map.Entry<String, Double> o2)
+            {
+                return (o1.getValue()).compareTo(o2.getValue());
+            }
+        });
+         
+        // put data from sorted list to hashmap
+        HashMap<String, Double> temp = new LinkedHashMap<String, Double>();
+        for (Map.Entry<String, Double> aa : list) {
+            temp.put(aa.getKey(), aa.getValue());
+        }
+        return temp;
+    }
+    
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -77,18 +107,18 @@ public class BadUsers {
         String str;
     
        
-        List<String> mylist = new ArrayList<>();
-        List<String> mers = MerchantDB.getBadMerchants();
-        List<String> cos = CompanyDB.getBadCompanies();
-        List<String> cits = CitizenDB.getBadCitizens();
-        mylist.addAll(mers);
-        mylist.addAll(cos);
-        mylist.addAll(cits);
+        HashMap<String, Double> mylist = new HashMap<String, Double>();
+        HashMap<String, Double> mers = MerchantDB.getBadMerchants();
+        HashMap<String, Double> cos = CompanyDB.getBadCompanies();
+        HashMap<String, Double> cits = CitizenDB.getBadCitizens();
+        mylist.putAll(mers);
+        mylist.putAll(cos);
+        mylist.putAll(cits);
         
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.setStatus(200);
-        str = gson.toJson(mylist);
+        str = gson.toJson(sortByValue(mylist));
         response.getWriter().print(str);
     
     }

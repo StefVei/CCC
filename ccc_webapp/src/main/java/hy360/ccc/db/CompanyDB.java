@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -241,8 +242,8 @@ public class CompanyDB {
 
     }
 
-    public static List<String> getBadCompanies() {
-        List<String> companies = null;
+    public static HashMap<String, Double> getBadCompanies() {
+        HashMap<String, Double> companies = null;
         PreparedStatement preparedStatement = null;
         Connection con = null;
 
@@ -256,10 +257,11 @@ public class CompanyDB {
             preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
 
-            companies = new ArrayList<>();
+            companies = new HashMap<String, Double>();
             while (res.next() == true) {
                 String co = res.getString("NAME");
-                companies.add(co);
+                double am = Double.valueOf(res.getString("AMOUNT_DUE"));
+                companies.put(co, am);
             }
 
         } catch (Exception ex) {
