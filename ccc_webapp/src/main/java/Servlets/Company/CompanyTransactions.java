@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Servlets.Questions;
+package Servlets.Company;
 
 import Utils_db.CompanyTransaction;
 import com.google.gson.Gson;
@@ -28,14 +28,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 /**
  *
- * @author sckou
+ * @author panagiotisk
  */
-public class EmployeesTransactions extends HttpServlet {
-    
-    
+public class CompanyTransactions extends HttpServlet {
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -53,15 +51,15 @@ public class EmployeesTransactions extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet EmployeeTransactions</title>");
+            out.println("<title>Servlet CompanyTransactions</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet EmployeeTransactions at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CompanyTransactions at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
-    
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -85,7 +83,6 @@ public class EmployeesTransactions extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -95,11 +92,10 @@ public class EmployeesTransactions extends HttpServlet {
 
         List<CompanyTransaction> list = new ArrayList<>();
         int index = 1;
-        String employee_list = request.getParameter("employeesList");
-        List<CM_Traffics> comp_trades_by_employees = CompanyTradesDB.
-                getTradesByEmployees(employee_list);
+        String employee = request.getParameter("employeeId");
+        List<CM_Traffics> traffics = CompanyTradesDB.getTrades("EMPLOYEE_ID", employee);
 
-        for (CM_Traffics trade : comp_trades_by_employees) {
+        for (CM_Traffics trade : traffics) {
             Transaction tr = TransactionDB.getTransaction(trade.getTransaction_id());
             String company_name = CompanyDB.getCompany("USERID",
                     trade.getCompany_id()).getName();
@@ -118,18 +114,25 @@ public class EmployeesTransactions extends HttpServlet {
             CompanyTransaction comp_tr = new CompanyTransaction(merchant_name,
                     date, (int) quantity, Double.valueOf(amount), product_name, employee_name, type);
             list.add(comp_tr);
-            index++;
 
         }
 
-    
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.setStatus(200);
         str = gson.toJson(list);
         response.getWriter().print(str);
 
-    
     }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
 
 }
