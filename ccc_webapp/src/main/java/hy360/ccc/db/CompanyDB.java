@@ -241,4 +241,34 @@ public class CompanyDB {
 
     }
 
+    public static List<String> getBadCompanies() {
+        List<String> companies = null;
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+
+        try {
+            String sql_getmer = "SELECT NAME FROM companies"
+                    + "WHERE AMOUNT_DUE > 0"
+                    + "ORDER BY AMOUNT_DUE;";
+            con = CccDB.getConnection();
+
+            preparedStatement = con.prepareStatement(sql_getmer);
+            preparedStatement.executeQuery();
+            ResultSet res = preparedStatement.getResultSet();
+
+            companies = new ArrayList<>();
+            while (res.next() == true) {
+                String co = res.getString("NAME");
+                companies.add(co);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(CompanyDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, CompanyDB.class.getName());
+        }
+
+        return companies;
+
+    }
 }
