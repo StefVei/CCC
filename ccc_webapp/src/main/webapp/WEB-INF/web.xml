@@ -92,6 +92,10 @@
         <servlet-name>CitizenTransactions</servlet-name>
         <servlet-class>Citizen.CitizenTransactions</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CompanyTransactions</servlet-name>
+        <servlet-class>Servlets.Company.CompanyTransactions</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>OpenCompanyAccount</servlet-name>
         <url-pattern>/OpenCompanyAccount</url-pattern>
@@ -171,6 +175,10 @@
     <servlet-mapping>
         <servlet-name>CitizenTransactions</servlet-name>
         <url-pattern>/CitizenTransactions</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CompanyTransactions</servlet-name>
+        <url-pattern>/CompanyTransactions</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

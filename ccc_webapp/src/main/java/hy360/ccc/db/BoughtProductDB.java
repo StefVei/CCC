@@ -84,7 +84,7 @@ public class BoughtProductDB {
      *
      *
      * @param transaction_id
-     * @return products in the current transaction
+     * @return product in the current transaction
      */
     public static BoughtProduct getBoughtProduct(int transaction_id) {
         PreparedStatement preparedStatement = null;
