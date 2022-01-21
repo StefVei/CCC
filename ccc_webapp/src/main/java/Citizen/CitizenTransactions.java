@@ -108,6 +108,7 @@ public class CitizenTransactions extends HttpServlet {
                     + "merchant_name: " + merchant_name + "date: " + date
                     + "quantity" + quantity + "amount: " + amount
                     + "product_name" + product_name + "type:" + type + "}");
+            index++;
 
         }
 

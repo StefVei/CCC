@@ -106,6 +106,7 @@ public class EmployeesTransactions extends HttpServlet {
             map.put(String.valueOf(index), " { company_name: " + company_name
                     + "merchant_name: " + merchant_name + "date: " + date
                     + "amount: " + amount + "type:" + type + "}");
+            index++;
 
         }
 
