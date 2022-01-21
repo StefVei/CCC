@@ -199,7 +199,7 @@ public class MerchantDB {
 
     }
 
-    public Merchant setMerchantOfTheMonth() {
+    public void setMerchantOfTheMonth() throws SQLException {
         Merchant mer = new Merchant();
         PreparedStatement preparedStatement = null;
         Connection con = null;
@@ -212,30 +212,15 @@ public class MerchantDB {
                     + "WHERE PURCHASES_TOTAL >= "
                     + "(SELECT MAX(PURCHASES_TOTAL) FROM merchants";
             preparedStatement = con.prepareStatement(mer_event);
-            ResultSet res = preparedStatement.executeQuery();
+            preparedStatement.execute();
 
-            if (res.next()) {
-                mer.setUser_id(res.getString("USERID"));
-                mer.setFirst_name(res.getString("FIRST_NAME"));
-                mer.setLast_name(res.getString("LAST_NAME"));
-                mer.setBirth_date(res.getString("BIRTH_DATE"));
-                mer.setGender(res.getString("GENDER"));
-                mer.setSupply(res.getDouble("SUPPLY"));
-                mer.setGain(res.getDouble("GAIN"));
-                mer.setPurchases_total(res.getInt("PURCHASES_TOTAL"));
-                mer.setEmail(res.getString("EMAIL"));
-                mer.setAddress(res.getString("ADDRESS"));
-                mer.setPhone(res.getString("PHONE"));
-                mer.setAmount_due(res.getDouble("AMOUNT_DUE"));
-            }
         } catch (SQLException ex) {
             Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return mer;
-    }
+}
 
     public static List<String> getBadMerchants() {
         List<String> merchants = null;
