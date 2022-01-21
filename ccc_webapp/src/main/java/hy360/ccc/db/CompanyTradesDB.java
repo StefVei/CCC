@@ -91,7 +91,7 @@ public class CompanyTradesDB {
             while (res.next()) {
                 CM_Traffics tr = new CM_Traffics();
                 tr.setTransaction_id(res.getString("TRANSACTION_ID"));
-                tr.setCompany_id(res.getString("CITIZEN_USERID"));
+                tr.setCompany_id(res.getString("COMPANY_USERID"));
                 tr.setMerchant_id(res.getString("MERCHANT_USERID"));
                 tr.setEmployee_id(res.getString("EMPLOYEE_ID"));
                 trades.add(tr);

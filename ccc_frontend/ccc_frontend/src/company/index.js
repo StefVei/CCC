@@ -31,6 +31,14 @@ function Company() {
         <Button
           variant="contained"
           color="primary"
+          onClick={() => navigate('/CompanyTransactionHistory', { state: { userid: userid } })}>
+          Transaction History
+        </Button>
+      </Box>
+      <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
+        <Button
+          variant="contained"
+          color="primary"
           onClick={() => navigate('/CompanyInfo', { state: { userid: userid } })}>
           Company Info
         </Button>

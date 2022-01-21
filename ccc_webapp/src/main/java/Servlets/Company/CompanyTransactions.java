@@ -91,15 +91,13 @@ public class CompanyTransactions extends HttpServlet {
         String str;
 
         List<CompanyTransaction> list = new ArrayList<>();
-        int index = 1;
         String company_id = request.getParameter("userId");
         List<CM_Traffics> traffics = CompanyTradesDB.getTrades("COMPANY_USERID", company_id);
+        System.out.println(company_id);
 
         for (CM_Traffics trade : traffics) {
             Transaction tr = TransactionDB.getTransaction(trade.getTransaction_id());
-            String company_name = CompanyDB.getCompany("USERID",
-                    trade.getCompany_id()).getName();
-            Merchant mer = MerchantDB.getMerchant("MERCHANT_USERID",
+            Merchant mer = MerchantDB.getMerchant("USERID",
                     trade.getMerchant_id());
             BoughtProduct br = BoughtProductDB.getBoughtProduct(Integer.valueOf(tr.getTransaction_id()));
             Product pr = ProductDB.getProduct(br.getProduct_id());
