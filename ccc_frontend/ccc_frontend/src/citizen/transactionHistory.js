@@ -25,7 +25,7 @@ function TransactionHistory() {
 
   const getTransactions = async () => {
     await cccClient
-      .post('GetCitizenTransaction', `userId=${userid}`)
+      .post('CitizenTransaction', `userId=${userid}`)
       .then(function (response) {
         console.log('🚀 ~ file: transactionHistory.js ~ line 30 ~ response', response);
         setTransactions(response.data);
@@ -48,39 +48,47 @@ function TransactionHistory() {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  {' '}
-                  <Typography variant="h6">Product id</Typography>
-                </TableCell>
-                <TableCell align="left">
-                  <Typography variant="h6">Name</Typography>
+                  <Typography variant="h6">Product Name</Typography>
                 </TableCell>
                 <TableCell align="left">
                   <Typography variant="h6">Quantity</Typography>
                 </TableCell>
                 <TableCell align="left">
-                  <Typography variant="h6">Price</Typography>
+                  <Typography variant="h6">Total Price</Typography>
                 </TableCell>
-                {/* <TableCell></TableCell> */}
+                <TableCell align="left">
+                  <Typography variant="h6">Date</Typography>
+                </TableCell>
+                <TableCell align="left">
+                  <Typography variant="h6">Merchant Name</Typography>
+                </TableCell>
+                <TableCell align="left">
+                  <Typography variant="h6">Type</Typography>
+                </TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {transactions?.map((row) => (
                 <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell component="th" scope="row">
-                    {row.product_id}
+                    {row.product_name}
                   </TableCell>
-                  <TableCell align="left">{row.name}</TableCell>
-                  <TableCell align="left">{row.quantity}</TableCell>
-                  <TableCell align="left">{row.price}&nbsp;€</TableCell>
-                  {/* <TableCell align="right">
+                  <TableCell align="left">{row.product_quantity}</TableCell>
+                  <TableCell align="left">{row.total_price}&nbsp;€</TableCell>
+                  <TableCell align="left">{row.date}</TableCell>
+                  <TableCell align="left">{row.merchant_name}</TableCell>
+                  <TableCell align="left">{row.type === 'A' ? 'Buyed' : 'Returned'}</TableCell>
+                  <TableCell align="right">
                     <Button
                       type="primary"
                       variant="contained"
                       color="primary"
-                      onClick={() => handleOpen(row)}>
-                      Buy
+                      disabled={row.type === 'E'}
+                      onClick={() => {}}>
+                      return
                     </Button>
-                  </TableCell> */}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
