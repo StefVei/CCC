@@ -198,4 +198,34 @@ public class MerchantDB {
 
     }
 
+    public static List<String> getBadMerchants() {
+        List<String> merchants = null;
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+
+        try {
+            String sql_getmer = "SELECT FIRST_NAME, LAST_NAME FROM merchants"
+                    + "WHERE AMOUNT_DUE > 0"
+                    + "ORDER BY AMOUNT_DUE;";
+            con = CccDB.getConnection();
+
+            preparedStatement = con.prepareStatement(sql_getmer);
+            preparedStatement.executeQuery();
+            ResultSet res = preparedStatement.getResultSet();
+
+            merchants = new ArrayList<>();
+            while (res.next() == true) {
+                String mr = res.getString("FIRST_NAME")+" "+ res.getString("LAST_NAME");
+                merchants.add(mr);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, MerchantDB.class.getName());
+        }
+
+        return merchants;
+
+    }
 }

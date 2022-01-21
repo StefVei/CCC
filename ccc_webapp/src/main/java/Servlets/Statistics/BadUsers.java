@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Servlets.Statistics;
 
@@ -13,17 +13,14 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 
 /**
  *
  * @author sckou
  */
-public class GoodUsers extends HttpServlet {
-
+public class BadUsers {
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -41,10 +38,10 @@ public class GoodUsers extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet GoodUsers</title>");
+            out.println("<title>Servlet BadUsers</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet GoodUsers at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet BadUsers at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,7 +56,6 @@ public class GoodUsers extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
@@ -74,7 +70,6 @@ public class GoodUsers extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -83,9 +78,9 @@ public class GoodUsers extends HttpServlet {
     
        
         List<String> mylist = new ArrayList<>();
-        List<String> mers = MerchantDB.getGoodMerchants();
-        List<String> cos = CompanyDB.getGoodCompanies();
-        List<String> cits = CitizenDB.getGoodCitizens();
+        List<String> mers = MerchantDB.getBadMerchants();
+        List<String> cos = CompanyDB.getBadCompanies();
+        List<String> cits = CitizenDB.getBadCitizens();
         mylist.addAll(mers);
         mylist.addAll(cos);
         mylist.addAll(cits);

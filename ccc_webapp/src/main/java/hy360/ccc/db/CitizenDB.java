@@ -247,5 +247,36 @@ public class CitizenDB {
         return citizens;
 
     }
+    
+    public static List<String> getBadCitizens() {
+        List<String> citizens = null;
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+
+        try {
+            String sql_getmer = "SELECT FIRST_NAME, LAST_NAME FROM citizens"
+                    + "WHERE AMOUNT_DUE > 0"
+                    + "ORDER BY AMOUNT_DUE;";
+            con = CccDB.getConnection();
+
+            preparedStatement = con.prepareStatement(sql_getmer);
+            preparedStatement.executeQuery();
+            ResultSet res = preparedStatement.getResultSet();
+
+            citizens = new ArrayList<>();
+            while (res.next() == true) {
+                String cit = res.getString("FIRST_NAME")+" "+ res.getString("LAST_NAME");
+                citizens.add(cit);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(CitizenDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, CitizenDB.class.getName());
+        }
+
+        return citizens;
+
+    }
 
 }
