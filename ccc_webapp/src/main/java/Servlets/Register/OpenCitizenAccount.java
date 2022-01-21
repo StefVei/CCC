@@ -95,8 +95,8 @@ public class OpenCitizenAccount extends HttpServlet {
         cit.setEmail(request.getParameter("email"));
         cit.setAddress(request.getParameter("address"));
         cit.setFirst_name(request.getParameter("firstname"));
-        cit.setAmount_due(Double.valueOf(request.getParameter("creditBalance")));
-        cit.setCredit_balance(Double.valueOf(request.getParameter("creditBalance")));
+        cit.setAmount_due(0);
+        cit.setCredit_balance(1000);
         cit.setCredit_limit(1000);
         cit.setLast_name(request.getParameter("lastname"));
         cit.setAmka(request.getParameter("amka"));
