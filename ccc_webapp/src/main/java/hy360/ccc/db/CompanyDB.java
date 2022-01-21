@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -241,4 +242,35 @@ public class CompanyDB {
 
     }
 
+    public static HashMap<String, Double> getBadCompanies() {
+        HashMap<String, Double> companies = null;
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+
+        try {
+            String sql_getmer = "SELECT NAME FROM companies"
+                    + "WHERE AMOUNT_DUE > 0"
+                    + "ORDER BY AMOUNT_DUE;";
+            con = CccDB.getConnection();
+
+            preparedStatement = con.prepareStatement(sql_getmer);
+            preparedStatement.executeQuery();
+            ResultSet res = preparedStatement.getResultSet();
+
+            companies = new HashMap<String, Double>();
+            while (res.next() == true) {
+                String co = res.getString("NAME");
+                double am = Double.valueOf(res.getString("AMOUNT_DUE"));
+                companies.put(co, am);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(CompanyDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, CompanyDB.class.getName());
+        }
+
+        return companies;
+
+    }
 }

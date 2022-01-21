@@ -6,16 +6,8 @@ package Servlets.Statistics;
 
 import com.google.gson.Gson;
 import hy360.ccc.db.CitizenDB;
-import hy360.ccc.db.CitizenTradesDB;
 import hy360.ccc.db.CompanyDB;
-import hy360.ccc.db.CompanyTradesDB;
 import hy360.ccc.db.MerchantDB;
-import hy360.ccc.db.TransactionDB;
-import hy360.ccc.db.UserDB;
-import hy360.ccc.model.CM_Trades;
-import hy360.ccc.model.CM_Traffics;
-import hy360.ccc.model.Transaction;
-import hy360.ccc.model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;

@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -236,6 +237,38 @@ public class CitizenDB {
             while (res.next() == true) {
                 String cit = res.getString("FIRST_NAME")+" "+ res.getString("LAST_NAME");
                 citizens.add(cit);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(CitizenDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, CitizenDB.class.getName());
+        }
+
+        return citizens;
+
+    }
+    
+    public static HashMap<String, Double> getBadCitizens() {
+        HashMap<String, Double> citizens = null;
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+
+        try {
+            String sql_getmer = "SELECT FIRST_NAME, LAST_NAME FROM citizens"
+                    + "WHERE AMOUNT_DUE > 0"
+                    + "ORDER BY AMOUNT_DUE;";
+            con = CccDB.getConnection();
+
+            preparedStatement = con.prepareStatement(sql_getmer);
+            preparedStatement.executeQuery();
+            ResultSet res = preparedStatement.getResultSet();
+
+            citizens = new HashMap<String, Double>();
+            while (res.next() == true) {
+                String cit = res.getString("FIRST_NAME")+" "+ res.getString("LAST_NAME");
+                double am = Double.valueOf(res.getString("AMOUNT_DUE"));
+                citizens.put(cit, am);
             }
 
         } catch (Exception ex) {

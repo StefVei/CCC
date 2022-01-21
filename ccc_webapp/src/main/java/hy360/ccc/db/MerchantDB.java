@@ -9,7 +9,9 @@ import hy360.ccc.model.Merchant;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import java.util.logging.Level;
@@ -198,4 +200,58 @@ public class MerchantDB {
 
     }
 
+    public void setMerchantOfTheMonth() throws SQLException {
+        Merchant mer = new Merchant();
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+        try {
+            con = CccDB.getConnection();
+            String mer_event = "CREATE EVENT IF NOT EXISTS merchant_of_the_month "
+                    + "ON SCHEDULE EVERY 1 MONTH DO"
+                    + "UPDATE merchants "
+                    + "SET AMOUNT_DUE = AMOUNT_DUE * 0.95"
+                    + "WHERE PURCHASES_TOTAL >= "
+                    + "(SELECT MAX(PURCHASES_TOTAL) FROM merchants)";
+            preparedStatement = con.prepareStatement(mer_event);
+            preparedStatement.execute();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+}
+
+    public static HashMap<String, Double> getBadMerchants() {
+        HashMap<String, Double> merchants = null;
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+
+        try {
+            String sql_getmer = "SELECT FIRST_NAME, LAST_NAME, AMOUNT_DUE FROM merchants"
+                    + "WHERE AMOUNT_DUE > 0"
+                    + "ORDER BY AMOUNT_DUE;";
+            con = CccDB.getConnection();
+
+            preparedStatement = con.prepareStatement(sql_getmer);
+            preparedStatement.executeQuery();
+            ResultSet res = preparedStatement.getResultSet();
+
+            merchants = new HashMap<String, Double>();
+            while (res.next() == true) {
+                String mr = res.getString("FIRST_NAME")+" "+ res.getString("LAST_NAME");
+                double am = Double.valueOf(res.getString("AMOUNT_DUE"));
+                merchants.put(mr, am);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, MerchantDB.class.getName());
+        }
+
+        return merchants;
+
+    }
 }
