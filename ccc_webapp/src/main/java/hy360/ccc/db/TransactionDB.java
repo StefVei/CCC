@@ -88,7 +88,7 @@ public class TransactionDB {
 
     }
 
-    public static Transaction getTransaction(String transaction) {
+    public static Transaction getTransaction(String transaction_id) {
         Transaction tr = new Transaction();
         PreparedStatement preparedStatement = null;
         Connection con = null;
@@ -97,7 +97,7 @@ public class TransactionDB {
             con = CccDB.getConnection();
 
             preparedStatement = con.prepareStatement(sql_getmer);
-            UtilitiesDB.setValues(preparedStatement, Integer.valueOf(transaction));
+            UtilitiesDB.setValues(preparedStatement, Integer.valueOf(transaction_id));
             preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
 

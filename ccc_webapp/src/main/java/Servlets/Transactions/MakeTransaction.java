@@ -9,7 +9,6 @@ import com.google.gson.Gson;
 import hy360.ccc.db.BoughtProductDB;
 import hy360.ccc.db.CitizenDB;
 import hy360.ccc.db.CitizenTradesDB;
-import static hy360.ccc.db.CitizenTradesDB.addTrade;
 import hy360.ccc.db.CompanyDB;
 import hy360.ccc.db.CompanyTradesDB;
 import hy360.ccc.db.EmployeeDB;
@@ -121,7 +120,7 @@ public class MakeTransaction extends HttpServlet {
         transaction.setTransaction_type("A");
         transaction.setDate(date.toString());
         
-        Product buying_product = ProductDB.getProduct(product_id, merchant_id);
+        Product buying_product = ProductDB.getProduct(product_id);
         cost = buying_product.getPrice() * quantity;
         
         

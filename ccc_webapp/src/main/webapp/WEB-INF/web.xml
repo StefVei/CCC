@@ -88,6 +88,10 @@
         <servlet-name>GetCitizenTransaction</servlet-name>
         <servlet-class>Servlets.Questions.GetCitizenTransaction</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CitizenTransactions</servlet-name>
+        <servlet-class>Citizen.CitizenTransactions</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>OpenCompanyAccount</servlet-name>
         <url-pattern>/OpenCompanyAccount</url-pattern>
@@ -163,6 +167,10 @@
     <servlet-mapping>
         <servlet-name>GetCitizenTransaction</servlet-name>
         <url-pattern>/GetCitizenTransaction</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CitizenTransactions</servlet-name>
+        <url-pattern>/CitizenTransactions</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
