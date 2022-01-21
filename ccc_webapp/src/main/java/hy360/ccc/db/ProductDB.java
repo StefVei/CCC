@@ -99,17 +99,17 @@ public class ProductDB {
         }
     }
 
-    public static Product getProduct(String product, String merchant) {
+    public static Product getProduct(String product) {
 
         Product pro = new Product();
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
-            String sql_getmer = "SELECT * FROM products WHERE PRODUCT_ID = ? AND MERCHANT_USERID = ?";
+            String sql_getmer = "SELECT * FROM products WHERE PRODUCT_ID = ? ";
             con = CccDB.getConnection();
 
             preparedStatement = con.prepareStatement(sql_getmer);
-            UtilitiesDB.setValues(preparedStatement, Integer.valueOf(product), Integer.valueOf(merchant));
+            UtilitiesDB.setValues(preparedStatement, Integer.valueOf(product));
             preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
 

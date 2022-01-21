@@ -110,7 +110,7 @@ public class ReturnProducts extends HttpServlet {
         transaction.setPending("Y");
         transaction.setDate(date.toString());
         
-        Product returning_product = ProductDB.getProduct(product_id, merchant_id);
+        Product returning_product = ProductDB.getProduct(product_id);
         product_quantity = returning_product.getQuantity() + quantity;
         returning_product.setQuantity(product_quantity);
         ProductDB.updateProduct(returning_product);
