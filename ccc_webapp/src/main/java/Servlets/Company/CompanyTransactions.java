@@ -92,8 +92,8 @@ public class CompanyTransactions extends HttpServlet {
 
         List<CompanyTransaction> list = new ArrayList<>();
         int index = 1;
-        String employee = request.getParameter("employeeId");
-        List<CM_Traffics> traffics = CompanyTradesDB.getTrades("EMPLOYEE_ID", employee);
+        String company_id = request.getParameter("userId");
+        List<CM_Traffics> traffics = CompanyTradesDB.getTrades("COMPANY_USERID", company_id);
 
         for (CM_Traffics trade : traffics) {
             Transaction tr = TransactionDB.getTransaction(trade.getTransaction_id());
