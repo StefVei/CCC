@@ -98,22 +98,11 @@ public class makePendings extends HttpServlet {
             mycredit_balance = CitizenDB.getCitizen("USERID", citizen_id).getCredit_balance();
 
             newcb = mycredit_balance + pmntAmount;
-            System.out.println("new credit balance is " + newcb + '\n' + "User id is "
-                    + citizen_id);
-
             cit.setCredit_balance(newcb);
 
             newamount = myamount_due - pmntAmount;
             cit.setAmount_due(newamount);
-
-            System.out.println("CITIZEN BEFORE update db is " + cit.getUser_id());
-
-
             CitizenDB.updateCitizen(cit);
-
-            //System.out.println("CITIZEN db is " + cit.toString());
-
-            // Citizen cit1 = CitizenDB.getCitizen("USERID", cit.getUser_id());
 
         }	
 	else if (user.equals("C")){
@@ -124,7 +113,6 @@ public class makePendings extends HttpServlet {
 
             newcb = mycredit_balance + pmntAmount;
 
-            System.out.println("new credit balance is " + newcb);
             comp.setCredit_balance(newcb);
             newamount = myamount_due - pmntAmount;
             comp.setAmount_due(newamount);

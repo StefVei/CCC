@@ -9,6 +9,7 @@ import hy360.ccc.model.Merchant;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -196,6 +197,44 @@ public class MerchantDB {
 
         return merchants;
 
+    }
+
+    public Merchant setMerchantOfTheMonth() {
+        Merchant mer = new Merchant();
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+        try {
+            con = CccDB.getConnection();
+            String mer_event = "CREATE EVENT IF NOT EXISTS merchant_of_the_month "
+                    + "ON SCHEDULE EVERY 1 MONTH DO"
+                    + "UPDATE merchants "
+                    + "SET AMOUNT_DUE = AMOUNT_DUE * 0.95"
+                    + "WHERE PURCHASES_TOTAL >= "
+                    + "(SELECT MAX(PURCHASES_TOTAL) FROM merchants";
+            preparedStatement = con.prepareStatement(mer_event);
+            ResultSet res = preparedStatement.executeQuery();
+
+            if (res.next()) {
+                mer.setUser_id(res.getString("USERID"));
+                mer.setFirst_name(res.getString("FIRST_NAME"));
+                mer.setLast_name(res.getString("LAST_NAME"));
+                mer.setBirth_date(res.getString("BIRTH_DATE"));
+                mer.setGender(res.getString("GENDER"));
+                mer.setSupply(res.getDouble("SUPPLY"));
+                mer.setGain(res.getDouble("GAIN"));
+                mer.setPurchases_total(res.getInt("PURCHASES_TOTAL"));
+                mer.setEmail(res.getString("EMAIL"));
+                mer.setAddress(res.getString("ADDRESS"));
+                mer.setPhone(res.getString("PHONE"));
+                mer.setAmount_due(res.getDouble("AMOUNT_DUE"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return mer;
     }
 
 }
