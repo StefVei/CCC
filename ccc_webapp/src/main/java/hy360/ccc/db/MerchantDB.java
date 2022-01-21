@@ -210,7 +210,7 @@ public class MerchantDB {
                     + "UPDATE merchants "
                     + "SET AMOUNT_DUE = AMOUNT_DUE * 0.95"
                     + "WHERE PURCHASES_TOTAL >= "
-                    + "(SELECT MAX(PURCHASES_TOTAL) FROM merchants";
+                    + "(SELECT MAX(PURCHASES_TOTAL) FROM merchants)";
             preparedStatement = con.prepareStatement(mer_event);
             preparedStatement.execute();
 
