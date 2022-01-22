@@ -35,38 +35,28 @@ function TransactionHistory() {
     setToDate(newValue);
   };
 
+  const getTransactions = async () => {
+    await cccClient
+      .post('MerchantTransactions', `userId=${userid}`)
+      .then(function (response) {
+        console.log('🚀 ~ file: transactionHistory.js ~ line 30 ~ response', response);
+        setTransactions(response.data);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
+
   const handleSearch = async () => {
     await cccClient
       .post(
-        'CitizenTransactions',
+        'MerchantTransactions',
         `userId=${userid}&from=${fromDate.toISOString().slice(0, 10)}&to=${toDate
           .toISOString()
           .slice(0, 10)}`
       )
       .then(function (response) {
         setTransactions(response.data);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-  };
-
-  const getTransactions = async () => {
-    await cccClient
-      .post('CitizenTransactions', `userId=${userid}`)
-      .then(function (response) {
-        setTransactions(response.data);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-  };
-
-  const returnProduct = async (prop) => {
-    await cccClient
-      .post('ReturnProduct', `userId=${userid}&transactionId=${prop.transaction_id}`)
-      .then(function () {
-        getTransactions();
       })
       .catch(function (err) {
         console.log(err);
@@ -131,12 +121,14 @@ function TransactionHistory() {
                   <Typography variant="h6">Date</Typography>
                 </TableCell>
                 <TableCell align="left">
-                  <Typography variant="h6">Merchant Name</Typography>
+                  <Typography variant="h6">Customer Name</Typography>
+                </TableCell>
+                <TableCell align="left">
+                  <Typography variant="h6">Employee Name</Typography>
                 </TableCell>
                 <TableCell align="left">
                   <Typography variant="h6">Type</Typography>
                 </TableCell>
-                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -146,22 +138,11 @@ function TransactionHistory() {
                     {row.product_name}
                   </TableCell>
                   <TableCell align="left">{row.quantity}</TableCell>
-                  <TableCell align="left">{row.amount}&nbsp;€</TableCell>
+                  <TableCell align="left">{row.total_price}&nbsp;€</TableCell>
                   <TableCell align="left">{row.date}</TableCell>
-                  <TableCell align="left">{row.merchant_name}</TableCell>
+                  <TableCell align="left">{row.customer_name}</TableCell>
+                  <TableCell align="left">{row.employee_name ? row.employee_name : '-'}</TableCell>
                   <TableCell align="left">{row.type === 'A' ? 'Buyed' : 'Returned'}</TableCell>
-                  <TableCell align="right">
-                    <Button
-                      type="primary"
-                      variant="contained"
-                      color="primary"
-                      disabled={row.type === 'E'}
-                      onClick={() => {
-                        returnProduct(row);
-                      }}>
-                      Return
-                    </Button>
-                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

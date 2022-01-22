@@ -21,6 +21,12 @@ const useStyles = makeStyles({
     border: '1px solid #000',
     boxShadow: 24,
     p: 4
+  },
+  filterContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItem: 'center'
   }
 });
 

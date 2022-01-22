@@ -11,7 +11,7 @@ function Home() {
 
   return (
     <div className={styles.container}>
-      <Grid container direction="column" spacing={2} alignContent={'center'}>
+      <Grid container direction="column" spacing={2} alignItems={'center'}>
         <Grid item xs={12}>
           <Typography alignSelf={'center'} variant="h2">
             Home
@@ -35,6 +35,16 @@ function Home() {
         <Grid item xs={12}>
           <Button variant="contained" color="primary" onClick={() => navigate('/EmployeeRegister')}>
             Register Employee
+          </Button>
+        </Grid>
+        <Grid item xs={12}>
+          <Button variant="contained" color="primary" onClick={() => navigate('/BadUsers')}>
+            Bad Users
+          </Button>
+        </Grid>
+        <Grid item xs={12}>
+          <Button variant="contained" color="primary" onClick={() => navigate('/GoodUsers')}>
+            Good Users
           </Button>
         </Grid>
         <Grid item xs={12}>
