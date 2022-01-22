@@ -7,7 +7,6 @@ package Servlets.Company;
 import Utils_db.CompanyTransaction;
 import com.google.gson.Gson;
 import hy360.ccc.db.BoughtProductDB;
-import hy360.ccc.db.CompanyDB;
 import hy360.ccc.db.CompanyTradesDB;
 import hy360.ccc.db.EmployeeDB;
 import hy360.ccc.db.MerchantDB;
@@ -111,6 +110,7 @@ public class CompanyTransactions extends HttpServlet {
             double quantity = br.getTotal();
             CompanyTransaction comp_tr = new CompanyTransaction(merchant_name,
                     date, (int) quantity, Double.valueOf(amount), product_name, employee_name, type);
+            comp_tr.setTransaction_id(tr.getTransaction_id());
             list.add(comp_tr);
 
         }

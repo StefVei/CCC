@@ -12,7 +12,7 @@ public class BoughtProduct {
     private String transaction_id;
     private String product_id;
     private String merchant_id;
-    private double total;
+    private int total;
     
     public BoughtProduct(){
         transaction_id = "";
@@ -22,7 +22,7 @@ public class BoughtProduct {
     }
     
     public BoughtProduct(String transaction, String bought_prod,
-            String merchant, double total) {
+            String merchant, int total) {
         this.transaction_id = transaction;
         this.product_id = bought_prod;
         this.merchant_id = merchant;
@@ -65,11 +65,11 @@ public class BoughtProduct {
         this.merchant_id = merchant_id;
     }
 
-    public double getTotal() {
+    public int getTotal() {
         return total;
     }
 
-    public void setTotal(double total) {
+    public void setTotal(int total) {
         this.total = total;
     }
     

@@ -6,13 +6,16 @@ package Servlets.Transactions;
 
 import static Servlets.Transactions.TransactionHelper.updateMerchant;
 import com.google.gson.Gson;
+import hy360.ccc.db.BoughtProductDB;
 import hy360.ccc.db.CitizenDB;
-import static hy360.ccc.db.CitizenTradesDB.addTrade;
+import hy360.ccc.db.CitizenTradesDB;
 import hy360.ccc.db.CompanyDB;
 import hy360.ccc.db.CompanyTradesDB;
 import hy360.ccc.db.EmployeeDB;
 import hy360.ccc.db.MerchantDB;
 import hy360.ccc.db.ProductDB;
+import hy360.ccc.db.TransactionDB;
+import hy360.ccc.db.UserDB;
 import hy360.ccc.model.Citizen;
 import hy360.ccc.model.Company;
 import hy360.ccc.model.Employee;
@@ -31,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author sckou
  */
-public class ReturnProducts extends HttpServlet {
+public class ReturnProduct extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -92,24 +95,31 @@ public class ReturnProducts extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         
-        Transaction transaction = new Transaction();
-        String customer_type;
-        String merchant_id, citizen_id, company_id, employee_id, product_id;
-        double merchant_gain, merchant_supply, customer_amount_due;
-        int quantity, product_quantity;
-        
+        Transaction transaction;
+        String transactionId, user_id;
+        String merchant_id, employee_id, product_id;
+        double merchant_gain, merchant_supply, amount_due;
+        int quantity, product_quantity, isCitizen;
         
         LocalDate date = java.time.LocalDate.now();
+
+        user_id = (request.getParameter("userId"));
+        transactionId = request.getParameter("transactionId");
+        System.out.println("transaction id is" + transactionId);
+        isCitizen = UserDB.getUser("USERID", user_id).getUser_type() == "C" ? 0 : 1;
+        if (isCitizen != 0) {
+            merchant_id = CitizenTradesDB.getTrade(transactionId).getMerchant_id();
+        } else {
+            merchant_id = CompanyTradesDB.getTrade(transactionId).getMerchant_id();
+        }
         
-        merchant_id = request.getParameter("merchantId");
-        product_id = request.getParameter("productId");
-        quantity = Integer.valueOf(request.getParameter("quantityOfReturningProduct"));
-        customer_type = request.getParameter("isCitizen");
-        
+        product_id = BoughtProductDB.getBoughtProduct(Integer.valueOf(transactionId)).getProduct_id();
+
+        quantity = BoughtProductDB.getBoughtProduct(Integer.valueOf(transactionId)).getTotal();
+
+        transaction = TransactionDB.getTransaction(transactionId);
         transaction.setTransaction_type("E");
-        transaction.setPending("Y");
-        transaction.setDate(date.toString());
-        
+
         Product returning_product = ProductDB.getProduct(product_id);
         product_quantity = returning_product.getQuantity() + quantity;
         returning_product.setQuantity(product_quantity);
@@ -123,59 +133,43 @@ public class ReturnProducts extends HttpServlet {
                 merchant.getPurchases_total() - 1,
                 merchant_gain * merchant_supply);
 
-        if (customer_type.equals("true")) {
-            citizen_id = request.getParameter("citizenId");
+        if (isCitizen == 1) {
 
-            customer_amount_due = CitizenDB.getCitizen("USERID", citizen_id).getAmount_due();
-            addTrade(citizen_id, merchant_id, transaction.getTransaction_id());
+            amount_due = CitizenDB.getCitizen("USERID", user_id).getAmount_due();
 
         } else {
             employee_id = request.getParameter("employeeId");
             String company_name = request.getParameter("Name");
             Company mycompany = CompanyDB.getCompany("NAME", company_name);
-            customer_amount_due = mycompany.getAmount_due();
-            CompanyTradesDB.addTrade(transaction.getTransaction_id(), merchant_id, mycompany.getUser_id(), employee_id);
+            amount_due = mycompany.getAmount_due();
         }
         
-        if(Double.valueOf(customer_amount_due)== 0){
-            if (customer_type.equals("true")){
-                citizen_id = request.getParameter("citizenId");
-                Citizen cit = CitizenDB.getCitizen("USERID", citizen_id);
-                double new_balance = cit.getCredit_balance() + (returning_product.getPrice() * quantity);
-                cit.setCredit_balance(new_balance);
-                CitizenDB.updateCitizen(cit);
-            }
-            else{
-                employee_id = request.getParameter("employeeId");
-                Employee em = EmployeeDB.getEmployee(employee_id);
-                Company comp = CompanyDB.getCompany("USERID", em.getCompany_id());
+        if (isCitizen == 1) {
+            Citizen cit = CitizenDB.getCitizen("USERID", user_id);
+            double new_balance = cit.getCredit_balance() + (returning_product.getPrice() * quantity);
+            cit.setCredit_balance(new_balance);
+            cit.setAmount_due(cit.getCredit_limit() - cit.getCredit_balance());
 
-                double new_balance = comp.getCredit_balance();
-                new_balance = new_balance + (returning_product.getPrice() * quantity);
-                comp.setCredit_balance(new_balance);
-                CompanyDB.updateCompany(comp);
-            }
-        }
-        else{
-            if (customer_type.equals("true")){
-                citizen_id = request.getParameter("citizenId");
-                Citizen cit = CitizenDB.getCitizen("USERID", citizen_id);
-                double new_balance = cit.getCredit_balance() + (returning_product.getPrice() * quantity);
-                cit.setCredit_balance(new_balance);
-                cit.setAmount_due(customer_amount_due - (returning_product.getPrice() * quantity));
-                CitizenDB.updateCitizen(cit);
-            }
-            else{
-                employee_id = request.getParameter("employeeId");
-                Employee em = EmployeeDB.getEmployee(employee_id);
-                Company comp = CompanyDB.getCompany("USERID", em.getCompany_id());
-                double new_balance = comp.getCredit_balance();
-                new_balance = new_balance + (returning_product.getPrice() * quantity);
-                comp.setCredit_balance(new_balance);
-                comp.setAmount_due(customer_amount_due - (returning_product.getPrice()) * quantity);
 
-                CompanyDB.updateCompany(comp);
-            }
+            CitizenDB.updateCitizen(cit);
+            TransactionDB.updateTransaction(transaction);
+
+        } else {
+            employee_id = request.getParameter("employeeId");
+            Employee em = EmployeeDB.getEmployee(employee_id);
+            Company comp = CompanyDB.getCompany("USERID", em.getCompany_id());
+
+            double new_balance = comp.getCredit_balance();
+            new_balance = new_balance + (returning_product.getPrice() * quantity);
+            comp.setCredit_balance(new_balance);
+            comp.setAmount_due(comp.getCredit_limit() - comp.getCredit_balance());
+
+
+            CompanyDB.updateCompany(comp);
+            TransactionDB.updateTransaction(transaction);
+
         }
+        
+
     }
 }

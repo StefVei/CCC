@@ -96,7 +96,7 @@ public class CitizenTradesDB {
     
         try {
             StringBuilder insQuery = new StringBuilder();
-
+            con = CccDB.getConnection();
             insQuery.append("SELECT * FROM cm_trades ")
                     .append(" WHERE TRANSACTION_ID = ")
                     .append("'").append(transaction_id).append("';");

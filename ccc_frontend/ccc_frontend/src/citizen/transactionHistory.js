@@ -16,6 +16,7 @@ function TransactionHistory() {
   const navigate = useNavigate();
   const { state } = useLocation();
   const [transactions, setTransactions] = useState([]);
+  const [buttonText, setButtonText] = useState('Return');
   const { userid } = state;
   const styles = useStyles();
 
@@ -28,6 +29,19 @@ function TransactionHistory() {
       .post('CitizenTransactions', `userId=${userid}`)
       .then(function (response) {
         setTransactions(response.data);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
+
+  const changeText = (text) => setButtonText(text);
+
+  const returnProduct = async (prop) => {
+    await cccClient
+      .post('ReturnProduct', `userId=${userid}&transactionId=${prop.transaction_id}`)
+      .then(function () {
+        changeText('Product is returned');
       })
       .catch(function (err) {
         console.log(err);
@@ -84,8 +98,10 @@ function TransactionHistory() {
                       variant="contained"
                       color="primary"
                       disabled={row.type === 'E'}
-                      onClick={() => {}}>
-                      return
+                      onClick={() => {
+                        returnProduct(row);
+                      }}>
+                      {buttonText}
                     </Button>
                   </TableCell>
                 </TableRow>
