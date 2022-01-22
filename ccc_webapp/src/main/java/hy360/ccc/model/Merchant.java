@@ -21,6 +21,7 @@ public class Merchant extends User {
     private String address;
     private String phone;
     private double amount_due;
+    private String acc_number;
 
     
     public Merchant(){
@@ -218,6 +219,20 @@ public class Merchant extends User {
                 .append("phone: ").append(phone).append("\n")
                 .append("amount_due: ").append(amount_due).append("\n");
         return super.toString() + ss.toString();
+    }
+
+    /**
+     * @return the acc_number
+     */
+    public String getAcc_number() {
+        return acc_number;
+    }
+
+    /**
+     * @param acc_number the acc_number to set
+     */
+    public void setAcc_number(String acc_number) {
+        this.acc_number = acc_number;
     }
 
     

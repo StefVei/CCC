@@ -2,21 +2,25 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Servlets.Company;
+package Servlets.Merchant;
 
-import Utils_db.CompanyTransaction;
+import Utils_db.MerchantTransaction;
 import Utils_db.UtilitiesDB;
 import com.google.gson.Gson;
 import hy360.ccc.db.BoughtProductDB;
+import hy360.ccc.db.CitizenDB;
+import hy360.ccc.db.CitizenTradesDB;
+import hy360.ccc.db.CompanyDB;
 import hy360.ccc.db.CompanyTradesDB;
 import hy360.ccc.db.EmployeeDB;
-import hy360.ccc.db.MerchantDB;
 import hy360.ccc.db.ProductDB;
 import hy360.ccc.db.TransactionDB;
 import hy360.ccc.model.BoughtProduct;
+import hy360.ccc.model.CM_Trades;
 import hy360.ccc.model.CM_Traffics;
+import hy360.ccc.model.Citizen;
+import hy360.ccc.model.Company;
 import hy360.ccc.model.Employee;
-import hy360.ccc.model.Merchant;
 import hy360.ccc.model.Product;
 import hy360.ccc.model.Transaction;
 import java.io.IOException;
@@ -32,7 +36,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author panagiotisk
  */
-public class CompanyTransactions extends HttpServlet {
+public class MerchantTransactions extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -51,10 +55,10 @@ public class CompanyTransactions extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CompanyTransactions</title>");
+            out.println("<title>Servlet MerchantTransactions</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CompanyTransactions at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet MerchantTransactions at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -89,10 +93,9 @@ public class CompanyTransactions extends HttpServlet {
 
         Gson gson = new Gson();
         String str;
-
         List<Transaction> tr_list = null;
-        List<CompanyTransaction> list = new ArrayList<>();
-        String company_id = request.getParameter("userId");
+        List<MerchantTransaction> list = null;
+        String user_id = request.getParameter("userId");
         String min_date = request.getParameter("from");
         String max_date = request.getParameter("to");
 
@@ -101,9 +104,13 @@ public class CompanyTransactions extends HttpServlet {
             tr_list = TransactionDB.getTransactionsByDates(min_date, max_date);
         }
 
-        List<CM_Traffics> traffics = CompanyTradesDB.getTrades("COMPANY_USERID", company_id);
+        List<CM_Trades> trades;
+        list = new ArrayList<>();
+        trades = CitizenTradesDB.getTrades("MERCHANT_USERID", user_id);
+        for (CM_Trades trade : trades) {
+            Citizen cit = CitizenDB.getCitizen("USERID",
+                    trade.getCitizen_id());
 
-        for (CM_Traffics trade : traffics) {
             Transaction tr;
 
             if (tr_list == null) {
@@ -114,27 +121,58 @@ public class CompanyTransactions extends HttpServlet {
                 } else {
                     continue;
                 }
-
             }
-
-            Merchant mer = MerchantDB.getMerchant("USERID",
-                    trade.getMerchant_id());
             BoughtProduct br = BoughtProductDB.getBoughtProduct(Integer.valueOf(tr.getTransaction_id()));
+
             Product pr = ProductDB.getProduct(br.getProduct_id());
-            Employee em = EmployeeDB.getEmployee(trade.getEmployee_id());
-            String employee_name = em.getFirst_name() + " " + em.getLast_name();
-            String merchant_name = mer.getFirst_name() + " " + mer.getLast_name();
+            String citizen_name = cit.getFirst_name() + " " + cit.getLast_name();
+            String date = tr.getDate();
+            String amount = tr.getAmount();
+            System.out.println("ASmount:"+amount);
+            String type = tr.getTransaction_type();
+            String product_name = pr.getName();
+            double quantity = br.getTotal();
+            MerchantTransaction mer_t = new MerchantTransaction(
+                    product_name, quantity, amount, date, citizen_name, type);
+            list.add(mer_t);
+
+        }
+
+        List<CM_Traffics> c_trades;
+        c_trades = CompanyTradesDB.getTrades("MERCHANT_USERID", user_id);
+        for (CM_Traffics trade : c_trades) {
+            Company comp = CompanyDB.getCompany("USERID",
+                    trade.getCompany_id());
+            Employee employee = EmployeeDB.getEmployee(trade.getEmployee_id());
+
+
+            Transaction tr;
+
+            if (tr_list == null) {
+                tr = TransactionDB.getTransaction(trade.getTransaction_id());
+            } else {
+                if (UtilitiesDB.containsId(tr_list, trade.getTransaction_id())) {
+                    tr = TransactionDB.getTransaction(trade.getTransaction_id());
+                } else {
+                    continue;
+                }
+            }
+            BoughtProduct br = BoughtProductDB.getBoughtProduct(Integer.valueOf(tr.getTransaction_id()));
+
+            Product pr = ProductDB.getProduct(br.getProduct_id());
+            String comp_name = comp.getName();
+            String employee_name = employee.getFirst_name() + " " + employee.getLast_name();
             String date = tr.getDate();
             String amount = tr.getAmount();
             String type = tr.getTransaction_type();
             String product_name = pr.getName();
             double quantity = br.getTotal();
-            CompanyTransaction comp_tr = new CompanyTransaction(merchant_name,
-                    date, (int) quantity, Double.valueOf(amount), product_name, employee_name, type);
-            comp_tr.setTransaction_id(tr.getTransaction_id());
-            list.add(comp_tr);
+            MerchantTransaction mer_t = new MerchantTransaction(employee_name,
+                    product_name, quantity, amount, date, comp_name, type);
+            list.add(mer_t);
 
         }
+
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
