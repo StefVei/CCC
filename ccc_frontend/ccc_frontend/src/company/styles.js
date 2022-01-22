@@ -31,6 +31,12 @@ const useStyles = makeStyles({
     display: 'flex',
     padding: '2.5%',
     flexDirection: 'column'
+  },
+  filterContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItem: 'center'
   }
 });
 

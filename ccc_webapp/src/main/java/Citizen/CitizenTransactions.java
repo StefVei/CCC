@@ -112,7 +112,7 @@ public class CitizenTransactions extends HttpServlet {
             } else {
                 if (UtilitiesDB.containsId(tr_list, trade.getTransaction_id())) {
                     tr = TransactionDB.getTransaction(trade.getTransaction_id());
-                } else {
+                }else{
                     continue;
                 }
 
