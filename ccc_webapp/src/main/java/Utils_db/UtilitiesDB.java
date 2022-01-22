@@ -6,6 +6,7 @@ package Utils_db;
 
 
 import hy360.ccc.db.CccDB;
+import hy360.ccc.model.Transaction;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -44,6 +45,10 @@ public class UtilitiesDB {
                 Logger.getLogger(UtilitiesDB.class.getName()).log(Level.SEVERE, null, sql_ex);
             }
         }
+    }
+
+    public static boolean containsId(final List<Transaction> list, final String id) {
+        return list.stream().anyMatch(o -> o.getTransaction_id().equals(id));
     }
 
     private static List<String> getAllAccountNumbers() {
