@@ -104,6 +104,7 @@ public class CitizenTransactions extends HttpServlet {
             String product_name = pr.getName();
             double quantity = br.getTotal();
             CitizenTransaction tr_cit = new CitizenTransaction(merchant_name, date, quantity , Double.valueOf(amount), product_name, type);
+            tr_cit.setTransaction_id(tr.getTransaction_id());
             list.add(tr_cit);
             index++;
 

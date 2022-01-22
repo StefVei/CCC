@@ -10,6 +10,7 @@ package Utils_db;
  */
 public class CompanyTransaction {
 
+    private String transaction_id;
     private String merchant_name;
     private String date;
     private int quantity;
@@ -125,6 +126,20 @@ public class CompanyTransaction {
      */
     public void setType(String type) {
         this.type = type;
+    }
+
+    /**
+     * @return the transaction_id
+     */
+    public String getTransaction_id() {
+        return transaction_id;
+    }
+
+    /**
+     * @param transaction_id the transaction_id to set
+     */
+    public void setTransaction_id(String transaction_id) {
+        this.transaction_id = transaction_id;
     }
 
 }

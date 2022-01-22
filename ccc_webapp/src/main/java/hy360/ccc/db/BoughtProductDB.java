@@ -57,7 +57,7 @@ public class BoughtProductDB {
         List<BoughtProduct> products = new ArrayList<>();
         try{
             con = CccDB.getConnection();
-            String sql_select = "SELECT * FROM BOUGHT_PRODUCT WHERE TRANSACTION_ID = ?";
+            String sql_select = "SELECT * FROM bought_products WHERE TRANSACTION_ID = ?";
             preparedStatement = con.prepareStatement(sql_select);
             UtilitiesDB.setValues(preparedStatement, transaction_id);
             preparedStatement.executeQuery();
@@ -67,7 +67,7 @@ public class BoughtProductDB {
                 prod.setProduct_id(res.getString("PRODUCT_ID"));
                 prod.setTransaction_id(res.getString("TRANSACTION_ID"));
                 prod.setMerchant_id(res.getString("MERCHANT_USERID"));
-                prod.setTotal(res.getDouble("TOTAL"));
+                prod.setTotal(res.getInt("TOTAL"));
                 products.add(prod);
             }
         }catch(Exception ex){
@@ -92,7 +92,7 @@ public class BoughtProductDB {
         BoughtProduct product = null;
         try {
             con = CccDB.getConnection();
-            String sql_select = "SELECT * FROM BOUGHT_PRODUCTS WHERE TRANSACTION_ID = ?";
+            String sql_select = "SELECT * FROM bought_products WHERE TRANSACTION_ID = ?";
             preparedStatement = con.prepareStatement(sql_select);
             UtilitiesDB.setValues(preparedStatement, transaction_id);
             preparedStatement.executeQuery();
@@ -102,7 +102,7 @@ public class BoughtProductDB {
                 product.setProduct_id(res.getString("PRODUCT_ID"));
                 product.setTransaction_id(res.getString("TRANSACTION_ID"));
                 product.setMerchant_id(res.getString("MERCHANT_USERID"));
-                product.setTotal(res.getDouble("TOTAL"));
+                product.setTotal(res.getInt("TOTAL"));
             }
         } catch (Exception ex) {
             Logger.getLogger(BoughtProductDB.class.getName()).log(Level.SEVERE, null, ex);

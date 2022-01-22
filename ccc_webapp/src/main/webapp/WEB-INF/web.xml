@@ -57,6 +57,10 @@
         <servlet-class>Servlets.Product.getAllProducts</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>ReturnProduct</servlet-name>
+        <servlet-class>Servlets.Transactions.ReturnProduct</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>EmployeesTransactions</servlet-name>
         <servlet-class>Servlets.Questions.EmployeesTransactions</servlet-class>
     </servlet>
@@ -143,6 +147,10 @@
     <servlet-mapping>
         <servlet-name>getAllProducts</servlet-name>
         <url-pattern>/getAllProducts</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReturnProduct</servlet-name>
+        <url-pattern>/ReturnProduct</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>EmployeesTransactions</servlet-name>
