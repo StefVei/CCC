@@ -20,7 +20,7 @@ public class MerchantTransaction {
     public MerchantTransaction(String pr, double qu, String am, String d, String c_name, String type) {
         product_name = pr;
         quantity = qu;
-        am = total_price;
+        total_price = am;
         date = d;
         customer_name = c_name;
         this.type = type;
@@ -30,7 +30,7 @@ public class MerchantTransaction {
     public MerchantTransaction(String em, String pr, double qu, String am, String d, String c_name, String type) {
         product_name = pr;
         quantity = qu;
-        am = total_price;
+        total_price = am;
         date = d;
         customer_name = c_name;
         this.type = type;

@@ -138,7 +138,7 @@ function TransactionHistory() {
                     {row.product_name}
                   </TableCell>
                   <TableCell align="left">{row.quantity}</TableCell>
-                  <TableCell align="left">{row.amount}&nbsp;€</TableCell>
+                  <TableCell align="left">{row.total_price}&nbsp;€</TableCell>
                   <TableCell align="left">{row.date}</TableCell>
                   <TableCell align="left">{row.customer_name}</TableCell>
                   <TableCell align="left">{row.employee_name ? row.employee_name : '-'}</TableCell>

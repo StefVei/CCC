@@ -128,6 +128,7 @@ public class MerchantTransactions extends HttpServlet {
             String citizen_name = cit.getFirst_name() + " " + cit.getLast_name();
             String date = tr.getDate();
             String amount = tr.getAmount();
+            System.out.println("ASmount:"+amount);
             String type = tr.getTransaction_type();
             String product_name = pr.getName();
             double quantity = br.getTotal();
