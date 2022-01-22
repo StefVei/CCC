@@ -4,6 +4,7 @@
  */
 package Servlets.Register;
 
+import Utils_db.UtilitiesDB;
 import com.google.gson.Gson;
 import hy360.ccc.db.MerchantDB;
 import hy360.ccc.db.UserDB;
@@ -84,6 +85,7 @@ public class OpenMerchantAccount extends HttpServlet {
         Merchant merchant = new Merchant();
         User user = merchant;
 
+        merchant.setAcc_number(UtilitiesDB.getNewAccountNumber());
         merchant.setFirst_name(request.getParameter("firstname"));
         merchant.setLast_name(request.getParameter("lastname"));
         merchant.setBirth_date(request.getParameter("birthDate"));

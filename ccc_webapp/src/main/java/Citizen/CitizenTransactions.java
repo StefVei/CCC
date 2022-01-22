@@ -5,6 +5,7 @@
 package Citizen;
 
 import Utils_db.CitizenTransaction;
+import Utils_db.UtilitiesDB;
 import com.google.gson.Gson;
 import hy360.ccc.db.BoughtProductDB;
 import hy360.ccc.db.CitizenTradesDB;
@@ -86,15 +87,34 @@ public class CitizenTransactions extends HttpServlet {
 
         Gson gson = new Gson();
         String str;
-        List<CitizenTransaction> list = new ArrayList<>();
+        List<Transaction> tr_list = null;
+        List<CitizenTransaction> list = null;
         int index = 1;
         String user_id = request.getParameter("userId");
+        String min_date = request.getParameter("from");
+        String max_date = request.getParameter("to");
+
+        if (min_date != null) {
+            tr_list = new ArrayList<>();
+            tr_list = TransactionDB.getTransactionsByDates(min_date, max_date);
+        }
+
         List<CM_Trades> trades = new ArrayList<>();
+        list = new ArrayList<>();
         trades = CitizenTradesDB.getTrades("CITIZEN_USERID", user_id);
         for (CM_Trades trade : trades) {
             Merchant mer = MerchantDB.getMerchant("USERID",
                     trade.getMerchant_id());
-            Transaction tr = TransactionDB.getTransaction(trade.getTransaction_id());
+            Transaction tr;
+
+            if (tr_list == null) {
+                tr = TransactionDB.getTransaction(trade.getTransaction_id());
+            } else {
+                if (UtilitiesDB.containsId(tr_list, trade.getTransaction_id())) {
+                    tr = TransactionDB.getTransaction(trade.getTransaction_id());
+                }
+
+            }
             BoughtProduct br = BoughtProductDB.getBoughtProduct(Integer.valueOf(tr.getTransaction_id()));
 
             Product pr = ProductDB.getProduct(br.getProduct_id());
