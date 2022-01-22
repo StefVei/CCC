@@ -104,6 +104,10 @@
         <servlet-name>MerchantTransactions</servlet-name>
         <servlet-class>Servlets.Merchant.MerchantTransactions</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>getMerchant</servlet-name>
+        <servlet-class>Servlets.Merchant.getMerchant</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>OpenCompanyAccount</servlet-name>
         <url-pattern>/OpenCompanyAccount</url-pattern>
@@ -195,6 +199,10 @@
     <servlet-mapping>
         <servlet-name>MerchantTransactions</servlet-name>
         <url-pattern>/MerchantTransactions</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>getMerchant</servlet-name>
+        <url-pattern>/getMerchant</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

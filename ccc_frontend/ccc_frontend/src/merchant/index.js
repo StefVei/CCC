@@ -26,6 +26,14 @@ function Company() {
         </Button>
       </Box>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate('/MerchantInfo', { state: { userid: userid } })}>
+          Personal Info
+        </Button>
+      </Box>
+      <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
         <Button variant="contained" color="primary" onClick={() => navigate('/')}>
           Logout
         </Button>
