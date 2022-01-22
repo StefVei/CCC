@@ -5,6 +5,7 @@
 package Servlets.Company;
 
 import Utils_db.CompanyTransaction;
+import Utils_db.UtilitiesDB;
 import com.google.gson.Gson;
 import hy360.ccc.db.BoughtProductDB;
 import hy360.ccc.db.CompanyTradesDB;
@@ -89,13 +90,33 @@ public class CompanyTransactions extends HttpServlet {
         Gson gson = new Gson();
         String str;
 
+        List<Transaction> tr_list = null;
         List<CompanyTransaction> list = new ArrayList<>();
         String company_id = request.getParameter("userId");
+        String min_date = request.getParameter("from");
+        String max_date = request.getParameter("to");
+
+        if (min_date != null) {
+            tr_list = new ArrayList<>();
+            tr_list = TransactionDB.getTransactionsByDates(min_date, max_date);
+        }
+
         List<CM_Traffics> traffics = CompanyTradesDB.getTrades("COMPANY_USERID", company_id);
-        System.out.println(company_id);
 
         for (CM_Traffics trade : traffics) {
-            Transaction tr = TransactionDB.getTransaction(trade.getTransaction_id());
+            Transaction tr;
+
+            if (tr_list == null) {
+                tr = TransactionDB.getTransaction(trade.getTransaction_id());
+            } else {
+                if (UtilitiesDB.containsId(tr_list, trade.getTransaction_id())) {
+                    tr = TransactionDB.getTransaction(trade.getTransaction_id());
+                } else {
+                    continue;
+                }
+
+            }
+
             Merchant mer = MerchantDB.getMerchant("USERID",
                     trade.getMerchant_id());
             BoughtProduct br = BoughtProductDB.getBoughtProduct(Integer.valueOf(tr.getTransaction_id()));
