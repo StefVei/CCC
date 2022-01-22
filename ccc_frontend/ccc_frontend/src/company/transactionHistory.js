@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Button, Box, TextField } from '@mui/material';
+import { Typography, Button, Box, TextField, Select, MenuItem } from '@mui/material';
 import AdapterDay from '@mui/lab/AdapterDayjs';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
@@ -14,6 +14,17 @@ import useStyles from './styles';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cccClient } from '../network';
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250
+    }
+  }
+};
+
 function TransactionHistory() {
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -21,10 +32,13 @@ function TransactionHistory() {
   const [transactions, setTransactions] = useState([]);
   const [fromDate, setFromDate] = useState(new Date());
   const [toDate, setToDate] = useState(new Date());
+  const [personName, setPersonName] = React.useState([]);
+  const [employees, setEmployees] = useState([]);
   const styles = useStyles();
 
   useEffect(() => {
     getTransactions();
+    getEmployees();
   }, []);
 
   const handleFromDate = (newValue) => {
@@ -35,13 +49,31 @@ function TransactionHistory() {
     setToDate(newValue);
   };
 
+  const getEmployees = async () => {
+    await cccClient
+      .post('getEmployees', `userid=${userid}`)
+      .then(function (response) {
+        setEmployees(response.data);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
+
+  const handleChange = (event) => {
+    const {
+      target: { value }
+    } = event;
+    setPersonName(typeof value === 'string' ? value.split(',') : value);
+  };
+
   const handleSearch = async () => {
     await cccClient
       .post(
         'CompanyTransactions',
         `userId=${userid}&from=${fromDate.toISOString().slice(0, 10)}&to=${toDate
           .toISOString()
-          .slice(0, 10)}`
+          .slice(0, 10)}&employees=${personName}`
       )
       .then(function (response) {
         setTransactions(response.data);
@@ -100,6 +132,25 @@ function TransactionHistory() {
               renderInput={(params) => <TextField {...params} />}
             />
           </LocalizationProvider>
+        </Box>
+        <Box p={3}>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={personName}
+            multiple
+            label="Employees"
+            onChange={handleChange}
+            MenuProps={MenuProps}
+            sx={{ m: 1, width: 300 }}>
+            {employees.map((row) => (
+              <MenuItem key={row.employee_id} value={row.employee_id}>
+                <Typography>
+                  {row.first_name} {row.last_name}
+                </Typography>
+              </MenuItem>
+            ))}
+          </Select>
         </Box>
         <Box p={3} display="flex" alignItems="center">
           <Button
