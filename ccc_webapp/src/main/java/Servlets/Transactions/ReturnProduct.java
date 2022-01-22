@@ -99,20 +99,29 @@ public class ReturnProduct extends HttpServlet {
         String transactionId, user_id;
         String merchant_id, employee_id, product_id;
         double merchant_gain, merchant_supply, amount_due;
-        int quantity, product_quantity, isCitizen;
+        int quantity, product_quantity;
+        boolean isCitizen;
         
         LocalDate date = java.time.LocalDate.now();
 
         user_id = (request.getParameter("userId"));
         transactionId = request.getParameter("transactionId");
         System.out.println("transaction id is" + transactionId);
-        isCitizen = UserDB.getUser("USERID", user_id).getUser_type() == "C" ? 0 : 1;
-        if (isCitizen != 0) {
-            merchant_id = CitizenTradesDB.getTrade(transactionId).getMerchant_id();
-        } else {
+        String userType = UserDB.getUser("USERID", user_id).getUser_type();
+        System.out.println("User type is "+userType.equals("C"));
+        
+        if ( userType.equals("I")){
+            isCitizen = true;
+             merchant_id = CitizenTradesDB.getTrade(transactionId).getMerchant_id();
+        }
+        else{
+            isCitizen = false;
             merchant_id = CompanyTradesDB.getTrade(transactionId).getMerchant_id();
         }
         
+        System.out.println(merchant_id);
+                System.out.println(isCitizen);
+
         product_id = BoughtProductDB.getBoughtProduct(Integer.valueOf(transactionId)).getProduct_id();
 
         quantity = BoughtProductDB.getBoughtProduct(Integer.valueOf(transactionId)).getTotal();
@@ -133,18 +142,16 @@ public class ReturnProduct extends HttpServlet {
                 merchant.getPurchases_total() - 1,
                 merchant_gain * merchant_supply);
 
-        if (isCitizen == 1) {
+        if (isCitizen == true) {
 
             amount_due = CitizenDB.getCitizen("USERID", user_id).getAmount_due();
 
         } else {
-            employee_id = request.getParameter("employeeId");
-            String company_name = request.getParameter("Name");
-            Company mycompany = CompanyDB.getCompany("NAME", company_name);
+            Company mycompany = CompanyDB.getCompany("USERID", user_id);
             amount_due = mycompany.getAmount_due();
         }
         
-        if (isCitizen == 1) {
+        if (isCitizen == true) {
             Citizen cit = CitizenDB.getCitizen("USERID", user_id);
             double new_balance = cit.getCredit_balance() + (returning_product.getPrice() * quantity);
             cit.setCredit_balance(new_balance);
@@ -155,10 +162,7 @@ public class ReturnProduct extends HttpServlet {
             TransactionDB.updateTransaction(transaction);
 
         } else {
-            employee_id = request.getParameter("employeeId");
-            Employee em = EmployeeDB.getEmployee(employee_id);
-            Company comp = CompanyDB.getCompany("USERID", em.getCompany_id());
-
+            Company comp = CompanyDB.getCompany("USERID", user_id);
             double new_balance = comp.getCredit_balance();
             new_balance = new_balance + (returning_product.getPrice() * quantity);
             comp.setCredit_balance(new_balance);

@@ -34,6 +34,17 @@ function TransactionHistory() {
       });
   };
 
+  const returnProduct = async (prop) => {
+    await cccClient
+      .post('ReturnProduct', `userId=${userid}&transactionId=${prop.transaction_id}`)
+      .then(function () {
+        getTransactions();
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
+
   return (
     <div className={styles.container}>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
@@ -88,7 +99,9 @@ function TransactionHistory() {
                       variant="contained"
                       color="primary"
                       disabled={row.type === 'E'}
-                      onClick={() => {}}>
+                      onClick={() => {
+                        returnProduct(row);
+                      }}>
                       return
                     </Button>
                   </TableCell>
