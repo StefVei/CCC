@@ -2,15 +2,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Servlets.Register;
+package Citizen;
 
+import Utils_db.CitizenTransaction;
 import com.google.gson.Gson;
+import hy360.ccc.db.BoughtProductDB;
+import hy360.ccc.db.CitizenTradesDB;
 import hy360.ccc.db.MerchantDB;
-import hy360.ccc.db.UserDB;
+import hy360.ccc.db.ProductDB;
+import hy360.ccc.db.TransactionDB;
+import hy360.ccc.model.BoughtProduct;
+import hy360.ccc.model.CM_Trades;
 import hy360.ccc.model.Merchant;
-import hy360.ccc.model.User;
+import hy360.ccc.model.Product;
+import hy360.ccc.model.Transaction;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author panagiotisk
  */
-public class OpenMerchantAccount extends HttpServlet {
+public class CitizenTransactions extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +48,10 @@ public class OpenMerchantAccount extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet OpenMerchantAccount</title>");
+            out.println("<title>Servlet CitizenTransactions</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet OpenMerchantAccount at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CitizenTransactions at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -77,40 +86,40 @@ public class OpenMerchantAccount extends HttpServlet {
 
         Gson gson = new Gson();
         String str;
+        List<CitizenTransaction> list = new ArrayList<>();
+        int index = 1;
+        String user_id = request.getParameter("userId");
+        List<CM_Trades> trades = new ArrayList<>();
+        trades = CitizenTradesDB.getTrades("CITIZEN_USERID", user_id);
+        for (CM_Trades trade : trades) {
+            Merchant mer = MerchantDB.getMerchant("USERID",
+                    trade.getMerchant_id());
+            Transaction tr = TransactionDB.getTransaction(trade.getTransaction_id());
+            BoughtProduct br = BoughtProductDB.getBoughtProduct(Integer.valueOf(tr.getTransaction_id()));
+
+            Product pr = ProductDB.getProduct(br.getProduct_id());
+            String merchant_name = mer.getFirst_name() + " " + mer.getLast_name();
+            String date = tr.getDate();
+            String amount = tr.getAmount();
+            String type = tr.getTransaction_type();
+            String product_name = pr.getName();
+            double quantity = br.getTotal();
+            CitizenTransaction tr_cit = new CitizenTransaction(merchant_name, date, quantity , Double.valueOf(amount), product_name, type);
+            tr_cit.setTransaction_id(tr.getTransaction_id());
+            list.add(tr_cit);
+            index++;
+
+        }
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-
-        Merchant merchant = new Merchant();
-        User user = merchant;
-
-        merchant.setFirst_name(request.getParameter("firstname"));
-        merchant.setLast_name(request.getParameter("lastname"));
-        merchant.setBirth_date(request.getParameter("birthDate"));
-        merchant.setPhone(request.getParameter("phone"));
-        merchant.setEmail(request.getParameter("email"));
-        merchant.setAddress(request.getParameter("address"));
-        merchant.setSupply(0.15);
-        merchant.setAmount_due(0);
-        merchant.setGain(0.0);
-        merchant.setPurchases_total(0);
-        String gender = "male".equals(request.getParameter("gender")) ? "M"
-                : "female".equals(request.getParameter("gender")) ? "F"
-                : "O";
-        merchant.setGender(gender);
-        
-        user.setUser_type("M");
-        user.setUserName(request.getParameter("username"));
-        user.setPassword(request.getParameter("password"));
-
-        UserDB.addUser(user);
-        MerchantDB.addMerchant(merchant);
-
         response.setStatus(200);
-        str = gson.toJson(merchant);
+        str = gson.toJson(list);
         response.getWriter().print(str);
 
     }
+
+
 
     /**
      * Returns a short description of the servlet.

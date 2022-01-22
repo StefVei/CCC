@@ -9,36 +9,23 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import useStyles from './styles';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { cccClient } from '../network';
 
 function TransactionHistory() {
   const navigate = useNavigate();
-  const { state } = useLocation();
-  const [transactions, setTransactions] = useState([]);
-  const { userid } = state;
+  const [goodUsers, setGoodUsers] = useState([]);
   const styles = useStyles();
 
   useEffect(() => {
-    getTransactions();
+    getGoodUsers();
   }, []);
 
-  const getTransactions = async () => {
+  const getGoodUsers = async () => {
     await cccClient
-      .post('CitizenTransactions', `userId=${userid}`)
+      .post('GoodUsers')
       .then(function (response) {
-        setTransactions(response.data);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-  };
-
-  const returnProduct = async (prop) => {
-    await cccClient
-      .post('ReturnProduct', `userId=${userid}&transactionId=${prop.transaction_id}`)
-      .then(function () {
-        getTransactions();
+        setGoodUsers(response.data);
       })
       .catch(function (err) {
         console.log(err);
@@ -49,7 +36,7 @@ function TransactionHistory() {
     <div className={styles.container}>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
         <Typography alignSelf={'center'} variant="h4">
-          Transactions
+          Good Users
         </Typography>
       </Box>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
@@ -58,9 +45,9 @@ function TransactionHistory() {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  <Typography variant="h6">Product Name</Typography>
+                  <Typography variant="h6">Name</Typography>
                 </TableCell>
-                <TableCell align="left">
+                {/* <TableCell align="left">
                   <Typography variant="h6">Quantity</Typography>
                 </TableCell>
                 <TableCell align="left">
@@ -73,34 +60,25 @@ function TransactionHistory() {
                   <Typography variant="h6">Merchant Name</Typography>
                 </TableCell>
                 <TableCell align="left">
-                  <Typography variant="h6">Type</Typography>
+                  <Typography variant="h6">Employee Name</Typography>
                 </TableCell>
-                <TableCell></TableCell>
+                <TableCell align="left">
+                  <Typography variant="h6">Type</Typography>
+                </TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
-              {transactions?.map((row) => (
+              {goodUsers?.map((row) => (
                 <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell component="th" scope="row">
-                    {row.product_name}
+                    {row.name}
                   </TableCell>
-                  <TableCell align="left">{row.quantity}</TableCell>
+                  {/* <TableCell align="left">{row.quantity}</TableCell>
                   <TableCell align="left">{row.amount}&nbsp;€</TableCell>
                   <TableCell align="left">{row.date}</TableCell>
                   <TableCell align="left">{row.merchant_name}</TableCell>
-                  <TableCell align="left">{row.type === 'A' ? 'Buyed' : 'Returned'}</TableCell>
-                  <TableCell align="right">
-                    <Button
-                      type="primary"
-                      variant="contained"
-                      color="primary"
-                      disabled={row.type === 'E'}
-                      onClick={() => {
-                        returnProduct(row);
-                      }}>
-                      Return
-                    </Button>
-                  </TableCell>
+                  <TableCell align="left">{row.employee_name}</TableCell>
+                  <TableCell align="left">{row.type === 'A' ? 'Buyed' : 'Returned'}</TableCell> */}
                 </TableRow>
               ))}
             </TableBody>

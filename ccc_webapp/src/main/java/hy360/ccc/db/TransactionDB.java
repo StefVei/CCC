@@ -67,16 +67,16 @@ public class TransactionDB {
         try {
 
             String mer_sql = "UPDATE transactions "
-                    + "SET PENDING = ?, "
-                    + " TRANSACTION_TYPE = ?, "
+                    + " SET TRANSACTION_TYPE = ?, "
                     + " AMOUNT = ?, "
-                    + " DATE = ?, "
-                    + "WHERE TRANSACTION_ID = ? ;";
+                    + " DATE = ? "
+                    + "WHERE TRANSACTION_ID = ? ";
 
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement(mer_sql);
-            UtilitiesDB.setValues(preparedStatement, transaction.getPending(),
-                    transaction.getTransaction_type(), transaction.getAmount(), transaction.getDate());
+            UtilitiesDB.setValues(preparedStatement,
+                    transaction.getTransaction_type(), transaction.getAmount(), transaction.getDate(),
+                    transaction.getTransaction_id());
             
             preparedStatement.executeUpdate();
 
@@ -88,7 +88,7 @@ public class TransactionDB {
 
     }
 
-    public static Transaction getTransaction(String transaction) {
+    public static Transaction getTransaction(String transaction_id) {
         Transaction tr = new Transaction();
         PreparedStatement preparedStatement = null;
         Connection con = null;
@@ -97,7 +97,7 @@ public class TransactionDB {
             con = CccDB.getConnection();
 
             preparedStatement = con.prepareStatement(sql_getmer);
-            UtilitiesDB.setValues(preparedStatement, Integer.valueOf(transaction));
+            UtilitiesDB.setValues(preparedStatement, Integer.valueOf(transaction_id));
             preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
 

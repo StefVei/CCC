@@ -51,23 +51,23 @@ public class BoughtProductDB {
      * @param transaction_id
      * @return a list of all the products in the current transaction 
      */
-    public static List<BoughtProduct> getBoughtProduct(int transaction_id){
+    public static List<BoughtProduct> getBoughtProducts(int transaction_id) {
         PreparedStatement preparedStatement = null;
         Connection con = null;
         List<BoughtProduct> products = new ArrayList<>();
         try{
             con = CccDB.getConnection();
-            String sql_select = "SELECT * FROM BOUGHT_PRODUCT WHERE TRANSACTION_ID = ? AND PRODUCT_ID = ? AND MERCHANT_USERID = ?";
+            String sql_select = "SELECT * FROM bought_products WHERE TRANSACTION_ID = ?";
             preparedStatement = con.prepareStatement(sql_select);
             UtilitiesDB.setValues(preparedStatement, transaction_id);
-            preparedStatement.executeUpdate();
+            preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
             while(res.next() == true){
                 BoughtProduct prod = new BoughtProduct();
                 prod.setProduct_id(res.getString("PRODUCT_ID"));
                 prod.setTransaction_id(res.getString("TRANSACTION_ID"));
                 prod.setMerchant_id(res.getString("MERCHANT_USERID"));
-                prod.setTotal(res.getDouble("TOTAL"));
+                prod.setTotal(res.getInt("TOTAL"));
                 products.add(prod);
             }
         }catch(Exception ex){
@@ -78,6 +78,40 @@ public class BoughtProductDB {
 
         return products;
                 
+    }
+
+    /**
+     *
+     *
+     * @param transaction_id
+     * @return product in the current transaction
+     */
+    public static BoughtProduct getBoughtProduct(int transaction_id) {
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+        BoughtProduct product = null;
+        try {
+            con = CccDB.getConnection();
+            String sql_select = "SELECT * FROM bought_products WHERE TRANSACTION_ID = ?";
+            preparedStatement = con.prepareStatement(sql_select);
+            UtilitiesDB.setValues(preparedStatement, transaction_id);
+            preparedStatement.executeQuery();
+            ResultSet res = preparedStatement.getResultSet();
+            if (res.next() == true) {
+                product = new BoughtProduct();
+                product.setProduct_id(res.getString("PRODUCT_ID"));
+                product.setTransaction_id(res.getString("TRANSACTION_ID"));
+                product.setMerchant_id(res.getString("MERCHANT_USERID"));
+                product.setTotal(res.getInt("TOTAL"));
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(BoughtProductDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, BoughtProductDB.class.getName());
+        }
+
+        return product;
+
     }
     
     

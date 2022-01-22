@@ -25,7 +25,7 @@ function TransactionHistory() {
 
   const getTransactions = async () => {
     await cccClient
-      .post('CitizenTransactions', `userId=${userid}`)
+      .post('MerchantTransactions', `userId=${userid}`)
       .then(function (response) {
         setTransactions(response.data);
       })
@@ -70,7 +70,7 @@ function TransactionHistory() {
                   <Typography variant="h6">Date</Typography>
                 </TableCell>
                 <TableCell align="left">
-                  <Typography variant="h6">Merchant Name</Typography>
+                  <Typography variant="h6">Customer Name</Typography>
                 </TableCell>
                 <TableCell align="left">
                   <Typography variant="h6">Type</Typography>
@@ -87,7 +87,7 @@ function TransactionHistory() {
                   <TableCell align="left">{row.quantity}</TableCell>
                   <TableCell align="left">{row.amount}&nbsp;€</TableCell>
                   <TableCell align="left">{row.date}</TableCell>
-                  <TableCell align="left">{row.merchant_name}</TableCell>
+                  <TableCell align="left">{row.customer_name}</TableCell>
                   <TableCell align="left">{row.type === 'A' ? 'Buyed' : 'Returned'}</TableCell>
                   <TableCell align="right">
                     <Button

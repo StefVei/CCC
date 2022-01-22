@@ -4,19 +4,25 @@
  */
 package Servlets.Questions;
 
+import Utils_db.CompanyTransaction;
 import com.google.gson.Gson;
+import hy360.ccc.db.BoughtProductDB;
 import hy360.ccc.db.CompanyDB;
 import hy360.ccc.db.CompanyTradesDB;
+import hy360.ccc.db.EmployeeDB;
 import hy360.ccc.db.MerchantDB;
+import hy360.ccc.db.ProductDB;
 import hy360.ccc.db.TransactionDB;
+import hy360.ccc.model.BoughtProduct;
 import hy360.ccc.model.CM_Traffics;
+import hy360.ccc.model.Employee;
 import hy360.ccc.model.Merchant;
+import hy360.ccc.model.Product;
 import hy360.ccc.model.Transaction;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -87,7 +93,7 @@ public class EmployeesTransactions extends HttpServlet {
         Gson gson = new Gson();
         String str;
 
-        Map<String, String> map = new HashMap<>();
+        List<CompanyTransaction> list = new ArrayList<>();
         int index = 1;
         String employee_list = request.getParameter("employeesList");
         List<CM_Traffics> comp_trades_by_employees = CompanyTradesDB.
@@ -99,13 +105,20 @@ public class EmployeesTransactions extends HttpServlet {
                     trade.getCompany_id()).getName();
             Merchant mer = MerchantDB.getMerchant("MERCHANT_USERID",
                     trade.getMerchant_id());
-            String merchant_name = mer.getFirst_name() + mer.getLast_name();
+            BoughtProduct br = BoughtProductDB.getBoughtProduct(Integer.valueOf(tr.getTransaction_id()));
+            Product pr = ProductDB.getProduct(br.getProduct_id());
+            Employee em = EmployeeDB.getEmployee(trade.getEmployee_id());
+            String employee_name = em.getFirst_name() + " " + em.getLast_name();
+            String merchant_name = mer.getFirst_name() + " " + mer.getLast_name();
             String date = tr.getDate();
             String amount = tr.getAmount();
             String type = tr.getTransaction_type();
-            map.put(String.valueOf(index), " { company_name: " + company_name
-                    + "merchant_name: " + merchant_name + "date: " + date
-                    + "amount: " + amount + "type:" + type + "}");
+            String product_name = pr.getName();
+            double quantity = br.getTotal();
+            CompanyTransaction comp_tr = new CompanyTransaction(merchant_name,
+                    date, (int) quantity, Double.valueOf(amount), product_name, employee_name, type);
+            list.add(comp_tr);
+            index++;
 
         }
 
@@ -113,7 +126,7 @@ public class EmployeesTransactions extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.setStatus(200);
-        str = gson.toJson(map);
+        str = gson.toJson(list);
         response.getWriter().print(str);
 
     

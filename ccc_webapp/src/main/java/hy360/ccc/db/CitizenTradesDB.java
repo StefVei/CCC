@@ -59,6 +59,7 @@ public class CitizenTradesDB {
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
+            con = CccDB.getConnection();
             StringBuilder insQuery = new StringBuilder();
 
             insQuery.append("SELECT * FROM cm_trades ")
@@ -95,7 +96,7 @@ public class CitizenTradesDB {
     
         try {
             StringBuilder insQuery = new StringBuilder();
-
+            con = CccDB.getConnection();
             insQuery.append("SELECT * FROM cm_trades ")
                     .append(" WHERE TRANSACTION_ID = ")
                     .append("'").append(transaction_id).append("';");

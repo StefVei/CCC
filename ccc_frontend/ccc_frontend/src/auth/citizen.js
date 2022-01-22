@@ -26,7 +26,7 @@ function CitizenRegister() {
   const [Email, setEmail] = useState('');
   const [Address, setAddress] = useState('');
   const [Firstname, setFirstname] = useState('');
-  const [CreditBalance, setCreditBalance] = useState('');
+  const [CreditBalance, setCreditBalance] = useState(1000);
   const [Lastname, setLastname] = useState('');
   const [Amka, setAmka] = useState('');
   const [Vat, setVat] = useState('');
@@ -45,8 +45,7 @@ function CitizenRegister() {
     await cccClient
       .post(
         'OpenCitizenAccount',
-        `username=${Username}&password=${Password}&email=${Email}&address=${Address}&firstname=${Firstname}&phone=${Phone}&creditBalance=${
-          CreditBalance ? CreditBalance : 0
+        `username=${Username}&password=${Password}&email=${Email}&address=${Address}&firstname=${Firstname}&phone=${Phone}
         }&lastname=${Lastname}&amka=${Amka}&vat=${Vat}&birthDate=${BirthDate.toISOString().slice(
           0,
           10
@@ -156,6 +155,7 @@ function CitizenRegister() {
             label="Credit Balance:"
             type="number"
             variant="filled"
+            disabled
             value={CreditBalance}
             onChange={(e) => setCreditBalance(e.target.value)}
             required

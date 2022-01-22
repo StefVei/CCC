@@ -168,10 +168,7 @@ function CompanyInfo() {
           </Button>
         </Box>
         <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={() => navigate('/Company', { state: { userid: userid } })}>
+          <Button variant="outlined" color="primary" onClick={() => navigate(-1)}>
             Back
           </Button>
         </Box>

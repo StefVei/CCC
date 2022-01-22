@@ -13,7 +13,7 @@ function CompanyRegister() {
   const [Email, setEmail] = useState('');
   const [Address, setAddress] = useState('');
   const [CompanyName, setCompanyName] = useState('');
-  const [CreditBalance, setCreditBalance] = useState('');
+  const [CreditBalance, setCreditBalance] = useState(5000);
 
   const handleSubmit = async () => {
     await cccClient
@@ -99,6 +99,7 @@ function CompanyRegister() {
             variant="filled"
             value={CreditBalance}
             onChange={(e) => setCreditBalance(e.target.value)}
+            disabled
             required
             type="number"
           />
