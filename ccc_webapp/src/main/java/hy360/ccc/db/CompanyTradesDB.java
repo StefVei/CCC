@@ -111,14 +111,14 @@ public class CompanyTradesDB {
      * @param employee_ids comma separated ids : "id1, id2, id3, id4"
      * @return
      */
-    public static List<CM_Traffics> getTradesByEmployees(String employee_ids) {
+    public static List<CM_Traffics> getTradesByEmployees(String employeesId) {
         List<CM_Traffics> trades = null;
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
             con = CccDB.getConnection();
             String sql = "SELECT * FROM cm_traffics"
-                    + "WHERE EMPLOYEE_ID in (" + employee_ids + ")";
+                    + "WHERE EMPLOYEE_ID in (" + employeesId + ")";
 
             preparedStatement = con.prepareStatement(sql);
             preparedStatement.executeQuery();
