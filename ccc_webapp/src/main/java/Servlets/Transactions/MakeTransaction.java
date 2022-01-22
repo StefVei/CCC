@@ -129,7 +129,7 @@ public class MakeTransaction extends HttpServlet {
             credit_balance = CitizenDB.getCitizen("USERID", citizen_id).getCredit_balance();
             credit_limit = CitizenDB.getCitizen("USERID", citizen_id).getCredit_limit();
             customer_amount_due = CitizenDB.getCitizen("USERID", citizen_id).getAmount_due();
-            if (credit_balance >= cost) {
+            if (credit_balance >= cost && cost <= credit_limit) {
                 transaction.setAmount(String.valueOf(cost));
                 TransactionDB.addTransaction(transaction);
 
@@ -180,7 +180,7 @@ public class MakeTransaction extends HttpServlet {
             customer_amount_due = mycompany.getAmount_due();
             credit_balance = mycompany.getCredit_balance();
             credit_limit = mycompany.getCredit_limit();
-            if ( credit_balance >= cost){
+            if (credit_balance >= cost && cost <= credit_limit) {
                 transaction.setAmount(String.valueOf(cost));
                 TransactionDB.addTransaction(transaction);
                 
