@@ -16,7 +16,6 @@ function TransactionHistory() {
   const navigate = useNavigate();
   const { state } = useLocation();
   const [transactions, setTransactions] = useState([]);
-  const [buttonText, setButtonText] = useState('Return');
   const { userid } = state;
   const styles = useStyles();
 
@@ -35,13 +34,11 @@ function TransactionHistory() {
       });
   };
 
-  const changeText = (text) => setButtonText(text);
-
   const returnProduct = async (prop) => {
     await cccClient
       .post('ReturnProduct', `userId=${userid}&transactionId=${prop.transaction_id}`)
       .then(function () {
-        changeText('Product is returned');
+        getTransactions();
       })
       .catch(function (err) {
         console.log(err);
@@ -101,7 +98,7 @@ function TransactionHistory() {
                       onClick={() => {
                         returnProduct(row);
                       }}>
-                      {buttonText}
+                      Return
                     </Button>
                   </TableCell>
                 </TableRow>
