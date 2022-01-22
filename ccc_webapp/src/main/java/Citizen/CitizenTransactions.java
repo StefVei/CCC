@@ -96,6 +96,7 @@ public class CitizenTransactions extends HttpServlet {
                     trade.getMerchant_id());
             Transaction tr = TransactionDB.getTransaction(trade.getTransaction_id());
             BoughtProduct br = BoughtProductDB.getBoughtProduct(Integer.valueOf(tr.getTransaction_id()));
+
             Product pr = ProductDB.getProduct(br.getProduct_id());
             String merchant_name = mer.getFirst_name() + " " + mer.getLast_name();
             String date = tr.getDate();

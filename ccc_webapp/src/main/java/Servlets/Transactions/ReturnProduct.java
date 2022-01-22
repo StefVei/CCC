@@ -97,7 +97,7 @@ public class ReturnProduct extends HttpServlet {
         
         Transaction transaction;
         String transactionId, user_id;
-        String merchant_id, citizen_id, employee_id, product_id;
+        String merchant_id, employee_id, product_id;
         double merchant_gain, merchant_supply, amount_due;
         int quantity, product_quantity, isCitizen;
         
@@ -105,7 +105,7 @@ public class ReturnProduct extends HttpServlet {
 
         user_id = (request.getParameter("userId"));
         transactionId = request.getParameter("transactionId");
-
+        System.out.println("transaction id is" + transactionId);
         isCitizen = UserDB.getUser("USERID", user_id).getUser_type() == "C" ? 0 : 1;
         if (isCitizen != 0) {
             merchant_id = CitizenTradesDB.getTrade(transactionId).getMerchant_id();
@@ -134,9 +134,8 @@ public class ReturnProduct extends HttpServlet {
                 merchant_gain * merchant_supply);
 
         if (isCitizen == 1) {
-            citizen_id = request.getParameter("citizenId");
 
-            amount_due = CitizenDB.getCitizen("USERID", citizen_id).getAmount_due();
+            amount_due = CitizenDB.getCitizen("USERID", user_id).getAmount_due();
 
         } else {
             employee_id = request.getParameter("employeeId");
@@ -146,14 +145,15 @@ public class ReturnProduct extends HttpServlet {
         }
         
         if (isCitizen == 1) {
-            citizen_id = request.getParameter("citizenId");
-            Citizen cit = CitizenDB.getCitizen("USERID", citizen_id);
+            Citizen cit = CitizenDB.getCitizen("USERID", user_id);
             double new_balance = cit.getCredit_balance() + (returning_product.getPrice() * quantity);
             cit.setCredit_balance(new_balance);
             cit.setAmount_due(cit.getCredit_limit() - cit.getCredit_balance());
 
 
             CitizenDB.updateCitizen(cit);
+            TransactionDB.updateTransaction(transaction);
+
         } else {
             employee_id = request.getParameter("employeeId");
             Employee em = EmployeeDB.getEmployee(employee_id);
@@ -166,9 +166,10 @@ public class ReturnProduct extends HttpServlet {
 
 
             CompanyDB.updateCompany(comp);
+            TransactionDB.updateTransaction(transaction);
+
         }
         
 
-        TransactionDB.updateTransaction(transaction);
     }
 }
