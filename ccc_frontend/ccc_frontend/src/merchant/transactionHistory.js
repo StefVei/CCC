@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Typography } from '@mui/material';
-import { Button, Box } from '@mui/material';
+import { Typography, Button, Box, TextField } from '@mui/material';
+import AdapterDay from '@mui/lab/AdapterDayjs';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -15,19 +17,45 @@ import { cccClient } from '../network';
 function TransactionHistory() {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const [transactions, setTransactions] = useState([]);
   const { userid } = state;
+  const [transactions, setTransactions] = useState([]);
+  const [fromDate, setFromDate] = useState(new Date());
+  const [toDate, setToDate] = useState(new Date());
   const styles = useStyles();
 
   useEffect(() => {
     getTransactions();
   }, []);
 
+  const handleFromDate = (newValue) => {
+    setFromDate(newValue);
+  };
+
+  const handleToDate = (newValue) => {
+    setToDate(newValue);
+  };
+
   const getTransactions = async () => {
     await cccClient
       .post('MerchantTransactions', `userId=${userid}`)
       .then(function (response) {
         console.log('🚀 ~ file: transactionHistory.js ~ line 30 ~ response', response);
+        setTransactions(response.data);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
+
+  const handleSearch = async () => {
+    await cccClient
+      .post(
+        'MerchantTransactions',
+        `userId=${userid}&from=${fromDate.toISOString().slice(0, 10)}&to=${toDate
+          .toISOString()
+          .slice(0, 10)}`
+      )
+      .then(function (response) {
         setTransactions(response.data);
       })
       .catch(function (err) {
@@ -42,6 +70,39 @@ function TransactionHistory() {
           Transactions
         </Typography>
       </Box>
+      <div className={styles.filterContainer}>
+        <Box p={3}>
+          <LocalizationProvider dateAdapter={AdapterDay}>
+            <DesktopDatePicker
+              label="From :"
+              value={fromDate}
+              onChange={handleFromDate}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
+        </Box>
+        <Box p={3}>
+          <LocalizationProvider dateAdapter={AdapterDay}>
+            <DesktopDatePicker
+              label="To :"
+              value={toDate}
+              onChange={handleToDate}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
+        </Box>
+        <Box p={3} display="flex" alignItems="center">
+          <Button
+            type="primary"
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              handleSearch();
+            }}>
+            Search
+          </Button>
+        </Box>
+      </div>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
