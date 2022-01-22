@@ -11,14 +11,12 @@ import hy360.ccc.db.CitizenDB;
 import hy360.ccc.db.CitizenTradesDB;
 import hy360.ccc.db.CompanyDB;
 import hy360.ccc.db.CompanyTradesDB;
-import hy360.ccc.db.EmployeeDB;
 import hy360.ccc.db.MerchantDB;
 import hy360.ccc.db.ProductDB;
 import hy360.ccc.db.TransactionDB;
 import hy360.ccc.db.UserDB;
 import hy360.ccc.model.Citizen;
 import hy360.ccc.model.Company;
-import hy360.ccc.model.Employee;
 import hy360.ccc.model.Merchant;
 import hy360.ccc.model.Product;
 import hy360.ccc.model.Transaction;
@@ -144,18 +142,19 @@ public class ReturnProduct extends HttpServlet {
 
         if (isCitizen == true) {
 
-            amount_due = CitizenDB.getCitizen("USERID", user_id).getAmount_due();
-
         } else {
             Company mycompany = CompanyDB.getCompany("USERID", user_id);
-            amount_due = mycompany.getAmount_due();
         }
         
         if (isCitizen == true) {
             Citizen cit = CitizenDB.getCitizen("USERID", user_id);
             double new_balance = cit.getCredit_balance() + (returning_product.getPrice() * quantity);
             cit.setCredit_balance(new_balance);
-            cit.setAmount_due(cit.getCredit_limit() - cit.getCredit_balance());
+            if (new_balance < cit.getCredit_limit()) {
+                cit.setAmount_due(cit.getCredit_limit() - cit.getCredit_balance());
+            } else {
+                cit.setAmount_due(0);
+            }
 
 
             CitizenDB.updateCitizen(cit);
@@ -166,7 +165,11 @@ public class ReturnProduct extends HttpServlet {
             double new_balance = comp.getCredit_balance();
             new_balance = new_balance + (returning_product.getPrice() * quantity);
             comp.setCredit_balance(new_balance);
-            comp.setAmount_due(comp.getCredit_limit() - comp.getCredit_balance());
+            if (new_balance < comp.getCredit_limit()) {
+                comp.setAmount_due(comp.getCredit_limit() - comp.getCredit_balance());
+            } else {
+                comp.setAmount_due(0);
+            }
 
 
             CompanyDB.updateCompany(comp);
