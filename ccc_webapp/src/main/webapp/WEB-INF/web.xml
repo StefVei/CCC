@@ -100,6 +100,7 @@
         <servlet-name>getMerchant</servlet-name>
         <servlet-class>Servlets.Merchant.getMerchant</servlet-class>
     </servlet>
+    <servlet>
         <servlet-name>GoodUsers</servlet-name>
         <servlet-class>Servlets.Statistics.GoodUsers</servlet-class>
     </servlet>
@@ -192,13 +193,12 @@
         <url-pattern>/MerchantTransactions</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-<<<<<<< HEAD
         <servlet-name>getMerchant</servlet-name>
         <url-pattern>/getMerchant</url-pattern>
-=======
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>GoodUsers</servlet-name>
         <url-pattern>/GoodUsers</url-pattern>
->>>>>>> master
     </servlet-mapping>
     <session-config>
         <session-timeout>

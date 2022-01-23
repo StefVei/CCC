@@ -100,7 +100,9 @@ public class CompanyTransactions extends HttpServlet {
         System.out.println("employeeList :"+ employee_list);
 
 
-        if (min_date != null && !min_date.equals("null")) {
+        if (min_date != null && !min_date.equals("null")
+                && max_date != null && !max_date.equals("null")) {
+            System.out.println("DATES IS NOT NULL??" + min_date);
             tr_list = TransactionDB.getTransactionsByDates(min_date, max_date);
         }
 
@@ -111,17 +113,23 @@ public class CompanyTransactions extends HttpServlet {
 
             if (tr_list == null) {
                 tr = TransactionDB.getTransaction(trade.getTransaction_id());
+                System.out.println("including transaction");
             } else {
                 if (UtilitiesDB.containsId(tr_list, trade.getTransaction_id())) {
                     tr = TransactionDB.getTransaction(trade.getTransaction_id());
+                    System.out.println("including from dates");
+
                 } else {
+                    System.out.println("Excluding");
+
                     continue;
                 }
 
             }
 
-            if (employee_list != null) {
+            if (employee_list != null && !employee_list.equals("null")) {
                 if (!employee_list.contains(trade.getEmployee_id())) {
+                    System.out.println("Excluding employee ");
                     continue;
                 }
             }
