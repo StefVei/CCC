@@ -7,7 +7,8 @@ import {
   Select,
   MenuItem,
   Collapse,
-  ToggleButton
+  ToggleButton,
+  Paper
 } from '@mui/material';
 import AdapterDay from '@mui/lab/AdapterDayjs';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -18,7 +19,6 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import useStyles from './styles';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cccClient } from '../network';
@@ -43,7 +43,7 @@ function TransactionHistory() {
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
   const [fromAmount, setFromAmount] = useState(0);
-  const [toAmount, setToAmount] = useState(0);
+  const [toAmount, setToAmount] = useState(20000);
   const [personName, setPersonName] = React.useState([]);
   const [employees, setEmployees] = useState([]);
   const styles = useStyles();
@@ -66,7 +66,7 @@ function TransactionHistory() {
     setFromDate(null);
     setToDate(null);
     setFromAmount(0);
-    setToAmount(0);
+    setToAmount(20000);
     setIsChecked(false);
     getTransactions();
   };
@@ -97,7 +97,9 @@ function TransactionHistory() {
           fromDate ? fromDate.toISOString().slice(0, 10) : 'null'
         }&toDate=${toDate ? toDate.toISOString().slice(0, 10) : 'null'}&employeesList=${
           personName.length > 0 ? personName.toString() : 'null'
-        }&fromAmount=${fromAmount ? fromAmount : 'null'}&toAmount=${toAmount ? toAmount : 'null'}`
+        }&fromAmount=${fromAmount >= 0 ? fromAmount : 'null'}&toAmount=${
+          toAmount >= 0 ? toAmount : 'null'
+        }`
       )
       .then(function (response) {
         setTransactions(response.data);
@@ -149,8 +151,6 @@ function TransactionHistory() {
         </Box>
         <Collapse in={isChecked}>
           <Box
-            p={3}
-            sx={3}
             display="flex"
             justifyContent="flex-start"
             alignItems="center"
@@ -182,7 +182,7 @@ function TransactionHistory() {
             </Box>
             <Box display="flex">
               <Box display="flex" alignItems="center">
-                <Typography variant="body">Amount due :</Typography>
+                <Typography variant="body">Total Price :</Typography>
               </Box>
               <Box p={3}>
                 <TextField
@@ -213,7 +213,7 @@ function TransactionHistory() {
                 label="Employees"
                 onChange={handleChange}
                 MenuProps={MenuProps}
-                sx={{ m: 1, width: 300 }}>
+                sx={{ m: 1, width: 200 }}>
                 {employees.map((row) => (
                   <MenuItem key={row.employee_id} value={row.employee_id}>
                     <Typography>
