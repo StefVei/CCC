@@ -219,13 +219,13 @@ public class CitizenDB {
 
     }
     
-    public static List<String> getGoodCitizens() {
-        List<String> citizens = null;
+    public static List<Citizen> getGoodCitizens() {
+        List<Citizen> citizens = null;
         PreparedStatement preparedStatement = null;
         Connection con = null;
 
         try {
-            String sql_getmer = "SELECT FIRST_NAME, LAST_NAME FROM citizens"
+            String sql_getmer = "SELECT * FROM citizens "
                     + "WHERE AMOUNT_DUE = 0;";
             con = CccDB.getConnection();
 
@@ -235,7 +235,23 @@ public class CitizenDB {
 
             citizens = new ArrayList<>();
             while (res.next() == true) {
-                String cit = res.getString("FIRST_NAME")+" "+ res.getString("LAST_NAME");
+                Citizen cit = new Citizen();
+                cit.setAmka(res.getString("AMKA"));
+                cit.setVat(res.getString("VAT"));
+                cit.setFirst_name(res.getString("FIRST_NAME"));
+                cit.setLast_name(res.getString("LAST_NAME"));
+                cit.setBirth_date(res.getString("BIRTH_DATE"));
+                cit.setGender(res.getString("GENDER"));
+
+                cit.setEmail(res.getString("EMAIL"));
+                cit.setAddress(res.getString("ADDRESS"));
+                cit.setPhone(res.getString("PHONE"));
+                cit.setAmount_due(res.getDouble("AMOUNT_DUE"));
+
+                cit.setCredit_limit(res.getDouble("CREDIT_LIMIT"));
+                cit.setCredit_balance(res.getDouble("CREDIT_BALANCE"));
+                cit.setAccount_due_date(res.getString("ACCOUNT_DUE_DATE"));
+
                 citizens.add(cit);
             }
 
@@ -255,9 +271,9 @@ public class CitizenDB {
         Connection con = null;
 
         try {
-            String sql_getmer = "SELECT FIRST_NAME, LAST_NAME FROM citizens"
-                    + "WHERE AMOUNT_DUE > 0"
-                    + "ORDER BY AMOUNT_DUE;";
+            String sql_getmer = "SELECT FIRST_NAME, LAST_NAME FROM citizens "
+                    + " WHERE AMOUNT_DUE > 0 "
+                    + " ORDER BY AMOUNT_DUE; ";
             con = CccDB.getConnection();
 
             preparedStatement = con.prepareStatement(sql_getmer);
