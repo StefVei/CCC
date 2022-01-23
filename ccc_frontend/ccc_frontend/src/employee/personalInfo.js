@@ -25,7 +25,6 @@ function EmployeeInfo() {
     await cccClient
       .post('getEmployee', `employeeId=${employeeId}`)
       .then(function (response) {
-        console.log('🚀 ~ file: personalInfo.js ~ line 30 ~ response', response);
         setFirstName(response.data.first_name);
         setLastName(response.data.last_name);
         setEmail(response.data.email);
@@ -39,6 +38,17 @@ function EmployeeInfo() {
         }
         setPhone(response.data.phone);
         setAddress(response.data.address);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
+
+  const deleteAccount = async () => {
+    await cccClient
+      .post('CloseEmployeeAccount', `userId=${employeeId}`)
+      .then(() => {
+        navigate('/');
       })
       .catch(function (err) {
         console.log(err);
@@ -122,6 +132,11 @@ function EmployeeInfo() {
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
         <Button variant="outlined" color="primary" onClick={() => navigate(-1)}>
           Back
+        </Button>
+      </Box>
+      <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
+        <Button variant="contained" color="error" onClick={() => deleteAccount()}>
+          Delete Account
         </Button>
       </Box>
     </div>
