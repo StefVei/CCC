@@ -69,10 +69,6 @@
         <servlet-class>Citizen.GetCitizen</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>GetCitizen</servlet-name>
-        <servlet-class>Citizen.GetCitizen</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>getCompany</servlet-name>
         <servlet-class>Servlets.Company.getCompany</servlet-class>
     </servlet>
@@ -103,6 +99,9 @@
     <servlet>
         <servlet-name>getMerchant</servlet-name>
         <servlet-class>Servlets.Merchant.getMerchant</servlet-class>
+    </servlet>
+        <servlet-name>GoodUsers</servlet-name>
+        <servlet-class>Servlets.Statistics.GoodUsers</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>OpenCompanyAccount</servlet-name>
@@ -193,8 +192,13 @@
         <url-pattern>/MerchantTransactions</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+<<<<<<< HEAD
         <servlet-name>getMerchant</servlet-name>
         <url-pattern>/getMerchant</url-pattern>
+=======
+        <servlet-name>GoodUsers</servlet-name>
+        <url-pattern>/GoodUsers</url-pattern>
+>>>>>>> master
     </servlet-mapping>
     <session-config>
         <session-timeout>

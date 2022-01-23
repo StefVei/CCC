@@ -8,6 +8,10 @@ import com.google.gson.Gson;
 import hy360.ccc.db.CitizenDB;
 import hy360.ccc.db.CompanyDB;
 import hy360.ccc.db.MerchantDB;
+import hy360.ccc.model.Citizen;
+import hy360.ccc.model.Company;
+import hy360.ccc.model.Merchant;
+import hy360.ccc.model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -82,10 +86,11 @@ public class GoodUsers extends HttpServlet {
         String str;
     
        
-        List<String> mylist = new ArrayList<>();
-        List<String> mers = MerchantDB.getGoodMerchants();
-        List<String> cos = CompanyDB.getGoodCompanies();
-        List<String> cits = CitizenDB.getGoodCitizens();
+        List<User> mylist = new ArrayList<>();
+        List<Merchant> mers = MerchantDB.getGoodMerchants();
+        List<Company> cos = CompanyDB.getGoodCompanies();
+        List<Citizen> cits = CitizenDB.getGoodCitizens();
+
         mylist.addAll(mers);
         mylist.addAll(cos);
         mylist.addAll(cits);
