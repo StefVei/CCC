@@ -96,9 +96,11 @@ public class CompanyTransactions extends HttpServlet {
         String min_date = request.getParameter("from");
         String max_date = request.getParameter("to");
         String employee_list = request.getParameter("employeesList");
+        
+        System.out.println("employeeList :"+ employee_list);
 
 
-        if (min_date != null) {
+        if (min_date != null && !min_date.equals("null")) {
             tr_list = TransactionDB.getTransactionsByDates(min_date, max_date);
         }
 

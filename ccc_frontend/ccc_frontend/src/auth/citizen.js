@@ -51,8 +51,8 @@ function CitizenRegister() {
           10
         )}&gender=${Gender}`
       )
-      .then(function (response) {
-        console.log(response);
+      .then(function () {
+        navigate('/Login');
       })
       .catch(function (error) {
         console.log(error);
