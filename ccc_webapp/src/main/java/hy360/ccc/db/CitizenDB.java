@@ -265,26 +265,40 @@ public class CitizenDB {
 
     }
     
-    public static HashMap<String, Double> getBadCitizens() {
-        HashMap<String, Double> citizens = null;
+    public static List<Citizen> getBadCitizens() {
+        List<Citizen> citizens = null;
         PreparedStatement preparedStatement = null;
         Connection con = null;
 
         try {
-            String sql_getmer = "SELECT FIRST_NAME, LAST_NAME FROM citizens "
-                    + " WHERE AMOUNT_DUE > 0 "
-                    + " ORDER BY AMOUNT_DUE; ";
+            String sql_getmer = "SELECT * FROM citizens "
+                    + "WHERE AMOUNT_DUE > 0;";
             con = CccDB.getConnection();
 
             preparedStatement = con.prepareStatement(sql_getmer);
             preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
 
-            citizens = new HashMap<String, Double>();
+            citizens = new ArrayList<>();
             while (res.next() == true) {
-                String cit = res.getString("FIRST_NAME")+" "+ res.getString("LAST_NAME");
-                double am = Double.valueOf(res.getString("AMOUNT_DUE"));
-                citizens.put(cit, am);
+                Citizen cit = new Citizen();
+                cit.setAmka(res.getString("AMKA"));
+                cit.setVat(res.getString("VAT"));
+                cit.setFirst_name(res.getString("FIRST_NAME"));
+                cit.setLast_name(res.getString("LAST_NAME"));
+                cit.setBirth_date(res.getString("BIRTH_DATE"));
+                cit.setGender(res.getString("GENDER"));
+
+                cit.setEmail(res.getString("EMAIL"));
+                cit.setAddress(res.getString("ADDRESS"));
+                cit.setPhone(res.getString("PHONE"));
+                cit.setAmount_due(res.getDouble("AMOUNT_DUE"));
+
+                cit.setCredit_limit(res.getDouble("CREDIT_LIMIT"));
+                cit.setCredit_balance(res.getDouble("CREDIT_BALANCE"));
+                cit.setAccount_due_date(res.getString("ACCOUNT_DUE_DATE"));
+
+                citizens.add(cit);
             }
 
         } catch (Exception ex) {
