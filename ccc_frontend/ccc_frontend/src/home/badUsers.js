@@ -65,11 +65,9 @@ function BadUsers() {
             <TableBody>
               {badUsers?.map((row) => (
                 <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell align="left">{row.type}</TableCell>
                   <TableCell align="left">
-                    {row.establishment_date ? 'Company' : row.amka ? 'Citizen' : 'Merchant'}
-                  </TableCell>
-                  <TableCell align="left">
-                    {row.establishment_date ? row.name : row.first_name + ' ' + row.last_name}
+                    {row.type === 'Company' ? row.name : row.first_name + ' ' + row.last_name}
                   </TableCell>
                   <TableCell align="left">{row.email}</TableCell>
                   <TableCell align="left">{row.phone}</TableCell>
