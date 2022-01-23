@@ -41,6 +41,17 @@ function MerchantInfo() {
     }
   };
 
+  const deleteAccount = async () => {
+    await cccClient
+      .post('CloseMerchantAccount', `userId=${userid}`)
+      .then(() => {
+        navigate('/');
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
+
   const makePayment = async () => {
     await cccClient
       .post('makePendings', `paymentAmount=${amount}&userId=${userid}`)
@@ -204,6 +215,11 @@ function MerchantInfo() {
           </Button>
         </Box>
       </div>
+      <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
+        <Button variant="contained" color="error" onClick={() => deleteAccount()}>
+          Delete Account
+        </Button>
+      </Box>
       <Modal
         open={open}
         onClose={handleClose}

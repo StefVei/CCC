@@ -68,10 +68,13 @@ public class EmployeeDB {
         Connection con = null;
         try {
             con = CccDB.getConnection();
-            String del = "DELETE FROM employees WHERE EMPLOYEE_ID = ?";
-            preparedStatement = con.prepareStatement(del);
+            
+            String del_employee = "DELETE FROM employees WHERE EMPLOYEE_ID = ?";
+            preparedStatement = con.prepareStatement(del_employee);
             preparedStatement.setInt(1, Integer.valueOf(employee.getEmployee_id()) );
             preparedStatement.executeUpdate();
+
+            
         } catch (Exception ex) {
             Logger.getLogger(EmployeeDB.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
