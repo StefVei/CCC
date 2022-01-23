@@ -227,14 +227,24 @@ public class MerchantDB {
         Connection con = null;
         try {
             con = CccDB.getConnection();
-            String mer_event = "CREATE EVENT IF NOT EXISTS merchant_of_the_month "
-                    + "ON SCHEDULE EVERY 1 MONTH DO"
+            String mer_event = "DELIMITER $$ "
+                    + "CREATE EVENT IF NOT EXISTS merchant_of_the_month "
+                    + "ON SCHEDULE EVERY 1 MONTH "
+                    + "STARTS '2022-1-23 00:30:00' "
+                    + "DO "
+                    + "BEGIN "
                     + "UPDATE merchants "
-                    + "SET AMOUNT_DUE = AMOUNT_DUE * 0.95"
+                    + "SET AMOUNT_DUE = AMOUNT_DUE * 0.95 "
                     + "WHERE PURCHASES_TOTAL >= "
-                    + "(SELECT MAX(PURCHASES_TOTAL) FROM merchants)";
+                    + "(SELECT MAX(PURCHASES_TOTAL) FROM merchants) "
+                    + "END $$"
+                    + "DELIMITER ;";
             preparedStatement = con.prepareStatement(mer_event);
             preparedStatement.execute();
+
+            preparedStatement = con.prepareStatement("SET GLOBAL event_scheduler = 1; ");
+            preparedStatement.execute();
+
 
         } catch (SQLException ex) {
             Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE, null, ex);
