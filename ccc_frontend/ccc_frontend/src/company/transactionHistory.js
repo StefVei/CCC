@@ -30,8 +30,8 @@ function TransactionHistory() {
   const { state } = useLocation();
   const { userid } = state;
   const [transactions, setTransactions] = useState([]);
-  const [fromDate, setFromDate] = useState(new Date());
-  const [toDate, setToDate] = useState(new Date());
+  const [fromDate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
   const [personName, setPersonName] = React.useState([]);
   const [employees, setEmployees] = useState([]);
   const styles = useStyles();
@@ -47,6 +47,13 @@ function TransactionHistory() {
 
   const handleToDate = (newValue) => {
     setToDate(newValue);
+  };
+
+  const handleClear = () => {
+    setPersonName(null);
+    setFromDate(null);
+    setToDate(null);
+    handleSearch();
   };
 
   const getEmployees = async () => {
@@ -71,9 +78,9 @@ function TransactionHistory() {
     await cccClient
       .post(
         'CompanyTransactions',
-        `userId=${userid}&from=${fromDate.toISOString().slice(0, 10)}&to=${toDate
-          .toISOString()
-          .slice(0, 10)}&employeesList=${personName.toString()}`
+        `userId=${userid}&from=${fromDate ? fromDate.toISOString().slice(0, 10) : 'null'}&to=${
+          toDate ? toDate.toISOString().slice(0, 10) : 'null'
+        }&employeesList=${personName.length > 0 ? personName.toString() : 'null'}`
       )
       .then(function (response) {
         setTransactions(response.data);
@@ -161,6 +168,17 @@ function TransactionHistory() {
               handleSearch();
             }}>
             Search
+          </Button>
+        </Box>
+        <Box p={3} display="flex" alignItems="center">
+          <Button
+            type="primary"
+            variant="outlined"
+            color="primary"
+            onClick={() => {
+              handleClear();
+            }}>
+            Clear
           </Button>
         </Box>
       </div>
