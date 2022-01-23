@@ -95,9 +95,10 @@ public class CompanyTransactions extends HttpServlet {
         String company_id = request.getParameter("userId");
         String min_date = request.getParameter("from");
         String max_date = request.getParameter("to");
+        String employee_list = request.getParameter("employeesList");
+
 
         if (min_date != null) {
-            tr_list = new ArrayList<>();
             tr_list = TransactionDB.getTransactionsByDates(min_date, max_date);
         }
 
@@ -115,6 +116,12 @@ public class CompanyTransactions extends HttpServlet {
                     continue;
                 }
 
+            }
+
+            if (employee_list != null) {
+                if (!employee_list.contains(trade.getEmployee_id())) {
+                    continue;
+                }
             }
 
             Merchant mer = MerchantDB.getMerchant("USERID",
