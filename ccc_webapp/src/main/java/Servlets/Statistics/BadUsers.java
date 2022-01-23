@@ -4,10 +4,15 @@
  */
 package Servlets.Statistics;
 
+import Utils_db.BadUser;
 import com.google.gson.Gson;
 import hy360.ccc.db.CitizenDB;
 import hy360.ccc.db.CompanyDB;
 import hy360.ccc.db.MerchantDB;
+import hy360.ccc.model.Citizen;
+import hy360.ccc.model.Company;
+import hy360.ccc.model.Merchant;
+import hy360.ccc.model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -17,6 +22,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -66,30 +72,6 @@ public class BadUsers {
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    // function to sort hashmap by values
-    public static HashMap<String, Double> sortByValue(HashMap<String, Double> hm)
-    {
-        // Create a list from elements of HashMap
-        List<Map.Entry<String, Double> > list =
-               new LinkedList<Map.Entry<String, Double> >(hm.entrySet());
- 
-        // Sort the list
-        Collections.sort(list, new Comparator<Map.Entry<String, Double> >() {
-            public int compare(Map.Entry<String, Double> o1,
-                               Map.Entry<String, Double> o2)
-            {
-                return (o1.getValue()).compareTo(o2.getValue());
-            }
-        });
-         
-        // put data from sorted list to hashmap
-        HashMap<String, Double> temp = new LinkedHashMap<String, Double>();
-        for (Map.Entry<String, Double> aa : list) {
-            temp.put(aa.getKey(), aa.getValue());
-        }
-        return temp;
-    }
     
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -107,19 +89,62 @@ public class BadUsers {
         String str;
     
        
-        HashMap<String, Double> mylist = new HashMap<String, Double>();
-        HashMap<String, Double> mers = MerchantDB.getBadMerchants();
-        HashMap<String, Double> cos = CompanyDB.getBadCompanies();
-        HashMap<String, Double> cits = CitizenDB.getBadCitizens();
-        mylist.putAll(mers);
-        mylist.putAll(cos);
-        mylist.putAll(cits);
+        List<BadUser> mylist = new ArrayList<>();
+        List<Merchant> mers = MerchantDB.getBadMerchants();
+        List<Company> cos = CompanyDB.getBadCompanies();
+        List<Citizen> cits = CitizenDB.getBadCitizens();
+        ListIterator<Merchant> mer = mers.listIterator();
+        while(mer.hasNext()){
+            BadUser m = new BadUser( 
+                mer.next().getAmount_due(),
+                mer.next().getPhone(), 
+                mer.next().getEmail(),
+                mer.next().getFirst_name(),
+                mer.next().getLast_name(),
+                "",
+                "Merchant");
+            mylist.add(m);
+        }
+        ListIterator<Citizen> ci = cits.listIterator();
+        while(ci.hasNext()){
+            BadUser m = new BadUser( 
+                ci.next().getAmount_due(),
+                ci.next().getPhone(), 
+                ci.next().getEmail(),
+                ci.next().getFirst_name(),
+                ci.next().getLast_name(),
+                "",
+                "Citizen");
+                        mylist.add(m);
+
+        }
+        ListIterator<Company> coy = cos.listIterator();
+        while(coy.hasNext()){
+            BadUser m = new BadUser( 
+                coy.next().getAmount_due(),
+                coy.next().getPhone(), 
+                coy.next().getEmail(),
+                "",
+                "",
+                coy.next().getName(),
+                "Company");
+                        mylist.add(m);
+
+        }
+        Collections.sort(mylist, new Comparator<BadUser>() {
+    @Override
+    public int compare(BadUser u1, BadUser u2) {
+        return Double.compare(u1.getAmount_due(), u2.getAmount_due());
+    }
+});
+        
         
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.setStatus(200);
-        str = gson.toJson(sortByValue(mylist));
+        str = gson.toJson(mylist);
         response.getWriter().print(str);
     
     }
 }
+    
