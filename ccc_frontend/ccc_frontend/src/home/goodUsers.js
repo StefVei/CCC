@@ -26,6 +26,7 @@ function GoodUsers() {
       .post('GoodUsers')
       .then(function (response) {
         setGoodUsers(response.data);
+        console.log(response.data);
       })
       .catch(function (err) {
         console.log(err);
