@@ -23,8 +23,8 @@ function CompanyRegister() {
           CreditBalance ? CreditBalance : 0
         }`
       )
-      .then(function (response) {
-        console.log(response);
+      .then(function () {
+        navigate('/Login');
       })
       .catch(function (error) {
         console.log(error);

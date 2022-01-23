@@ -47,8 +47,8 @@ function MerchantRegister() {
           10
         )}&gender=${Gender}&phone=${Phone}`
       )
-      .then(function (response) {
-        console.log(response);
+      .then(function () {
+        navigate('/Login');
       })
       .catch(function (error) {
         console.log(error);
