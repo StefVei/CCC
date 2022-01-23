@@ -2,12 +2,24 @@ import React from 'react';
 import { Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
+import { cccClient } from '../network';
 
 import useStyles from './styles';
 
 function Home() {
   const navigate = useNavigate();
   const styles = useStyles();
+
+  const GetMerchantOfTheMonth = async () => {
+    await cccClient
+      .post('GetMerchantOfTheMonth')
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
 
   return (
     <div className={styles.container}>
@@ -35,6 +47,11 @@ function Home() {
         <Grid item xs={12}>
           <Button variant="contained" color="primary" onClick={() => navigate('/EmployeeRegister')}>
             Register Employee
+          </Button>
+        </Grid>
+        <Grid item xs={12}>
+          <Button variant="contained" color="primary" onClick={() => GetMerchantOfTheMonth()}>
+            Merchant of the month
           </Button>
         </Grid>
         <Grid item xs={12}>
