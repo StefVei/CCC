@@ -261,9 +261,9 @@ public class CompanyDB {
         Connection con = null;
 
         try {
-            String sql_getmer = "SELECT NAME FROM companies"
-                    + "WHERE AMOUNT_DUE > 0"
-                    + "ORDER BY AMOUNT_DUE;";
+            String sql_getmer = " SELECT NAME FROM companies "
+                    + " WHERE AMOUNT_DUE > 0 "
+                    + " ORDER BY AMOUNT_DUE; ";
             con = CccDB.getConnection();
 
             preparedStatement = con.prepareStatement(sql_getmer);

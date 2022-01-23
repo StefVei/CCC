@@ -271,9 +271,9 @@ public class CitizenDB {
         Connection con = null;
 
         try {
-            String sql_getmer = "SELECT FIRST_NAME, LAST_NAME FROM citizens"
-                    + "WHERE AMOUNT_DUE > 0"
-                    + "ORDER BY AMOUNT_DUE;";
+            String sql_getmer = "SELECT FIRST_NAME, LAST_NAME FROM citizens "
+                    + " WHERE AMOUNT_DUE > 0 "
+                    + " ORDER BY AMOUNT_DUE; ";
             con = CccDB.getConnection();
 
             preparedStatement = con.prepareStatement(sql_getmer);
