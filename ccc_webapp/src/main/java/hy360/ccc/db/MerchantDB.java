@@ -244,26 +244,41 @@ public class MerchantDB {
 
 }
 
-    public static HashMap<String, Double> getBadMerchants() {
-        HashMap<String, Double> merchants = null;
+    public static List<Merchant> getBadMerchants() {
+        List<Merchant> merchants = null;
         PreparedStatement preparedStatement = null;
         Connection con = null;
 
         try {
-            String sql_getmer = "SELECT FIRST_NAME, LAST_NAME, AMOUNT_DUE FROM merchants "
-                    + " WHERE AMOUNT_DUE > 0 "
-                    + " ORDER BY AMOUNT_DUE; ";
+            String sql_getmer = "SELECT * FROM merchants"
+                    + " WHERE AMOUNT_DUE > ? ;";
             con = CccDB.getConnection();
 
+
             preparedStatement = con.prepareStatement(sql_getmer);
+
+            UtilitiesDB.setValues(preparedStatement, 0.0);
             preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
 
-            merchants = new HashMap<String, Double>();
+            merchants = new ArrayList<>();
             while (res.next() == true) {
-                String mr = res.getString("FIRST_NAME")+" "+ res.getString("LAST_NAME");
-                double am = Double.valueOf(res.getString("AMOUNT_DUE"));
-                merchants.put(mr, am);
+                Merchant mer = new Merchant();
+                mer.setUser_id(res.getString("USERID"));
+                mer.setFirst_name(res.getString("FIRST_NAME"));
+                mer.setLast_name(res.getString("LAST_NAME"));
+                mer.setBirth_date(res.getString("BIRTH_DATE"));
+                mer.setGender(res.getString("GENDER"));
+                mer.setSupply(res.getDouble("SUPPLY"));
+                mer.setGain(res.getDouble("GAIN"));
+                mer.setPurchases_total(res.getInt("PURCHASES_TOTAL"));
+                mer.setEmail(res.getString("EMAIL"));
+                mer.setAddress(res.getString("ADDRESS"));
+                mer.setPhone(res.getString("PHONE"));
+                mer.setAmount_due(res.getDouble("AMOUNT_DUE"));
+                mer.setUser_id(res.getString("USERID"));
+
+                merchants.add(mer);
             }
 
         } catch (Exception ex) {

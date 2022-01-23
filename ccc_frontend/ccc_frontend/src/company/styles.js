@@ -34,8 +34,8 @@ const useStyles = makeStyles({
   },
   filterContainer: {
     display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
+    flexDirection: 'column',
+    justifyContent: 'center',
     alignItem: 'center'
   }
 });
