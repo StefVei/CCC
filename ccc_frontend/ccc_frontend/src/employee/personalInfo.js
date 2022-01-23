@@ -46,7 +46,7 @@ function EmployeeInfo() {
 
   const deleteAccount = async () => {
     await cccClient
-      .post('CloseEmployeeAccount', `userId=${employeeId}`)
+      .post('CloseEmployeeAccount', `employeeId=${employeeId}`)
       .then(() => {
         navigate('/');
       })
