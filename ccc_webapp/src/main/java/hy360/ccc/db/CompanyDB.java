@@ -255,26 +255,37 @@ public class CompanyDB {
 
     }
 
-    public static HashMap<String, Double> getBadCompanies() {
-        HashMap<String, Double> companies = null;
+    public static List<Company> getBadCompanies() {
+        List<Company> companies = null;
         PreparedStatement preparedStatement = null;
         Connection con = null;
 
         try {
-            String sql_getmer = " SELECT NAME FROM companies "
-                    + " WHERE AMOUNT_DUE > 0 "
-                    + " ORDER BY AMOUNT_DUE; ";
+            String sql_getmer = "SELECT * FROM companies "
+                    + "WHERE AMOUNT_DUE > 0;";
             con = CccDB.getConnection();
 
             preparedStatement = con.prepareStatement(sql_getmer);
             preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
 
-            companies = new HashMap<String, Double>();
+            companies = new ArrayList<>();
             while (res.next() == true) {
-                String co = res.getString("NAME");
-                double am = Double.valueOf(res.getString("AMOUNT_DUE"));
-                companies.put(co, am);
+                Company comp = new Company();
+                comp.setUser_id(res.getString("USERID"));
+                comp.setEstablishment_date(res.getString("ESTABLISHMENT_DATE"));
+                comp.setName(res.getString("NAME"));
+
+                comp.setEmail(res.getString("EMAIL"));
+                comp.setAddress(res.getString("ADDRESS"));
+                comp.setPhone(res.getString("PHONE"));
+                comp.setAmount_due(res.getDouble("AMOUNT_DUE"));
+
+                comp.setCredit_limit(res.getDouble("CREDIT_LIMIT"));
+                comp.setCredit_balance(res.getDouble("CREDIT_BALANCE"));
+                comp.setAccount_due_date(res.getString("ACCOUNT_DUE_DATE"));
+
+                companies.add(comp);
             }
 
         } catch (Exception ex) {
