@@ -104,6 +104,10 @@
         <servlet-name>GoodUsers</servlet-name>
         <servlet-class>Servlets.Statistics.GoodUsers</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BadUsers</servlet-name>
+        <servlet-class>Servlets.Statistics.BadUsers</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>OpenCompanyAccount</servlet-name>
         <url-pattern>/OpenCompanyAccount</url-pattern>
@@ -199,6 +203,10 @@
     <servlet-mapping>
         <servlet-name>GoodUsers</servlet-name>
         <url-pattern>/GoodUsers</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BadUsers</servlet-name>
+        <url-pattern>/BadUsers</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
