@@ -12,7 +12,7 @@ import useStyles from './styles';
 import { useNavigate } from 'react-router-dom';
 import { cccClient } from '../network';
 
-function TransactionHistory() {
+function GoodUsers() {
   const navigate = useNavigate();
   const [goodUsers, setGoodUsers] = useState([]);
   const styles = useStyles();
@@ -47,24 +47,6 @@ function TransactionHistory() {
                 <TableCell>
                   <Typography variant="h6">Name</Typography>
                 </TableCell>
-                {/* <TableCell align="left">
-                  <Typography variant="h6">Quantity</Typography>
-                </TableCell>
-                <TableCell align="left">
-                  <Typography variant="h6">Total Price</Typography>
-                </TableCell>
-                <TableCell align="left">
-                  <Typography variant="h6">Date</Typography>
-                </TableCell>
-                <TableCell align="left">
-                  <Typography variant="h6">Merchant Name</Typography>
-                </TableCell>
-                <TableCell align="left">
-                  <Typography variant="h6">Employee Name</Typography>
-                </TableCell>
-                <TableCell align="left">
-                  <Typography variant="h6">Type</Typography>
-                </TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -73,12 +55,6 @@ function TransactionHistory() {
                   <TableCell component="th" scope="row">
                     {row.name}
                   </TableCell>
-                  {/* <TableCell align="left">{row.quantity}</TableCell>
-                  <TableCell align="left">{row.amount}&nbsp;€</TableCell>
-                  <TableCell align="left">{row.date}</TableCell>
-                  <TableCell align="left">{row.merchant_name}</TableCell>
-                  <TableCell align="left">{row.employee_name}</TableCell>
-                  <TableCell align="left">{row.type === 'A' ? 'Buyed' : 'Returned'}</TableCell> */}
                 </TableRow>
               ))}
             </TableBody>
@@ -94,4 +70,4 @@ function TransactionHistory() {
   );
 }
 
-export default TransactionHistory;
+export default GoodUsers;
