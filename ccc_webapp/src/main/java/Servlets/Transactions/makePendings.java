@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import hy360.ccc.db.CitizenDB;
 import hy360.ccc.db.CompanyDB;
 import hy360.ccc.db.MerchantDB;
+import hy360.ccc.db.UserDB;
 import hy360.ccc.model.Citizen;
 import hy360.ccc.model.Company;
 import hy360.ccc.model.Merchant;
@@ -85,17 +86,18 @@ public class makePendings extends HttpServlet {
         
         
         String company_id, citizen_id, merchant_id;
-        String user = request.getParameter("userType");
+        String userId = request.getParameter("userId");
+        String user_type = UserDB.getUser("USERID", userId).getUser_type();
+
         double myamount_due, mycredit_balance;
         double newcb, newamount;
         double pmntAmount = Double.valueOf(request.getParameter("paymentAmount"));
 
-        if (user.equals("I")) {
+        if (user_type.equals("I")) {
 
-            citizen_id = request.getParameter("citizenId");
-            Citizen cit = CitizenDB.getCitizen("USERID", citizen_id);
+            Citizen cit = CitizenDB.getCitizen("USERID", userId);
             myamount_due = cit.getAmount_due();
-            mycredit_balance = CitizenDB.getCitizen("USERID", citizen_id).getCredit_balance();
+            mycredit_balance = CitizenDB.getCitizen("USERID", userId).getCredit_balance();
 
             newcb = mycredit_balance + pmntAmount;
             cit.setCredit_balance(newcb);
@@ -105,11 +107,10 @@ public class makePendings extends HttpServlet {
             CitizenDB.updateCitizen(cit);
 
         }	
-	else if (user.equals("C")){
-            company_id = request.getParameter("companyId");
-            Company comp = CompanyDB.getCompany("USERID", company_id);
-            myamount_due = CompanyDB.getCompany("USERID", company_id).getAmount_due();
-            mycredit_balance = CompanyDB.getCompany("USERID", company_id).getCredit_balance();
+        else if (user_type.equals("C")) {
+            Company comp = CompanyDB.getCompany("USERID", userId);
+            myamount_due = CompanyDB.getCompany("USERID", userId).getAmount_due();
+            mycredit_balance = CompanyDB.getCompany("USERID", userId).getCredit_balance();
 
             newcb = mycredit_balance + pmntAmount;
 
@@ -119,10 +120,9 @@ public class makePendings extends HttpServlet {
 
             CompanyDB.updateCompany(comp);
         }
-        else if (user.equals("M")){
-            merchant_id = request.getParameter("merchantId");
-            Merchant mer = MerchantDB.getMerchant("USERID", merchant_id);
-            myamount_due = MerchantDB.getMerchant("USERID", merchant_id).getAmount_due();
+        else if (user_type.equals("M")) {
+            Merchant mer = MerchantDB.getMerchant("USERID", userId);
+            myamount_due = MerchantDB.getMerchant("USERID", userId).getAmount_due();
             if (Double.valueOf(pmntAmount) > Double.valueOf(myamount_due)) {
                 //error message
             }

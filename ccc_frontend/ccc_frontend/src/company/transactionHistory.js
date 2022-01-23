@@ -73,7 +73,7 @@ function TransactionHistory() {
         'CompanyTransactions',
         `userId=${userid}&from=${fromDate.toISOString().slice(0, 10)}&to=${toDate
           .toISOString()
-          .slice(0, 10)}&employees=${personName.toString()}`
+          .slice(0, 10)}&employeesList=${personName.toString()}`
       )
       .then(function (response) {
         setTransactions(response.data);

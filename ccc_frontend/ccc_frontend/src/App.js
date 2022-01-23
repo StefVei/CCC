@@ -18,6 +18,7 @@ import Employee from './employee';
 import EmployeeInfo from './employee/personalInfo';
 import Merchant from './merchant';
 import MerchantTransactionHistory from './merchant/transactionHistory';
+import MerchantInfo from './merchant/personalInfo';
 import ManageProducts from './merchant/manageProducts';
 import ListCustomers from './merchant/ListCustomers';
 import BadUsers from './home/badUsers';
@@ -45,6 +46,7 @@ function App() {
           <Route path="/Employee" element={<Employee />} />
           <Route path="/EmployeeInfo" element={<EmployeeInfo />} />
           <Route path="/Merchant" element={<Merchant />} />
+          <Route path="/MerchantInfo" element={<MerchantInfo />} />
           <Route path="/MerchantTransactionHistory" element={<MerchantTransactionHistory />} />
           <Route path="/ListCustomers" element={<ListCustomers />} />
           <Route path="/ManageProducts" element={<ManageProducts />} />

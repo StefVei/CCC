@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -111,14 +112,19 @@ public class CompanyTradesDB {
      * @param employee_ids comma separated ids : "id1, id2, id3, id4"
      * @return
      */
-    public static List<CM_Traffics> getTradesByEmployees(String employee_ids) {
+    public static List<CM_Traffics> getTradesByEmployees(String employeesId) {
         List<CM_Traffics> trades = null;
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
+
+            String[] ids = (String[]) Arrays.stream(employeesId.split(",")).toArray();
+
             con = CccDB.getConnection();
-            String sql = "SELECT * FROM cm_traffics"
-                    + "WHERE EMPLOYEE_ID in (" + employee_ids + ")";
+
+            String sql = "SELECT * FROM `cm_traffics` WHERE"
+                    + "`EMPLOYEE_ID` IN " + "(? )";
+
 
             preparedStatement = con.prepareStatement(sql);
             preparedStatement.executeQuery();

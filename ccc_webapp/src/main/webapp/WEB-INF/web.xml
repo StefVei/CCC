@@ -61,10 +61,6 @@
         <servlet-class>Servlets.Transactions.ReturnProduct</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>EmployeesTransactions</servlet-name>
-        <servlet-class>Servlets.Questions.EmployeesTransactions</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>TransactionsList</servlet-name>
         <servlet-class>Servlets.Questions.TransactionsList</servlet-class>
     </servlet>
@@ -103,6 +99,10 @@
     <servlet>
         <servlet-name>MerchantTransactions</servlet-name>
         <servlet-class>Servlets.Merchant.MerchantTransactions</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>getMerchant</servlet-name>
+        <servlet-class>Servlets.Merchant.getMerchant</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>OpenCompanyAccount</servlet-name>
@@ -157,10 +157,6 @@
         <url-pattern>/ReturnProduct</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>EmployeesTransactions</servlet-name>
-        <url-pattern>/EmployeesTransactions</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>TransactionsList</servlet-name>
         <url-pattern>/TransactionsList</url-pattern>
     </servlet-mapping>
@@ -195,6 +191,10 @@
     <servlet-mapping>
         <servlet-name>MerchantTransactions</servlet-name>
         <url-pattern>/MerchantTransactions</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>getMerchant</servlet-name>
+        <url-pattern>/getMerchant</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

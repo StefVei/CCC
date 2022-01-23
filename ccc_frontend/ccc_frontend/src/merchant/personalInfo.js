@@ -4,29 +4,27 @@ import useStyles from './styles';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cccClient } from '../network';
 
-function CitizenInfo() {
+function MerchantInfo() {
   const navigate = useNavigate();
   const { state } = useLocation();
   const { userid } = state;
   const styles = useStyles();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [amka, setAmka] = useState('');
-  const [vat, setVat] = useState('');
+  const [supply, setSupply] = useState('');
+  const [gain, setGain] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [gender, setGender] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
   const [amountDue, setAmountDue] = useState('');
-  const [creditLimit, setCreditLimit] = useState('');
-  const [creditBalance, setCreditBalance] = useState('');
-  const [dueDate, setDueDate] = useState('');
+  const [purchasesTotal, setPurchasesTotal] = useState('');
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState(0);
 
   useEffect(() => {
-    getCitizen();
+    getMerchant();
   }, []);
 
   const handleOpen = () => {
@@ -47,7 +45,7 @@ function CitizenInfo() {
     await cccClient
       .post('makePendings', `paymentAmount=${amount}&userId=${userid}`)
       .then(() => {
-        getCitizen();
+        getMerchant();
         handleClose();
       })
       .catch(function (err) {
@@ -55,14 +53,15 @@ function CitizenInfo() {
       });
   };
 
-  const getCitizen = async () => {
+  const getMerchant = async () => {
     await cccClient
-      .post('GetCitizen', `userid=${userid}`)
+      .post('getMerchant', `userid=${userid}`)
       .then(function (response) {
+        console.log(response);
         setFirstName(response.data.first_name);
         setLastName(response.data.last_name);
-        setAmka(response.data.amka);
-        setVat(response.data.vat);
+        setSupply(response.data.supply);
+        setGain(response.data.gain);
         setBirthDate(response.data.birth_date);
         if (response.data.gender === 'F') {
           setGender('Female');
@@ -75,9 +74,7 @@ function CitizenInfo() {
         setPhone(response.data.phone);
         setAddress(response.data.address);
         setAmountDue(response.data.amount_due);
-        setCreditBalance(response.data.credit_balance);
-        setCreditLimit(response.data.credit_limit);
-        setDueDate(response.data.account_due_date);
+        setPurchasesTotal(response.data.purchases_total);
       })
       .catch(function (err) {
         console.log(err);
@@ -88,7 +85,7 @@ function CitizenInfo() {
     <div className={styles.container}>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
         <Typography alignSelf={'center'} variant="h4">
-          Citizen Info
+          Merchant Info
         </Typography>
       </Box>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
@@ -111,20 +108,20 @@ function CitizenInfo() {
       </Box>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
         <TextField
-          label="Amka :"
+          label="Supply :"
           variant="outlined"
           disabled
-          value={amka}
-          onChange={(e) => setAmka(e.target.value)}
+          value={supply}
+          onChange={(e) => setSupply(e.target.value)}
         />{' '}
       </Box>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
         <TextField
-          label="VAT :"
+          label="Gain :"
           variant="outlined"
           disabled
-          value={vat}
-          onChange={(e) => setVat(e.target.value)}
+          value={gain}
+          onChange={(e) => setGain(e.target.value)}
         />{' '}
       </Box>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
@@ -185,29 +182,11 @@ function CitizenInfo() {
       </Box>
       <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
         <TextField
-          label="Credit limit :"
+          label="Purchases Total :"
           variant="outlined"
           disabled
-          value={creditLimit}
-          onChange={(e) => setCreditLimit(e.target.value)}
-        />{' '}
-      </Box>
-      <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
-        <TextField
-          label="Credit balance :"
-          variant="outlined"
-          disabled
-          value={creditBalance}
-          onChange={(e) => setCreditBalance(e.target.value)}
-        />{' '}
-      </Box>
-      <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
-        <TextField
-          label="Account due date :"
-          variant="outlined"
-          disabled
-          value={dueDate}
-          onChange={(e) => setDueDate(e.target.value)}
+          value={purchasesTotal}
+          onChange={(e) => setPurchasesTotal(e.target.value)}
         />{' '}
       </Box>
       <div className={styles.buttonContainer}>
@@ -220,7 +199,7 @@ function CitizenInfo() {
           <Button
             variant="outlined"
             color="primary"
-            onClick={() => navigate('/Citizen', { state: { userid: userid } })}>
+            onClick={() => navigate('/Merchant', { state: { userid: userid } })}>
             Back
           </Button>
         </Box>
@@ -247,4 +226,4 @@ function CitizenInfo() {
   );
 }
 
-export default CitizenInfo;
+export default MerchantInfo;

@@ -200,6 +200,10 @@ public class MerchantDB {
 
     }
 
+    public static Merchant getCitizen(String userid, String parameter) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     public void setMerchantOfTheMonth() throws SQLException {
         Merchant mer = new Merchant();
         PreparedStatement preparedStatement = null;
