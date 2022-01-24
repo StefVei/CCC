@@ -82,7 +82,7 @@ public class CloseMerchantAccount extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         
-        User user = new User();
+        User user = UserDB.getUser("USERID", user_id);
         Merchant merch =  MerchantDB.getMerchant("USERID", user_id);
         
         if(merch.getAmount_due() > 0){
