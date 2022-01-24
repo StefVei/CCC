@@ -80,7 +80,7 @@ public class getEmployees extends HttpServlet {
         String str;
         List<Employee> employees = new ArrayList<>();
 
-        employees = EmployeeDB.getEmployeesByProp("COMPANY_USERID",request.getParameter("userid"));
+        employees = EmployeeDB.getNonDeletedEmployeesByProp("COMPANY_USERID",request.getParameter("userid"));
         response.setStatus(200);
         str = gson.toJson(employees);
         response.setContentType("application/json");

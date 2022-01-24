@@ -44,8 +44,12 @@ function MerchantInfo() {
   const deleteAccount = async () => {
     await cccClient
       .post('CloseMerchantAccount', `userId=${userid}`)
-      .then(() => {
-        navigate('/');
+      .then((response) => {
+        if (response.data === 'There is amount due balance') {
+          alert('There is amount due balance. The account cant be deleted.');
+        } else {
+          navigate('/');
+        }
       })
       .catch(function (err) {
         console.log(err);
@@ -201,12 +205,12 @@ function MerchantInfo() {
         />{' '}
       </Box>
       <div className={styles.buttonContainer}>
-        <Box p={3}>
+        <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
           <Button type="primary" variant="contained" color="primary" onClick={() => handleOpen()}>
             Payment
           </Button>
         </Box>
-        <Box p={3}>
+        <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
           <Button
             variant="outlined"
             color="primary"

@@ -93,7 +93,23 @@ public class Product {
                 .append("name: ").append(name).append("\n")
                 .append("price: ").append(price).append("\n")
                 .append("quantity: ").append(quantity).append("\n")
-                .append("merchant_id: ").append(merchant_id).append("\n");
+                .append("merchant_id: ").append(merchant_id).append("\n")
+                .append("deleted: ").append(deleted).append("\n");
+
         return ss.toString();
+    }
+
+    /**
+     * @return the deleted
+     */
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    /**
+     * @param deleted the deleted to set
+     */
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

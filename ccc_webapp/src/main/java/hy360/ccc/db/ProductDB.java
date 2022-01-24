@@ -120,6 +120,7 @@ public class ProductDB {
                 pro.setPrice(res.getDouble("PRICE"));
                 pro.setQuantity(res.getInt("QUANTITY"));
                 pro.setMerchant_id(res.getString("MERCHANT_USERID"));
+                pro.setDeleted(res.getBoolean("DELETED"));
             }
 
         } catch (Exception ex) {
@@ -153,6 +154,8 @@ public class ProductDB {
                 pro.setPrice(res.getDouble("PRICE"));
                 pro.setQuantity(res.getInt("QUANTITY"));
                 pro.setMerchant_id(res.getString("MERCHANT_USERID"));
+                pro.setDeleted(res.getBoolean("DELETED"));
+
                 products.add(pro);
             }
 
@@ -171,11 +174,11 @@ public class ProductDB {
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
-            String sql_getmer = "UPDATE products SET DELETED = ? WHERE MERCHANT_USERID = ?";
+            String sql_getmer = "UPDATE products SET DELETED = 1 WHERE MERCHANT_USERID = ?";
             con = CccDB.getConnection();
 
             preparedStatement = con.prepareStatement(sql_getmer);
-            UtilitiesDB.setValues(preparedStatement, true, Integer.valueOf(merchant_id));
+            UtilitiesDB.setValues(preparedStatement, Integer.valueOf(merchant_id));
             preparedStatement.executeQuery();
 
         } catch (Exception ex) {

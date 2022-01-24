@@ -5,6 +5,7 @@
 package Servlets.Close;
 
 import hy360.ccc.db.CompanyDB;
+import hy360.ccc.db.EmployeeDB;
 import hy360.ccc.db.UserDB;
 import hy360.ccc.model.Company;
 import hy360.ccc.model.User;
@@ -91,7 +92,7 @@ public class CloseCompanyAccount extends HttpServlet {
         
         }else{
             
-            CompanyDB.deleteEmployees(user_id);
+            EmployeeDB.deleteEmployees(user_id);
             
             user.setUser_id(user_id);
             UserDB.deleteUser(user);

@@ -73,6 +73,8 @@ public class UserDB {
                 user.setUserName(res.getString("USERNAME"));
                 user.setPassword(res.getString("PASSWORD"));
                 user.setUser_id(res.getString("USERID"));
+                user.setDeleted(res.getBoolean("DELETED"));
+
             }
         } catch (Exception ex) {
             Logger.getLogger(CitizenDB.class.getName()).log(Level.SEVERE, null, ex);
@@ -89,9 +91,9 @@ public class UserDB {
         Connection con = null;
         try {
             con = CccDB.getConnection();
-            String del = "UPDATE users SET DELETED = ? WHERE USERID = ? ;";
+            String del = "UPDATE users SET DELETED = 1 WHERE USERID = ? ;";
             preparedStatement = con.prepareStatement(del);
-            UtilitiesDB.setValues(preparedStatement, true, user.getUser_id());
+            UtilitiesDB.setValues(preparedStatement, user.getUser_id());
             preparedStatement.executeUpdate();
         } catch (Exception ex) {
             Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);

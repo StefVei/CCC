@@ -9,6 +9,20 @@ package hy360.ccc.model;
  * @author sckou
  */
 public class Employee {
+
+    /**
+     * @return the deleted
+     */
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    /**
+     * @param deleted the deleted to set
+     */
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
     private String employee_id;
     private String first_name;
     private String last_name;

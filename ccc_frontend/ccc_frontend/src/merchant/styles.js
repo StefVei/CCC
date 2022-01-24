@@ -22,6 +22,11 @@ const useStyles = makeStyles({
     boxShadow: 24,
     p: 4
   },
+  buttonContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItem: 'center'
+  },
   filterContainer: {
     display: 'flex',
     flexDirection: 'row',
