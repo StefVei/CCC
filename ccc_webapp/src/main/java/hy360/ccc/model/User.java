@@ -99,7 +99,8 @@ public class User implements Serializable{
         ss.append("userid: ").append(getUserid()).append("\n")
                 .append("username: ").append(getUsername()).append("\n")
                 .append("password: ").append(password).append("\n")
-                .append("account_number: " ).append(account_number).append("\n");
+                .append("account_number: " ).append(account_number).append("\n")
+                .append("isDeleted: " ).append(deleted).append("\n");
         
         return ss.toString();
                 

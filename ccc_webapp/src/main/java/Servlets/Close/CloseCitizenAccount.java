@@ -4,9 +4,10 @@
  */
 package Servlets.Close;
 
-import com.google.gson.Gson;
 import hy360.ccc.db.CitizenDB;
+import hy360.ccc.db.UserDB;
 import hy360.ccc.model.Citizen;
+import hy360.ccc.model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -73,21 +74,28 @@ public class CloseCitizenAccount extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        Gson gson = new Gson();
-        String str;
+        String user_id = request.getParameter("userId");
         
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         
-        Citizen cit = new Citizen();
+        User user = new User();
+        Citizen cit = CitizenDB.getCitizen("USERID", user_id);
         
-        cit.setAmka(request.getParameter("AMKA"));
-        CitizenDB.deleteCitizen(cit);
-
-        response.setStatus(200);
-        str = gson.toJson(cit);
-        response.getWriter().print(str);
-
+        if(cit.getAmount_due() > 0){
+            
+            response.setStatus(200);
+            response.getWriter().print("There is amount due balance");
+        
+        }else{
+            
+            user.setUser_id(user_id);
+            UserDB.deleteUser(user);
+            
+            response.setStatus(200);
+            response.getWriter().print("User: " + user.getUser_id() + " deleted");
+        
+        }
     }
 
     /**

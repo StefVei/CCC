@@ -154,6 +154,8 @@ public class EmployeeDB {
                 employee.setGender(gender);
                 employee.setEmployee_id(res.getString("EMPLOYEE_ID"));
                 employee.setCompany_id(res.getString("COMPANY_USERID"));
+                employee.setDeleted(res.getBoolean("DELETED"));
+
             }
 
         } catch (Exception ex) {
@@ -190,6 +192,47 @@ public class EmployeeDB {
                 String gender = res.getString("GENDER");
                 employee.setGender(gender);
                 employee.setEmployee_id(res.getString("EMPLOYEE_ID"));
+                employee.setDeleted(res.getBoolean("DELETED"));
+
+                employees.add(employee);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(EmployeeDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, EmployeeDB.class.getName());
+        }
+
+        return employees;
+
+    }
+    
+    public static List<Employee> getNonDeletedEmployees() {
+        List<Employee> employees = new ArrayList<>();
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+        try {
+            String sql_getemployees = "SELECT * FROM employees WHERE DELETED = 0;";
+            con = CccDB.getConnection();
+            preparedStatement = con.prepareStatement(sql_getemployees);
+            preparedStatement.executeQuery();
+            ResultSet res = preparedStatement.getResultSet();
+
+            while (res.next() == true) {
+                Employee employee = new Employee();
+                employee.setFirst_name(res.getString("FIRST_NAME"));
+                employee.setLast_name(res.getString("LAST_NAME"));
+                employee.setBirth_date(res.getString("BIRTH_DATE"));
+                employee.setEmployee_id(res.getString("EMPLOYEE_ID"));
+                employee.setPhone(res.getString("PHONE"));
+                employee.setEmail(res.getString("EMAIL"));
+                employee.setAddress(res.getString("ADDRESS"));
+                employee.setCompany_id(res.getString("COMPANY_USERID"));
+                String gender = res.getString("GENDER");
+                employee.setGender(gender);
+                employee.setEmployee_id(res.getString("EMPLOYEE_ID"));
+                employee.setDeleted(res.getBoolean("DELETED"));
+
                 employees.add(employee);
             }
 
@@ -215,6 +258,54 @@ public class EmployeeDB {
             insQuery.append("SELECT * FROM employees")
                 .append(" WHERE").append(" ").append(columnToSearch).append(" = ")
                 .append("'").append(value).append("';");
+             
+            
+            preparedStatement = con.prepareStatement(insQuery.toString());
+            preparedStatement.executeQuery();
+            ResultSet res = preparedStatement.getResultSet();
+
+            while (res.next() == true) {
+                Employee employee = new Employee();
+                employee.setFirst_name(res.getString("FIRST_NAME"));
+                employee.setLast_name(res.getString("LAST_NAME"));
+                employee.setBirth_date(res.getString("BIRTH_DATE"));
+                employee.setEmployee_id(res.getString("EMPLOYEE_ID"));
+                employee.setPhone(res.getString("PHONE"));
+                employee.setEmail(res.getString("EMAIL"));
+                employee.setAddress(res.getString("ADDRESS"));
+                employee.setCompany_id(res.getString("COMPANY_USERID"));
+
+                String gender = "male".equals(res.getString("GENDER")) ? "M"
+                        : "female".equals(res.getString("GENDER")) ? "F"
+                        : "O";
+
+                employee.setGender(gender);
+                employee.setEmployee_id(res.getString("EMPLOYEE_ID"));
+                employees.add(employee);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(EmployeeDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, EmployeeDB.class.getName());
+        }
+
+        return employees;
+
+    }
+    
+        public static List<Employee> getNonDeletedEmployeesByProp(String columnToSearch, String value) {
+        List<Employee> employees = new ArrayList<>();
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+        try {
+            con = CccDB.getConnection();
+
+            StringBuilder insQuery = new StringBuilder();
+             
+            insQuery.append("SELECT * FROM employees")
+                .append(" WHERE").append(" ").append(columnToSearch).append(" = ")
+                .append("'").append(value).append("'").append(" AND DELETED = 0 ;");
              
             
             preparedStatement = con.prepareStatement(insQuery.toString());

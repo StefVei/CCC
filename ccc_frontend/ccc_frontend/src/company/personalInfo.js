@@ -42,8 +42,12 @@ function CompanyInfo() {
   const deleteAccount = async () => {
     await cccClient
       .post('CloseCompanyAccount', `userId=${userid}`)
-      .then(() => {
-        navigate('/');
+      .then((response) => {
+        if (response.data === 'There is amount due balance') {
+          alert('There is amount due balance. The account cant be deleted.');
+        } else {
+          navigate('/');
+        }
       })
       .catch(function (err) {
         console.log(err);

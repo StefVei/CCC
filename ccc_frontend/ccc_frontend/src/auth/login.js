@@ -16,6 +16,8 @@ function Login() {
       .then(function (response) {
         if (response.data === 'Wrong Credentials') {
           alert(response.data);
+        } else if (response.data === 'Account is closed') {
+          alert('Account is closed');
         } else {
           if (response.data.user_type === 'C') {
             navigate('/ChooseEmployees', { state: { userid: response.data.userid } });
