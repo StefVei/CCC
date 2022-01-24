@@ -12,7 +12,7 @@ function Home() {
 
   const GetMerchantOfTheMonth = async () => {
     await cccClient
-      .post('GetMerchantOfTheMonth')
+      .post('SetMerchantOfTheMonth')
       .then(function (response) {
         console.log(response.data);
       })
