@@ -64,9 +64,9 @@ public class ProductDB {
         Connection con = null;
         try{
             con = CccDB.getConnection();
-            String del = "DELETE FROM products WHERE PROUCT_ID = ?";
+            String del = "UPDATE products SET DELETED = ? WHERE PROUCT_ID = ?";
             preparedStatement = con.prepareStatement(del);
-            preparedStatement.setString(1, product_id);
+            UtilitiesDB.setValues(preparedStatement, true, product_id);
             preparedStatement.executeUpdate();
         }catch(Exception ex){
             Logger.getLogger(ProductDB.class.getName()).log(Level.SEVERE,null, ex);
@@ -83,6 +83,7 @@ public class ProductDB {
             String mer_sql = "UPDATE products "
                     + "SET NAME = ?, "
                     + "PRICE = ?, "
+                    + "DELETED = ?, "
                     + "QUANTITY = ? "
                     + "WHERE PRODUCT_ID = ?";
 
@@ -167,7 +168,7 @@ public class ProductDB {
 
     /**
      *
-     * @return all the products in the db
+     * @return all the NON deleted products in the db
      */
     public static List<Product> getAllProducts() {
 
@@ -175,10 +176,11 @@ public class ProductDB {
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
-            String sql_getmer = "SELECT * FROM products";
+            String sql_getmer = "SELECT * FROM products WHERE DELETED = ? ;";
             con = CccDB.getConnection();
 
             preparedStatement = con.prepareStatement(sql_getmer);
+            UtilitiesDB.setValues(preparedStatement, false);
             preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
 

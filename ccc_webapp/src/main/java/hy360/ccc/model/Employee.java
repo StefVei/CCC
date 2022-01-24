@@ -18,6 +18,7 @@ public class Employee {
     private String address;
     private String phone;
     private String company_id;
+    private boolean deleted;
 
     public Employee(){
         employee_id = "";
@@ -29,6 +30,7 @@ public class Employee {
         address = "";
         phone="";
         company_id = "";
+        deleted = false;
     }
     
     
@@ -43,7 +45,8 @@ public class Employee {
         this.email = email;
         this.address = address;
         this.phone = phone;
-        this.company_id=company_id;
+        this.company_id = company_id;
+        deleted = false;
     }
 
     public void checkFields() throws Exception {

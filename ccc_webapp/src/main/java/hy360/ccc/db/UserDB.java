@@ -89,9 +89,9 @@ public class UserDB {
         Connection con = null;
         try {
             con = CccDB.getConnection();
-            String del = "DELETE FROM users WHERE USERID = ?";
+            String del = "UPDATE users SET DELETED = ? WHERE USERID = ? ;";
             preparedStatement = con.prepareStatement(del);
-            preparedStatement.setInt(1, Integer.valueOf(user.getUser_id()));
+            UtilitiesDB.setValues(preparedStatement, true, user.getUser_id());
             preparedStatement.executeUpdate();
         } catch (Exception ex) {
             Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);

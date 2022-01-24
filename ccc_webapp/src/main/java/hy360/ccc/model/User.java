@@ -17,9 +17,11 @@ public class User implements Serializable{
     private String password;
     private String account_number;
     private String user_type;
+    private boolean deleted;
 
     
-    public User(){
+    public User() {
+        this.deleted = false;
         this.userid = "";
         this.username = "";
         this.password = "";
@@ -30,7 +32,8 @@ public class User implements Serializable{
             String userid,
             String username,
             String password,
-            String account_number){
+            String account_number) {
+        this.deleted = false;
         this.userid=userid;
         this.username = username;
         this.password = password;
@@ -44,7 +47,7 @@ public class User implements Serializable{
      */
     public void checkFields() throws Exception{
         
-        if(username == null || username.trim().isEmpty()
+        if(getUsername() == null || getUsername().trim().isEmpty()
             || password == null || password.trim().isEmpty()
             || account_number == null || account_number.trim().isEmpty() ) {
 
@@ -54,19 +57,19 @@ public class User implements Serializable{
     }
 
     public String getUser_id() {
-        return userid;
+        return getUserid();
     }
 
     public void setUser_id(String userid) {
-        this.userid = userid;
+        this.setUserid(userid);
     }
 
     public String getUserName() {
-        return username;
+        return getUsername();
     }
 
     public void setUserName(String username) {
-        this.username = username;
+        this.setUsername(username);
     }
 
     public String getPassword() {
@@ -93,8 +96,8 @@ public class User implements Serializable{
     @Override
     public String toString(){
         StringBuilder ss = new StringBuilder();
-        ss.append("userid: ").append(userid).append("\n")
-                .append("username: ").append(username).append("\n")
+        ss.append("userid: ").append(getUserid()).append("\n")
+                .append("username: ").append(getUsername()).append("\n")
                 .append("password: ").append(password).append("\n")
                 .append("account_number: " ).append(account_number).append("\n");
         
@@ -114,6 +117,48 @@ public class User implements Serializable{
      */
     public void setUser_type(String user_type) {
         this.user_type = user_type;
+    }
+
+    /**
+     * @return the userid
+     */
+    public String getUserid() {
+        return userid;
+    }
+
+    /**
+     * @param userid the userid to set
+     */
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
+    /**
+     * @return the username
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * @param username the username to set
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    /**
+     * @return the deleted
+     */
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    /**
+     * @param deleted the deleted to set
+     */
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
     
    

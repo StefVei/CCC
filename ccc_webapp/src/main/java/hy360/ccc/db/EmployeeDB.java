@@ -69,9 +69,9 @@ public class EmployeeDB {
         try {
             con = CccDB.getConnection();
             
-            String del_employee = "DELETE FROM employees WHERE EMPLOYEE_ID = ?";
+            String del_employee = "UPDATE employees SET DELETED = ? WHERE EMPLOYEE_ID = ?";
             preparedStatement = con.prepareStatement(del_employee);
-            preparedStatement.setInt(1, Integer.valueOf(employee.getEmployee_id()) );
+            UtilitiesDB.setValues(preparedStatement, true, employee.getEmployee_id());
             preparedStatement.executeUpdate();
 
             
