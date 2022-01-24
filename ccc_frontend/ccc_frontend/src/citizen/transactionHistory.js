@@ -37,13 +37,21 @@ function TransactionHistory() {
     setToDate(newValue);
   };
 
+  const handleClear = () => {
+    setFromDate(null);
+    setToDate(null);
+    setFromAmount(0);
+    setToAmount(20000);
+    getTransactions();
+  };
+
   const handleSearch = async () => {
     await cccClient
       .post(
         'CitizenTransactions',
-        `userId=${userid}&from=${fromDate.toISOString().slice(0, 10)}&to=${toDate
-          .toISOString()
-          .slice(0, 10)}&fromAmount=${fromAmount >= 0 ? fromAmount : 'null'}&toAmount=${
+        `userId=${userid}&from=${fromDate ? fromDate.toISOString().slice(0, 10) : 'null'}&to=${
+          toDate ? toDate.toISOString().slice(0, 10) : 'null'
+        }&fromAmount=${fromAmount >= 0 ? fromAmount : 'null'}&toAmount=${
           toAmount >= 0 ? toAmount : 'null'
         }`
       )
@@ -142,6 +150,17 @@ function TransactionHistory() {
               handleSearch();
             }}>
             Search
+          </Button>
+        </Box>
+        <Box p={3} display="flex" alignItems="center">
+          <Button
+            type="primary"
+            variant="outlined"
+            color="primary"
+            onClick={() => {
+              handleClear();
+            }}>
+            Clear
           </Button>
         </Box>
       </div>
