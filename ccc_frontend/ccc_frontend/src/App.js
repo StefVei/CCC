@@ -20,7 +20,6 @@ import Merchant from './merchant';
 import MerchantTransactionHistory from './merchant/transactionHistory';
 import MerchantInfo from './merchant/personalInfo';
 import ManageProducts from './merchant/manageProducts';
-import ListCustomers from './merchant/ListCustomers';
 import BadUsers from './home/badUsers';
 import GoodUsers from './home/goodUsers';
 import Products from './products';
@@ -48,7 +47,6 @@ function App() {
           <Route path="/Merchant" element={<Merchant />} />
           <Route path="/MerchantInfo" element={<MerchantInfo />} />
           <Route path="/MerchantTransactionHistory" element={<MerchantTransactionHistory />} />
-          <Route path="/ListCustomers" element={<ListCustomers />} />
           <Route path="/ManageProducts" element={<ManageProducts />} />
           <Route path="/Products" element={<Products />} />
           <Route path="/BadUsers" element={<BadUsers />} />
