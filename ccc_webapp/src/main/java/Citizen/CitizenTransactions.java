@@ -93,9 +93,12 @@ public class CitizenTransactions extends HttpServlet {
         String user_id = request.getParameter("userId");
         String min_date = request.getParameter("from");
         String max_date = request.getParameter("to");
+        String min_amount = request.getParameter("fromAmount");
+        String max_amount = request.getParameter("toAmount");
 
-        if (min_date != null) {
-            tr_list = new ArrayList<>();
+
+        if (min_date != null && !min_date.equals("null")
+                && max_date != null && !max_date.equals("null")) {
             tr_list = TransactionDB.getTransactionsByDates(min_date, max_date);
         }
 
@@ -117,12 +120,27 @@ public class CitizenTransactions extends HttpServlet {
                 }
 
             }
+
+            String amount = tr.getAmount();
+
+            if (min_amount != null && !min_amount.equals("null")
+                    && max_amount != null && !max_amount.equals("null")) {
+
+                double am = Double.valueOf(amount);
+                double min = Double.valueOf(min_amount);
+                double max = Double.valueOf(max_amount);
+
+                if (am < min || am > max) {
+                    continue;
+                }
+
+            }
+
             BoughtProduct br = BoughtProductDB.getBoughtProduct(Integer.valueOf(tr.getTransaction_id()));
 
             Product pr = ProductDB.getProduct(br.getProduct_id());
             String merchant_name = mer.getFirst_name() + " " + mer.getLast_name();
             String date = tr.getDate();
-            String amount = tr.getAmount();
             String type = tr.getTransaction_type();
             String product_name = pr.getName();
             double quantity = br.getTotal();
