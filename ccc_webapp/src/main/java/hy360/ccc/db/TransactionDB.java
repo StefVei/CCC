@@ -34,11 +34,10 @@ public class TransactionDB {
             
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement("INSERT INTO transactions "
-                    + "( `PENDING`, `TRANSACTION_TYPE`, `AMOUNT`, `DATE` )"
-                    + " VALUES (? ,? ,? ,?)", PreparedStatement.RETURN_GENERATED_KEYS);
+                    + "( `TRANSACTION_TYPE`, `AMOUNT`, `DATE` )"
+                    + " VALUES (? ,? ,?)", PreparedStatement.RETURN_GENERATED_KEYS);
             
             UtilitiesDB.setValues(preparedStatement,
-                    transaction.getPending(),
                     transaction.getTransaction_type(),
                     transaction.getAmount(),
                     transaction.getDate()
@@ -103,7 +102,6 @@ public class TransactionDB {
 
             if (res.next() == true) {
                 tr.setTransaction_id(res.getString("TRANSACTION_ID"));
-                tr.setPending(res.getString("PENDING"));
                 tr.setTransaction_type(res.getString("TRANSACTION_TYPE"));
                 tr.setAmount(res.getString("AMOUNT"));
                 tr.setDate(res.getString("DATE"));
