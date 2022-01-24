@@ -14,7 +14,7 @@ import java.sql.SQLException;
  * @author panagiotisk
  */
 public class CccDB {
-    static final String url = "jdbc:mysql://localhost:3307/ccc";
+    static final String url = "jdbc:mysql://localhost:3306/ccc";
     static final String user = "admin";
     static final String password = "password123";
     static final int port = 3307;
