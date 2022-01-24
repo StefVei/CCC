@@ -19,8 +19,10 @@ function TransactionHistory() {
   const { state } = useLocation();
   const { userid } = state;
   const [transactions, setTransactions] = useState([]);
-  const [fromDate, setFromDate] = useState(new Date());
-  const [toDate, setToDate] = useState(new Date());
+  const [fromDate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
+  const [fromAmount, setFromAmount] = useState(0);
+  const [toAmount, setToAmount] = useState(20000);
   const styles = useStyles();
 
   useEffect(() => {
@@ -39,7 +41,6 @@ function TransactionHistory() {
     await cccClient
       .post('MerchantTransactions', `userId=${userid}`)
       .then(function (response) {
-        console.log('🚀 ~ file: transactionHistory.js ~ line 30 ~ response', response);
         setTransactions(response.data);
       })
       .catch(function (err) {
@@ -53,7 +54,9 @@ function TransactionHistory() {
         'MerchantTransactions',
         `userId=${userid}&from=${fromDate.toISOString().slice(0, 10)}&to=${toDate
           .toISOString()
-          .slice(0, 10)}`
+          .slice(0, 10)}&fromAmount=${fromAmount >= 0 ? fromAmount : 'null'}&toAmount=${
+          toAmount >= 0 ? toAmount : 'null'
+        }`
       )
       .then(function (response) {
         setTransactions(response.data);
@@ -71,25 +74,53 @@ function TransactionHistory() {
         </Typography>
       </Box>
       <div className={styles.filterContainer}>
-        <Box p={3}>
-          <LocalizationProvider dateAdapter={AdapterDay}>
-            <DesktopDatePicker
-              label="From :"
-              value={fromDate}
-              onChange={handleFromDate}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </LocalizationProvider>
+        <Box display="flex">
+          <Box p={3} display="flex" alignItems="center">
+            <Typography variant="body">Date :</Typography>
+          </Box>
+          <Box p={3}>
+            <LocalizationProvider dateAdapter={AdapterDay}>
+              <DesktopDatePicker
+                label="From :"
+                value={fromDate}
+                onChange={handleFromDate}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+          </Box>
+          <Box p={3}>
+            <LocalizationProvider dateAdapter={AdapterDay}>
+              <DesktopDatePicker
+                label="To :"
+                value={toDate}
+                onChange={handleToDate}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+          </Box>
         </Box>
-        <Box p={3}>
-          <LocalizationProvider dateAdapter={AdapterDay}>
-            <DesktopDatePicker
-              label="To :"
-              value={toDate}
-              onChange={handleToDate}
-              renderInput={(params) => <TextField {...params} />}
+        <Box display="flex">
+          <Box display="flex" alignItems="center">
+            <Typography variant="body">Total Price :</Typography>
+          </Box>
+          <Box p={3}>
+            <TextField
+              label="From :"
+              variant="filled"
+              type="number"
+              value={fromAmount}
+              onChange={(e) => setFromAmount(e.target.value)}
             />
-          </LocalizationProvider>
+          </Box>
+          <Box p={3}>
+            <TextField
+              label="To :"
+              variant="filled"
+              type="number"
+              value={toAmount}
+              onChange={(e) => setToAmount(e.target.value)}
+            />
+          </Box>
         </Box>
         <Box p={3} display="flex" alignItems="center">
           <Button
