@@ -73,20 +73,14 @@ public class CloseEmployeeAccount extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        Gson gson = new Gson();
-        String str;
-
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-
-        Employee em = new Employee();
-
-        em.setEmployee_id(request.getParameter("EMPLOYEE_ID"));
+        
+        Employee em = EmployeeDB.getEmployee(request.getParameter("employeeId"));
         EmployeeDB.deleteEmployee(em);
-
+        
         response.setStatus(200);
-        str = gson.toJson(em);
-        response.getWriter().print(str);
+        response.getWriter().print("Employee: " + em.getEmployee_id() + " deleted");
 
     }
 

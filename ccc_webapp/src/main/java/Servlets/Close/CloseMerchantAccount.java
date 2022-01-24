@@ -4,9 +4,11 @@
  */
 package Servlets.Close;
 
-import com.google.gson.Gson;
 import hy360.ccc.db.MerchantDB;
+import hy360.ccc.db.ProductDB;
+import hy360.ccc.db.UserDB;
 import hy360.ccc.model.Merchant;
+import hy360.ccc.model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -74,21 +76,30 @@ public class CloseMerchantAccount extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        Gson gson = new Gson();
-        String str;
-
+        
+        String user_id = request.getParameter("userId");
+        
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
+        
+        User user = UserDB.getUser("USERID", user_id);
+        Merchant merch =  MerchantDB.getMerchant("USERID", user_id);
+        
+        if(merch.getAmount_due() > 0){
+            
+            response.setStatus(200);
+            response.getWriter().print("There is amount due balance");
+        
+        }else{
+            
+            ProductDB.deleteProducts(user_id);
+            
+            UserDB.deleteUser(user);
+            
+            response.setStatus(200);
+            response.getWriter().print("User: " + user.getUser_id() + " deleted");
 
-        Merchant merchant = new Merchant();
-        merchant.setUser_id(request.getParameter("merchantanyId"));
-
-        MerchantDB.deleteMerchant(merchant);
-
-        response.setStatus(200);
-        str = gson.toJson(merchant);
-        response.getWriter().print(str);
+        }
 
     }
 

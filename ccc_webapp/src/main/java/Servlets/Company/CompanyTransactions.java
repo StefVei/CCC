@@ -93,35 +93,34 @@ public class CompanyTransactions extends HttpServlet {
         List<Transaction> tr_list = null;
         List<CompanyTransaction> list = new ArrayList<>();
         String company_id = request.getParameter("userId");
-        String min_date = request.getParameter("from");
-        String max_date = request.getParameter("to");
+        String min_date = request.getParameter("fromDate");
+        String max_date = request.getParameter("toDate");
+        String min_amount = request.getParameter("fromAmount");
+        String max_amount = request.getParameter("toAmount");
         String employee_list = request.getParameter("employeesList");
-        
-        System.out.println("employeeList :"+ employee_list);
 
 
         if (min_date != null && !min_date.equals("null")
                 && max_date != null && !max_date.equals("null")) {
-            System.out.println("DATES IS NOT NULL??" + min_date);
             tr_list = TransactionDB.getTransactionsByDates(min_date, max_date);
         }
+        int kk = 0;
 
         List<CM_Traffics> traffics = CompanyTradesDB.getTrades("COMPANY_USERID", company_id);
 
         for (CM_Traffics trade : traffics) {
             Transaction tr;
-
+            kk++;
             if (tr_list == null) {
                 tr = TransactionDB.getTransaction(trade.getTransaction_id());
-                System.out.println("including transaction");
+                System.out.println("Including " + kk);
             } else {
                 if (UtilitiesDB.containsId(tr_list, trade.getTransaction_id())) {
                     tr = TransactionDB.getTransaction(trade.getTransaction_id());
-                    System.out.println("including from dates");
-
+                    System.out.println("Including "
+                            + kk);
                 } else {
-                    System.out.println("Excluding");
-
+                    System.out.println("Exluding" + kk);
                     continue;
                 }
 
@@ -129,9 +128,24 @@ public class CompanyTransactions extends HttpServlet {
 
             if (employee_list != null && !employee_list.equals("null")) {
                 if (!employee_list.contains(trade.getEmployee_id())) {
-                    System.out.println("Excluding employee ");
+                    System.out.println("Exlcuding employee" + kk);
                     continue;
                 }
+            }
+            String amount = tr.getAmount();
+
+            if (min_amount != null && !min_amount.equals("null")
+                    && max_amount != null && !max_amount.equals("null")) {
+
+                double am = Double.valueOf(amount);
+                double min = Double.valueOf(min_amount);
+                double max = Double.valueOf(max_amount);
+
+                if (am < min || am > max) {
+                    System.out.println("Exlcuding amount " + kk);
+                    continue;
+                }
+
             }
 
             Merchant mer = MerchantDB.getMerchant("USERID",
@@ -142,7 +156,6 @@ public class CompanyTransactions extends HttpServlet {
             String employee_name = em.getFirst_name() + " " + em.getLast_name();
             String merchant_name = mer.getFirst_name() + " " + mer.getLast_name();
             String date = tr.getDate();
-            String amount = tr.getAmount();
             String type = tr.getTransaction_type();
             String product_name = pr.getName();
             double quantity = br.getTotal();

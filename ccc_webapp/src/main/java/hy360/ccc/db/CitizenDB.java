@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -79,21 +78,6 @@ public class CitizenDB {
 
     }
 
-    public static void deleteCitizen(Citizen citizen) {
-        PreparedStatement preparedStatement = null;
-        Connection con = null;
-        try {
-            con = CccDB.getConnection();
-            String del = "DELETE FROM citizens WHERE USERID = ?";
-            preparedStatement = con.prepareStatement(del);
-            preparedStatement.setInt(1, Integer.valueOf(citizen.getUser_id()));
-            preparedStatement.executeUpdate();
-        } catch (Exception ex) {
-            Logger.getLogger(CitizenDB.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            UtilitiesDB.closeConnection(preparedStatement, con, CitizenDB.class.getName());
-        }
-    }
 
     public static Citizen getCitizen(String columnToSearch, String value) {
 

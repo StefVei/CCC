@@ -64,9 +64,9 @@ public class ProductDB {
         Connection con = null;
         try{
             con = CccDB.getConnection();
-            String del = "DELETE FROM products WHERE PROUCT_ID = ?";
+            String del = "UPDATE products SET DELETED = ? WHERE PROUCT_ID = ?";
             preparedStatement = con.prepareStatement(del);
-            preparedStatement.setString(1, product_id);
+            UtilitiesDB.setValues(preparedStatement, true, product_id);
             preparedStatement.executeUpdate();
         }catch(Exception ex){
             Logger.getLogger(ProductDB.class.getName()).log(Level.SEVERE,null, ex);
@@ -83,13 +83,14 @@ public class ProductDB {
             String mer_sql = "UPDATE products "
                     + "SET NAME = ?, "
                     + "PRICE = ?, "
+                    + "DELETED = ?, "
                     + "QUANTITY = ? "
                     + "WHERE PRODUCT_ID = ?";
 
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement(mer_sql);
             UtilitiesDB.setValues(preparedStatement, product.getName(),
-                    product.getPrice(), product.getQuantity(), product.getProduct_id());
+                    product.getPrice(), product.isDeleted(), product.getQuantity(), product.getProduct_id());
             preparedStatement.executeUpdate();
 
         } catch (Exception ex) {
@@ -119,6 +120,7 @@ public class ProductDB {
                 pro.setPrice(res.getDouble("PRICE"));
                 pro.setQuantity(res.getInt("QUANTITY"));
                 pro.setMerchant_id(res.getString("MERCHANT_USERID"));
+                pro.setDeleted(res.getBoolean("DELETED"));
             }
 
         } catch (Exception ex) {
@@ -152,6 +154,8 @@ public class ProductDB {
                 pro.setPrice(res.getDouble("PRICE"));
                 pro.setQuantity(res.getInt("QUANTITY"));
                 pro.setMerchant_id(res.getString("MERCHANT_USERID"));
+                pro.setDeleted(res.getBoolean("DELETED"));
+
                 products.add(pro);
             }
 
@@ -165,20 +169,41 @@ public class ProductDB {
 
     }
 
+    public static void deleteProducts(String merchant_id) {
+        List<Product> products = new ArrayList<Product>();
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+        try {
+            String sql_getmer = "UPDATE products SET DELETED = 1 WHERE MERCHANT_USERID = ? ;";
+            con = CccDB.getConnection();
+
+            preparedStatement = con.prepareStatement(sql_getmer);
+            UtilitiesDB.setValues(preparedStatement, Integer.valueOf(merchant_id));
+            preparedStatement.executeUpdate();
+
+        } catch (Exception ex) {
+            Logger.getLogger(ProductDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, ProductDB.class.getName());
+        }
+
+    }
+
     /**
      *
-     * @return all the products in the db
+     * @return all the NON deleted products in the db
      */
-    public static List<Product> getAllProducts() {
+    public static List<Product> getAllNonDeletedProducts() {
 
         List<Product> products = new ArrayList<Product>();
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
-            String sql_getmer = "SELECT * FROM products";
+            String sql_getmer = "SELECT * FROM products WHERE DELETED = ? ;";
             con = CccDB.getConnection();
 
             preparedStatement = con.prepareStatement(sql_getmer);
+            UtilitiesDB.setValues(preparedStatement, false);
             preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
 

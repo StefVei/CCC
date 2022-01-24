@@ -26,7 +26,6 @@ function GoodUsers() {
       .post('GoodUsers')
       .then(function (response) {
         setGoodUsers(response.data);
-        console.log(response.data);
       })
       .catch(function (err) {
         console.log(err);
@@ -45,17 +44,31 @@ function GoodUsers() {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>
+                <TableCell align="left">
+                  <Typography variant="h6">Type</Typography>
+                </TableCell>
+                <TableCell align="left">
                   <Typography variant="h6">Name</Typography>
+                </TableCell>
+                <TableCell align="left">
+                  <Typography variant="h6">Email</Typography>
+                </TableCell>
+                <TableCell align="left">
+                  <Typography variant="h6">Phone</Typography>
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {goodUsers?.map((row) => (
                 <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <TableCell component="th" scope="row">
-                    {row.name}
+                  <TableCell align="left">
+                    {row.establishment_date ? 'Company' : row.amka ? 'Citizen' : 'Merchant'}
                   </TableCell>
+                  <TableCell align="left">
+                    {row.establishment_date ? row.name : row.first_name + ' ' + row.last_name}
+                  </TableCell>
+                  <TableCell align="left">{row.email}</TableCell>
+                  <TableCell align="left">{row.phone}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

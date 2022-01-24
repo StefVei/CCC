@@ -11,7 +11,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import java.util.logging.Level;
@@ -67,22 +66,7 @@ public class MerchantDB {
         }
     
     }
-    
-    public static void deleteMerchant(Merchant merchant) {
-        PreparedStatement preparedStatement = null;
-        Connection con = null;
-        try{
-            con = CccDB.getConnection();
-            String del = "DELETE FROM merchants WHERE USERID = ?";
-            preparedStatement = con.prepareStatement(del);
-            preparedStatement.setInt(1, Integer.valueOf(merchant.getUser_id()));
-            preparedStatement.executeUpdate();
-        }catch(Exception ex){
-            Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE,null, ex);
-        }finally{
-            UtilitiesDB.closeConnection(preparedStatement, con, MerchantDB.class.getName());
-        }
-    }
+
 
     public static void updateMerchant(Merchant merchant) {
 
@@ -217,24 +201,23 @@ public class MerchantDB {
 
     }
 
-    public static Merchant getCitizen(String userid, String parameter) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 
-    public void setMerchantOfTheMonth() throws SQLException {
+    public static void setMerchantOfTheMonth() {
         Merchant mer = new Merchant();
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
             con = CccDB.getConnection();
-            String mer_event = "CREATE EVENT IF NOT EXISTS merchant_of_the_month "
-                    + "ON SCHEDULE EVERY 1 MONTH DO"
-                    + "UPDATE merchants "
-                    + "SET AMOUNT_DUE = AMOUNT_DUE * 0.95"
-                    + "WHERE PURCHASES_TOTAL >= "
-                    + "(SELECT MAX(PURCHASES_TOTAL) FROM merchants)";
+
+            preparedStatement = con.prepareStatement("SET GLOBAL event_scheduler = 1; ");
+            preparedStatement.execute();
+
+            String mer_event = "CREATE EVENT IF NOT EXISTS merchant_of_the_month ON SCHEDULE EVERY '1' MONTH STARTS '2022-1-24 18:03:00' DO UPDATE merchants SET AMOUNT_DUE = AMOUNT_DUE * 0.95 WHERE PURCHASES_TOTAL >= ( SELECT MAX(PURCHASES_TOTAL) FROM merchants )";
+
             preparedStatement = con.prepareStatement(mer_event);
             preparedStatement.execute();
+
+
 
         } catch (SQLException ex) {
             Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE, null, ex);
@@ -242,7 +225,7 @@ public class MerchantDB {
             Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-}
+    }
 
     public static List<Merchant> getBadMerchants() {
         List<Merchant> merchants = null;

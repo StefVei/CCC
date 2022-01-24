@@ -14,6 +14,7 @@ public class Product {
     private double price;
     private int quantity;
     private String merchant_id;
+    private boolean deleted;
     
     
     public Product(){
@@ -22,6 +23,7 @@ public class Product {
         price = 0;
         quantity = 0;
         merchant_id = "";
+        deleted = false;
     }
     
     public Product(String product_id, String name, double price, int quantity, String merchant_id) {
@@ -30,6 +32,7 @@ public class Product {
         this.price = price;
         this.quantity = quantity;
         this.merchant_id = merchant_id;
+        this.deleted = false;
     }
 
     public void checkFields() throws Exception {
@@ -90,7 +93,23 @@ public class Product {
                 .append("name: ").append(name).append("\n")
                 .append("price: ").append(price).append("\n")
                 .append("quantity: ").append(quantity).append("\n")
-                .append("merchant_id: ").append(merchant_id).append("\n");
+                .append("merchant_id: ").append(merchant_id).append("\n")
+                .append("deleted: ").append(deleted).append("\n");
+
         return ss.toString();
+    }
+
+    /**
+     * @return the deleted
+     */
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    /**
+     * @param deleted the deleted to set
+     */
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

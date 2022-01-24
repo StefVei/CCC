@@ -55,6 +55,21 @@ function CitizenInfo() {
       });
   };
 
+  const deleteAccount = async () => {
+    await cccClient
+      .post('CloseCitizenAccount', `userId=${userid}`)
+      .then((response) => {
+        if (response.data === 'There is amount due balance') {
+          alert('There is amount due balance. The account cant be deleted.');
+        } else {
+          navigate('/');
+        }
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
+
   const getCitizen = async () => {
     await cccClient
       .post('GetCitizen', `userid=${userid}`)
@@ -225,6 +240,11 @@ function CitizenInfo() {
           </Button>
         </Box>
       </div>
+      <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
+        <Button variant="contained" color="error" onClick={() => deleteAccount()}>
+          Delete Account
+        </Button>
+      </Box>
       <Modal
         open={open}
         onClose={handleClose}

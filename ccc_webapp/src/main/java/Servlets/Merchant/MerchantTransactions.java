@@ -98,9 +98,12 @@ public class MerchantTransactions extends HttpServlet {
         String user_id = request.getParameter("userId");
         String min_date = request.getParameter("from");
         String max_date = request.getParameter("to");
+        String min_amount = request.getParameter("fromAmount");
+        String max_amount = request.getParameter("toAmount");
 
-        if (min_date != null) {
-            tr_list = new ArrayList<>();
+
+        if (min_date != null && !min_date.equals("null")
+                && max_date != null && !max_date.equals("null")) {
             tr_list = TransactionDB.getTransactionsByDates(min_date, max_date);
         }
 
@@ -122,13 +125,27 @@ public class MerchantTransactions extends HttpServlet {
                     continue;
                 }
             }
+            String amount = tr.getAmount();
+            if (min_amount != null && !min_amount.equals("null")
+                    && max_amount != null && !max_amount.equals("null")) {
+
+                double am = Double.valueOf(amount);
+                double min = Double.valueOf(min_amount);
+                double max = Double.valueOf(max_amount);
+
+                if (am < min || am > max) {
+                    continue;
+                }
+
+            }
+
+
             BoughtProduct br = BoughtProductDB.getBoughtProduct(Integer.valueOf(tr.getTransaction_id()));
 
             Product pr = ProductDB.getProduct(br.getProduct_id());
             String citizen_name = cit.getFirst_name() + " " + cit.getLast_name();
             String date = tr.getDate();
-            String amount = tr.getAmount();
-            System.out.println("ASmount:"+amount);
+            System.out.println("ASmount:" + amount);
             String type = tr.getTransaction_type();
             String product_name = pr.getName();
             double quantity = br.getTotal();
@@ -157,13 +174,29 @@ public class MerchantTransactions extends HttpServlet {
                     continue;
                 }
             }
+
+            String amount = tr.getAmount();
+
+
+            if (min_amount != null && !min_amount.equals("null")
+                    && max_amount != null && !max_amount.equals("null")) {
+
+                double am = Double.valueOf(amount);
+                double min = Double.valueOf(min_amount);
+                double max = Double.valueOf(max_amount);
+
+                if (am < min || am > max) {
+                    continue;
+                }
+
+            }
+
             BoughtProduct br = BoughtProductDB.getBoughtProduct(Integer.valueOf(tr.getTransaction_id()));
 
             Product pr = ProductDB.getProduct(br.getProduct_id());
             String comp_name = comp.getName();
             String employee_name = employee.getFirst_name() + " " + employee.getLast_name();
             String date = tr.getDate();
-            String amount = tr.getAmount();
             String type = tr.getTransaction_type();
             String product_name = pr.getName();
             double quantity = br.getTotal();

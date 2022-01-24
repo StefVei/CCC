@@ -5,18 +5,9 @@
 package Servlets.Register;
 
 import com.google.gson.Gson;
-import hy360.ccc.db.CompanyDB;
-import hy360.ccc.db.EmployeeDB;
-import hy360.ccc.model.Company;
-import hy360.ccc.model.Employee;
-import hy360.ccc.db.CitizenDB;
-import hy360.ccc.model.Citizen;
-import hy360.ccc.db.MerchantDB;
 import hy360.ccc.db.UserDB;
-import hy360.ccc.model.Merchant;
 import hy360.ccc.model.User;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -67,6 +58,9 @@ public class Login extends HttpServlet {
             if( !user.getPassword().equals(request.getParameter("password"))){
                 response.setStatus(200);
                 response.getWriter().print("Wrong Credentials");
+            } else if (user.isDeleted()) {
+                response.setStatus(200);
+                response.getWriter().print("Account is closed");
             } else {
                 response.setStatus(200);
                 str = gson.toJson(user);

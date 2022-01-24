@@ -9,6 +9,20 @@ package hy360.ccc.model;
  * @author sckou
  */
 public class Employee {
+
+    /**
+     * @return the deleted
+     */
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    /**
+     * @param deleted the deleted to set
+     */
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
     private String employee_id;
     private String first_name;
     private String last_name;
@@ -18,6 +32,7 @@ public class Employee {
     private String address;
     private String phone;
     private String company_id;
+    private boolean deleted;
 
     public Employee(){
         employee_id = "";
@@ -29,6 +44,7 @@ public class Employee {
         address = "";
         phone="";
         company_id = "";
+        deleted = false;
     }
     
     
@@ -43,7 +59,8 @@ public class Employee {
         this.email = email;
         this.address = address;
         this.phone = phone;
-        this.company_id=company_id;
+        this.company_id = company_id;
+        deleted = false;
     }
 
     public void checkFields() throws Exception {

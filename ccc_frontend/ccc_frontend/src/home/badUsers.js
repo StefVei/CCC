@@ -26,7 +26,6 @@ function BadUsers() {
       .post('BadUsers')
       .then(function (response) {
         setBadUsers(response.data);
-        console.log(response.data);
       })
       .catch(function (err) {
         console.log(err);
@@ -35,27 +34,45 @@ function BadUsers() {
 
   return (
     <div className={styles.container}>
-      <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
+      <Box p={3} sx={3} display="flex" justifyContent="center">
         <Typography alignSelf={'center'} variant="h4">
           Bad Users
         </Typography>
       </Box>
-      <Box p={3} sx={3} display="flex" justifyContent="center" alignItems="center">
+      <Box p={3} sx={3} display="flex" justifyContent="center">
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>
+                <TableCell align="left">
+                  <Typography variant="h6">Type</Typography>
+                </TableCell>
+                <TableCell align="left">
                   <Typography variant="h6">Name</Typography>
+                </TableCell>
+                <TableCell align="left">
+                  <Typography variant="h6">Email</Typography>
+                </TableCell>
+                <TableCell align="left">
+                  <Typography variant="h6">Phone</Typography>
+                </TableCell>
+                <TableCell align="left">
+                  <Typography variant="h6">Amount Due</Typography>
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {badUsers?.map((row) => (
-                <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <TableCell component="th" scope="row">
-                    {row.name}
+                <TableRow
+                  key={row.email}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell align="left">{row.type}</TableCell>
+                  <TableCell align="left">
+                    {row.type === 'Company' ? row.name : row.first_name + ' ' + row.last_name}
                   </TableCell>
+                  <TableCell align="left">{row.email}</TableCell>
+                  <TableCell align="left">{row.phone}</TableCell>
+                  <TableCell align="left">{row.amount_due}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
