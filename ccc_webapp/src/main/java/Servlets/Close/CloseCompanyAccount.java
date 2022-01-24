@@ -4,9 +4,10 @@
  */
 package Servlets.Close;
 
-import com.google.gson.Gson;
 import hy360.ccc.db.CompanyDB;
+import hy360.ccc.db.UserDB;
 import hy360.ccc.model.Company;
+import hy360.ccc.model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -73,24 +74,32 @@ public class CloseCompanyAccount extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException {        
         
-        Gson gson = new Gson();
-        String str;
+        String user_id = request.getParameter("userId");
         
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         
-        Company comp = new Company();
-        comp.setUser_id(request.getParameter("companyId"));
+        User user = new User();
+        Company comp = CompanyDB.getCompany("USERID", user_id);
+        
+        if(comp.getAmount_due() > 0){
+            
+            response.setStatus(200);
+            response.getWriter().print("There is amount due balance");
+        
+        }else{
+            
+            CompanyDB.deleteEmployees(user_id);
+            
+            user.setUser_id(user_id);
+            UserDB.deleteUser(user);
+            
+            response.setStatus(200);
+            response.getWriter().print("User: " + user.getUser_id() + " deleted");
 
-        CompanyDB.deleteCompany(comp);
-
-        response.setStatus(200);
-        str = gson.toJson(comp);
-        response.getWriter().print(str);
-
-
+        }
     }
 
     /**

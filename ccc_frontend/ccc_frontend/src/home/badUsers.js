@@ -26,7 +26,6 @@ function BadUsers() {
       .post('BadUsers')
       .then(function (response) {
         setBadUsers(response.data);
-        console.log(response.data);
       })
       .catch(function (err) {
         console.log(err);
