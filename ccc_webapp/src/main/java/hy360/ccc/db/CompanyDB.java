@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -74,21 +73,6 @@ public class CompanyDB {
 
     }
 
-    public static void deleteCompany(Company company) {
-        PreparedStatement preparedStatement = null;
-        Connection con = null;
-        try {
-            con = CccDB.getConnection();
-            String del = "DELETE FROM companies WHERE USERID = ?";
-            preparedStatement = con.prepareStatement(del);
-            preparedStatement.setInt(1, Integer.valueOf(company.getUser_id()));
-            preparedStatement.executeUpdate();
-        } catch (Exception ex) {
-            Logger.getLogger(CompanyDB.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            UtilitiesDB.closeConnection(preparedStatement, con, CompanyDB.class.getName());
-        }
-    }
 
     /**
      *

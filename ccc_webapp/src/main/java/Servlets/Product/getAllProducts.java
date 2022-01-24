@@ -79,7 +79,7 @@ public class getAllProducts extends HttpServlet {
         Gson gson = new Gson();
         List<Product> products = new ArrayList<>();
 
-        products = ProductDB.getAllProducts();
+        products = ProductDB.getAllNonDeletedProducts();
 
         response.setStatus(200);
         str = gson.toJson(products);

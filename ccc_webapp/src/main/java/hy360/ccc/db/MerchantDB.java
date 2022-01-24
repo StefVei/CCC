@@ -66,22 +66,7 @@ public class MerchantDB {
         }
     
     }
-    
-    public static void deleteMerchant(Merchant merchant) {
-        PreparedStatement preparedStatement = null;
-        Connection con = null;
-        try{
-            con = CccDB.getConnection();
-            String del = "DELETE FROM merchants WHERE USERID = ?";
-            preparedStatement = con.prepareStatement(del);
-            preparedStatement.setInt(1, Integer.valueOf(merchant.getUser_id()));
-            preparedStatement.executeUpdate();
-        }catch(Exception ex){
-            Logger.getLogger(MerchantDB.class.getName()).log(Level.SEVERE,null, ex);
-        }finally{
-            UtilitiesDB.closeConnection(preparedStatement, con, MerchantDB.class.getName());
-        }
-    }
+
 
     public static void updateMerchant(Merchant merchant) {
 
