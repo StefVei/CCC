@@ -90,7 +90,7 @@ public class ProductDB {
             con = CccDB.getConnection();
             preparedStatement = con.prepareStatement(mer_sql);
             UtilitiesDB.setValues(preparedStatement, product.getName(),
-                    product.getPrice(), product.getQuantity(), product.getProduct_id());
+                    product.getPrice(), product.isDeleted(), product.getQuantity(), product.getProduct_id());
             preparedStatement.executeUpdate();
 
         } catch (Exception ex) {
