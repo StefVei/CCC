@@ -98,8 +98,6 @@ public class CompanyTransactions extends HttpServlet {
         String min_amount = request.getParameter("fromAmount");
         String max_amount = request.getParameter("toAmount");
         String employee_list = request.getParameter("employeesList");
-        
-        System.out.println("employeeList :"+ employee_list);
 
 
         if (min_date != null && !min_date.equals("null")

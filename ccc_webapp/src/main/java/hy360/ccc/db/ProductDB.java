@@ -190,7 +190,7 @@ public class ProductDB {
      *
      * @return all the NON deleted products in the db
      */
-    public static List<Product> getAllProducts() {
+    public static List<Product> getAllNonDeletedProducts() {
 
         List<Product> products = new ArrayList<Product>();
         PreparedStatement preparedStatement = null;
