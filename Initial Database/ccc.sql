@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Εξυπηρετητής: 127.0.0.1
--- Χρόνος δημιουργίας: 24 Ιαν 2022 στις 14:52:34
+-- Χρόνος δημιουργίας: 24 Ιαν 2022 στις 19:20:52
 -- Έκδοση διακομιστή: 10.4.22-MariaDB
 -- Έκδοση PHP: 8.0.14
 
@@ -138,6 +138,7 @@ CREATE TABLE `employees` (
   `EMAIL` varchar(50) NOT NULL,
   `ADDRESS` varchar(50) NOT NULL,
   `PHONE` varchar(10) NOT NULL,
+  `DELETED` tinyint(1) NOT NULL DEFAULT 0,
   `COMPANY_USERID` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -145,13 +146,13 @@ CREATE TABLE `employees` (
 -- Άδειασμα δεδομένων του πίνακα `employees`
 --
 
-INSERT INTO `employees` (`EMPLOYEE_ID`, `FIRST_NAME`, `LAST_NAME`, `BIRTH_DATE`, `GENDER`, `EMAIL`, `ADDRESS`, `PHONE`, `COMPANY_USERID`) VALUES
-(1, 'Mahesh', 'Pegasus', '2011-11-30', 'M', 'mape@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2101111111', 2),
-(3, 'Anna', 'Derilla', '2001-11-30', 'F', 'ande@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2102222222', 2),
-(4, 'Helena', 'Burt', '1996-03-31', 'F', 'hebu@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2103333333', 3),
-(5, 'Pedro', 'Lema', '2004-11-01', 'O', 'pele@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2104444444', 6),
-(6, 'Vigga', 'Stegga', '2001-09-13', 'O', 'viste@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2105555555', 12),
-(7, 'Wilma', 'Lorenza', '2003-09-14', 'F', 'wilo@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2106666666', 15);
+INSERT INTO `employees` (`EMPLOYEE_ID`, `FIRST_NAME`, `LAST_NAME`, `BIRTH_DATE`, `GENDER`, `EMAIL`, `ADDRESS`, `PHONE`, `DELETED`, `COMPANY_USERID`) VALUES
+(1, 'Mahesh', 'Pegasus', '2011-11-30', 'M', 'mape@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2101111111', 0, 2),
+(3, 'Anna', 'Derilla', '2001-11-30', 'F', 'ande@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2102222222', 0, 2),
+(4, 'Helena', 'Burt', '1996-03-31', 'F', 'hebu@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2103333333', 0, 3),
+(5, 'Pedro', 'Lema', '2004-11-01', 'O', 'pele@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2104444444', 0, 6),
+(6, 'Vigga', 'Stegga', '2001-09-13', 'O', 'viste@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2105555555', 0, 12),
+(7, 'Wilma', 'Lorenza', '2003-09-14', 'F', 'wilo@example.com', '(804) 462-5266 98 Lakemont Rd Lancaster, Virginia(', '2106666666', 0, 15);
 
 -- --------------------------------------------------------
 
@@ -196,6 +197,7 @@ CREATE TABLE `products` (
   `NAME` varchar(20) NOT NULL,
   `PRICE` double NOT NULL DEFAULT 0,
   `QUANTITY` int(10) NOT NULL DEFAULT 0,
+  `DELETED` tinyint(1) NOT NULL DEFAULT 0,
   `MERCHANT_USERID` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -203,14 +205,14 @@ CREATE TABLE `products` (
 -- Άδειασμα δεδομένων του πίνακα `products`
 --
 
-INSERT INTO `products` (`PRODUCT_ID`, `NAME`, `PRICE`, `QUANTITY`, `MERCHANT_USERID`) VALUES
-(1, 'PC Antivirus', 30.5, 19, 5),
-(3, 'PC Games', 360.5, 210, 5),
-(4, 'PC Gadgets', 240.5, 50, 7),
-(5, 'PC Monitor', 120.5, 40, 8),
-(6, 'Laptops', 650.99, 140, 10),
-(7, 'Movies', 10.5, 297, 11),
-(8, 'PC Desktops', 1249.99, 34, 11);
+INSERT INTO `products` (`PRODUCT_ID`, `NAME`, `PRICE`, `QUANTITY`, `DELETED`, `MERCHANT_USERID`) VALUES
+(1, 'PC Antivirus', 30.5, 19, 0, 5),
+(3, 'PC Games', 360.5, 210, 0, 5),
+(4, 'PC Gadgets', 240.5, 50, 0, 7),
+(5, 'PC Monitor', 120.5, 40, 0, 8),
+(6, 'Laptops', 650.99, 140, 0, 10),
+(7, 'Movies', 10.5, 297, 0, 11),
+(8, 'PC Desktops', 1249.99, 34, 0, 11);
 
 -- --------------------------------------------------------
 
@@ -236,29 +238,30 @@ CREATE TABLE `users` (
   `USERNAME` varchar(20) NOT NULL,
   `PASSWORD` varchar(20) NOT NULL,
   `ACCOUNT_NUMBER` varchar(27) NOT NULL,
-  `USER_TYPE` char(1) NOT NULL
+  `USER_TYPE` char(1) NOT NULL,
+  `DELETED` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Άδειασμα δεδομένων του πίνακα `users`
 --
 
-INSERT INTO `users` (`USERID`, `USERNAME`, `PASSWORD`, `ACCOUNT_NUMBER`, `USER_TYPE`) VALUES
-(1, 'geoka', 'geoka3440', 'GR0101010101010101010101010', 'I'),
-(2, 'epi', 'epi3440', 'BR0101010101010101010101010', 'C'),
-(3, 'stone', 'geoka3440', 'BR0202020202020202020202020', 'C'),
-(4, 'selmo', 'selmo3440', 'GR0202020202020202020202020', 'I'),
-(5, 'lyxa', 'lyxa3440', 'GB0101010101010101010101010', 'M'),
-(6, 'ote', 'ote3440', 'BR0303030303030303030303030', 'C'),
-(7, 'steta', 'steta3440', 'GB0202020202020202020202020', 'M'),
-(8, 'zikou', 'zikou3440', 'GB0303030303030303030303030', 'M'),
-(9, 'vixa', 'vixa3440', 'GR0303030303030303030303030', 'I'),
-(10, 'distro', 'distro3440', 'GB0404040404040404040404040', 'M'),
-(11, 'spitri', 'spitri3440', 'GB0505050505050505050505050', 'M'),
-(12, 'csd', 'csd3440', 'BR0404040404040404040404040', 'C'),
-(13, 'beha', 'beha3440', 'GR0404040404040404040404040', 'I'),
-(14, 'bewa', 'bewa3440', 'GR0505050505050505050505050', 'I'),
-(15, 'alpha', 'alpha3440', 'BR0505050505050505050505050', 'C');
+INSERT INTO `users` (`USERID`, `USERNAME`, `PASSWORD`, `ACCOUNT_NUMBER`, `USER_TYPE`, `DELETED`) VALUES
+(1, 'geoka', 'geoka3440', 'GR0101010101010101010101010', 'I', 0),
+(2, 'epi', 'epi3440', 'BR0101010101010101010101010', 'C', 0),
+(3, 'stone', 'geoka3440', 'BR0202020202020202020202020', 'C', 0),
+(4, 'selmo', 'selmo3440', 'GR0202020202020202020202020', 'I', 0),
+(5, 'lyxa', 'lyxa3440', 'GB0101010101010101010101010', 'M', 0),
+(6, 'ote', 'ote3440', 'BR0303030303030303030303030', 'C', 0),
+(7, 'steta', 'steta3440', 'GB0202020202020202020202020', 'M', 0),
+(8, 'zikou', 'zikou3440', 'GB0303030303030303030303030', 'M', 0),
+(9, 'vixa', 'vixa3440', 'GR0303030303030303030303030', 'I', 0),
+(10, 'distro', 'distro3440', 'GB0404040404040404040404040', 'M', 0),
+(11, 'spitri', 'spitri3440', 'GB0505050505050505050505050', 'M', 0),
+(12, 'csd', 'csd3440', 'BR0404040404040404040404040', 'C', 0),
+(13, 'beha', 'beha3440', 'GR0404040404040404040404040', 'I', 0),
+(14, 'bewa', 'bewa3440', 'GR0505050505050505050505050', 'I', 0),
+(15, 'alpha', 'alpha3440', 'BR0505050505050505050505050', 'C', 0);
 
 --
 -- Ευρετήρια για άχρηστους πίνακες
