@@ -104,19 +104,23 @@ public class CompanyTransactions extends HttpServlet {
                 && max_date != null && !max_date.equals("null")) {
             tr_list = TransactionDB.getTransactionsByDates(min_date, max_date);
         }
+        int kk = 0;
 
         List<CM_Traffics> traffics = CompanyTradesDB.getTrades("COMPANY_USERID", company_id);
 
         for (CM_Traffics trade : traffics) {
             Transaction tr;
-
+            kk++;
             if (tr_list == null) {
                 tr = TransactionDB.getTransaction(trade.getTransaction_id());
+                System.out.println("Including " + kk);
             } else {
                 if (UtilitiesDB.containsId(tr_list, trade.getTransaction_id())) {
                     tr = TransactionDB.getTransaction(trade.getTransaction_id());
-
+                    System.out.println("Including "
+                            + kk);
                 } else {
+                    System.out.println("Exluding" + kk);
                     continue;
                 }
 
@@ -124,6 +128,7 @@ public class CompanyTransactions extends HttpServlet {
 
             if (employee_list != null && !employee_list.equals("null")) {
                 if (!employee_list.contains(trade.getEmployee_id())) {
+                    System.out.println("Exlcuding employee" + kk);
                     continue;
                 }
             }
@@ -137,6 +142,7 @@ public class CompanyTransactions extends HttpServlet {
                 double max = Double.valueOf(max_amount);
 
                 if (am < min || am > max) {
+                    System.out.println("Exlcuding amount " + kk);
                     continue;
                 }
 

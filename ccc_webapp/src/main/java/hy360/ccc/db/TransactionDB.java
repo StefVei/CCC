@@ -135,7 +135,6 @@ public class TransactionDB {
             while (res.next() == true) {
                 Transaction tr = new Transaction();
                 tr.setTransaction_id(res.getString("TRANSACTION_ID"));
-                tr.setPending(res.getString("PENDING"));
                 tr.setTransaction_type(res.getString("TRANSACTION_TYPE"));
                 tr.setAmount(res.getString("AMOUNT"));
                 tr.setDate(res.getString("DATE"));

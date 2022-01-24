@@ -94,7 +94,6 @@ public class CloseMerchantAccount extends HttpServlet {
             
             ProductDB.deleteProducts(user_id);
             
-            user.setUser_id(user_id);
             UserDB.deleteUser(user);
             
             response.setStatus(200);
