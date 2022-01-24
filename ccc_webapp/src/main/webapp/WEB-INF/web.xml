@@ -108,6 +108,10 @@
         <servlet-name>BadUsers</servlet-name>
         <servlet-class>Servlets.Statistics.BadUsers</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SetMerchantOfTheMonth</servlet-name>
+        <servlet-class>Servlets.Merchant.SetMerchantOfTheMonth</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>OpenCompanyAccount</servlet-name>
         <url-pattern>/OpenCompanyAccount</url-pattern>
@@ -207,6 +211,10 @@
     <servlet-mapping>
         <servlet-name>BadUsers</servlet-name>
         <url-pattern>/BadUsers</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SetMerchantOfTheMonth</servlet-name>
+        <url-pattern>/SetMerchantOfTheMonth</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
