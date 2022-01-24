@@ -202,11 +202,11 @@ public class CompanyDB {
         Connection con = null;
 
         try {
-            String sql_getmer = "SELECT * FROM companies "
+            String sql = "SELECT * FROM companies "
                     + "WHERE AMOUNT_DUE = 0;";
             con = CccDB.getConnection();
 
-            preparedStatement = con.prepareStatement(sql_getmer);
+            preparedStatement = con.prepareStatement(sql);
             preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
 
@@ -245,11 +245,11 @@ public class CompanyDB {
         Connection con = null;
 
         try {
-            String sql_getmer = "SELECT * FROM companies "
+            String sql = "SELECT * FROM companies "
                     + "WHERE AMOUNT_DUE > 0;";
             con = CccDB.getConnection();
 
-            preparedStatement = con.prepareStatement(sql_getmer);
+            preparedStatement = con.prepareStatement(sql);
             preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
 

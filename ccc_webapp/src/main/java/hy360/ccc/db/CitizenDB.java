@@ -78,7 +78,12 @@ public class CitizenDB {
 
     }
 
-
+    /**
+     *
+     * @param columnToSearch AMKA VAT OR USERID
+     * @param value THE VALUE OF THE COLUMN TO BE SEARCHED
+     * @return
+     */
     public static Citizen getCitizen(String columnToSearch, String value) {
 
         PreparedStatement preparedStatement = null;
@@ -209,11 +214,11 @@ public class CitizenDB {
         Connection con = null;
 
         try {
-            String sql_getmer = "SELECT * FROM citizens "
+            String sql = "SELECT * FROM citizens "
                     + "WHERE AMOUNT_DUE = 0;";
             con = CccDB.getConnection();
 
-            preparedStatement = con.prepareStatement(sql_getmer);
+            preparedStatement = con.prepareStatement(sql);
             preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
 
@@ -255,11 +260,11 @@ public class CitizenDB {
         Connection con = null;
 
         try {
-            String sql_getmer = "SELECT * FROM citizens "
+            String sql = "SELECT * FROM citizens "
                     + "WHERE AMOUNT_DUE > 0;";
             con = CccDB.getConnection();
 
-            preparedStatement = con.prepareStatement(sql_getmer);
+            preparedStatement = con.prepareStatement(sql);
             preparedStatement.executeQuery();
             ResultSet res = preparedStatement.getResultSet();
 
