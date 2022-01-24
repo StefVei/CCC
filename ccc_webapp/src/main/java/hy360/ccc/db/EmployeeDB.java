@@ -63,6 +63,24 @@ public class EmployeeDB {
 
     }
 
+    public static void deleteEmployees(String company_id) {
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+        try {
+            con = CccDB.getConnection();
+
+            String del_employee = "UPDATE employees SET DELETED = ? WHERE COMPANY_USERID = ?";
+            preparedStatement = con.prepareStatement(del_employee);
+            UtilitiesDB.setValues(preparedStatement, true, company_id);
+            preparedStatement.executeUpdate();
+
+        } catch (Exception ex) {
+            Logger.getLogger(EmployeeDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, EmployeeDB.class.getName());
+        }
+    }
+
     public static void deleteEmployee(Employee employee) {
         PreparedStatement preparedStatement = null;
         Connection con = null;

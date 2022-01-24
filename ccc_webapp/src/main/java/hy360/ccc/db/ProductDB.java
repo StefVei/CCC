@@ -166,6 +166,26 @@ public class ProductDB {
 
     }
 
+    public static void deleteProducts(String merchant_id) {
+        List<Product> products = new ArrayList<Product>();
+        PreparedStatement preparedStatement = null;
+        Connection con = null;
+        try {
+            String sql_getmer = "UPDATE products SET DELETED = ? WHERE MERCHANT_USERID = ?";
+            con = CccDB.getConnection();
+
+            preparedStatement = con.prepareStatement(sql_getmer);
+            UtilitiesDB.setValues(preparedStatement, true, Integer.valueOf(merchant_id));
+            preparedStatement.executeQuery();
+
+        } catch (Exception ex) {
+            Logger.getLogger(ProductDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            UtilitiesDB.closeConnection(preparedStatement, con, ProductDB.class.getName());
+        }
+
+    }
+
     /**
      *
      * @return all the NON deleted products in the db
