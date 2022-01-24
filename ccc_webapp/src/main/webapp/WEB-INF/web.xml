@@ -17,6 +17,10 @@
         <servlet-class>Servlets.Close.CloseCitizenAccount</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>CloseMerchantAccount</servlet-name>
+        <servlet-class>Servlets.Close.CloseMerchantAccount</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>CloseEmployeeAccount</servlet-name>
         <servlet-class>Servlets.Close.CloseEmployeeAccount</servlet-class>
     </servlet>
@@ -131,6 +135,10 @@
     <servlet-mapping>
         <servlet-name>CloseEmployeeAccount</servlet-name>
         <url-pattern>/CloseEmployeeAccount</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CloseMerchantAccount</servlet-name>
+        <url-pattern>/CloseMerchantAccount</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>MakeTransaction</servlet-name>

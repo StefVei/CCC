@@ -174,12 +174,12 @@ public class ProductDB {
         PreparedStatement preparedStatement = null;
         Connection con = null;
         try {
-            String sql_getmer = "UPDATE products SET DELETED = 1 WHERE MERCHANT_USERID = ?";
+            String sql_getmer = "UPDATE products SET DELETED = 1 WHERE MERCHANT_USERID = ? ;";
             con = CccDB.getConnection();
 
             preparedStatement = con.prepareStatement(sql_getmer);
             UtilitiesDB.setValues(preparedStatement, Integer.valueOf(merchant_id));
-            preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
 
         } catch (Exception ex) {
             Logger.getLogger(ProductDB.class.getName()).log(Level.SEVERE, null, ex);
