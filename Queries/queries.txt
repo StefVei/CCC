@@ -1,0 +1,476 @@
+TABLE NAME : bought_products
+
+AddBoughtProduct :
+
+	INSERT INTO bought_products
+    ( TRANSACTION_ID, PRODUCT_ID, MERCHANT_USERID, TOTAL ) 
+	   "VALUES (?, ?, ?, ?)");
+		UtilitiesDB.setValues(preparedStatement, transaction_id, product_id,
+				mer_id, totalQuantity);
+
+getBoughtProduct :
+
+SELECT * FROM bought_products WHERE TRANSACTION_ID = ?
+
+
+
+
+TABLE NAME : citizens
+
+addCitizen
+
+"INSERT INTO citizens "
+		 "( `USERID`, `AMKA`, `VAT`, `FIRST_NAME`, `LAST_NAME`, `BIRTH_DATE`, `GENDER`,"
+		 " `EMAIL`, `ADDRESS`, `PHONE`, `AMOUNT_DUE`,"
+		 " `CREDIT_LIMIT`, `CREDIT_BALANCE`, `ACCOUNT_DUE_DATE` )"
+		 " VALUES (?, ? ,? ,? ,? ,? ,?"
+		 ", ?, ?, ?, ?"
+		 ", ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
+
+            UtilitiesDB.setValues(preparedStatement,
+                    citizen.getUser_id(),
+                    citizen.getAmka(),
+                    citizen.getVat(),
+                    citizen.getFirst_name(),
+                    citizen.getLast_name(),
+                    citizen.getBirth_date(),
+                    citizen.getGender(),
+                    
+                    
+                    citizen.getEmail(),
+                    citizen.getAddress(),
+                    citizen.getPhone(),
+                    citizen.getAmount_due(),
+                    
+                    citizen.getCredit_limit(),
+                    citizen.getCredit_balance(),
+                    citizen.getAccount_due_date());
+
+
+  /**
+     * 
+     * @param columnToSearch AMKA VAT OR USERID
+     * @param value THE VALUE OF THE COLUMN TO BE SEARCHED
+     * @return 
+     */
+    public static Citizen getCitizen(String columnToSearch, String value) {
+		
+		insQuery.append("SELECT * FROM citizens ")
+                    .append(" WHERE").append(" ").append(columnToSearch).append(" = ")
+                    .append("'").append(value).append("';");	
+	
+	....
+}
+
+
+
+
+
+
+getAllCitizens 
+
+	String getCitizens = "SELECT * FROM citizens";
+
+
+
+updateCitizen
+
+	String sql = "UPDATE citizens "
+                    + "SET EMAIL = ?, "
+                    + "ADDRESS = ?,"
+                    + " PHONE = ?,"
+                    + " AMOUNT_DUE = ?,"
+                    + " CREDIT_LIMIT = ?,"
+                    + " CREDIT_BALANCE = ?,"
+                    + " ACCOUNT_DUE_DATE = ? "
+                    + "WHERE USERID = ?;";
+
+
+getGoodCitizens
+
+	String sql = "SELECT * FROM citizens "
+                    + "WHERE AMOUNT_DUE = 0;";
+
+getBadCitizens
+
+	String sql = "SELECT * FROM citizens "
+                    + "WHERE AMOUNT_DUE > 0;";
+
+
+Table Name : cm_trades 
+Citizen Trades
+
+            preparedStatement = con.prepareStatement("INSERT INTO cm_trades "
+                    + "( `CITIZEN_USERID`, `MERCHANT_USERID`, `TRANSACTION_ID` )"
+                    + " VALUES (? ,? ,?)");
+
+
+getTrades by Id
+
+	insQuery.append("SELECT * FROM cm_trades ")
+			.append(" WHERE").append(" ").append(columnToSearch).append(" = ")
+			.append("'").append(value).append("';");
+
+
+
+getTrades by transaction Id
+
+            insQuery.append("SELECT * FROM cm_trades ")
+                    .append(" WHERE TRANSACTION_ID = ")
+                    .append("'").append(transaction_id).append("';");
+
+				
+Delete trade with specific transaction id
+
+	String del = "DELETE FROM cm_trades WHERE TRANSACTION_ID = ?";
+
+
+Delete trades with citizen id or merchant id
+
+	            insQuery.append("DELETE FROM cm_trades ")
+                    .append(" WHERE").append(" ").append(column).append(" = ")
+                    .append("'").append(value).append("';");
+
+
+
+Table name: companies
+
+addCompany
+
+            preparedStatement = con.prepareStatement("INSERT INTO companies "
+                    + "(`USERID`, `NAME`, `ESTABLISHMENT_DATE`,"
+                    + " `EMAIL`, `ADDRESS`, `PHONE`, `AMOUNT_DUE`,"
+                    + " `CREDIT_LIMIT`, `CREDIT_BALANCE`, `ACCOUNT_DUE_DATE` )"
+                    + " VALUES (?, ?,"
+                    + "?, ?, ?, ?,"
+                    + "?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
+
+
+getCompany by NAME OR USERID
+
+	insQuery.append("SELECT * FROM companies ")
+			.append(" WHERE").append(" ").append(columnToSearch).append(" = ")
+			.append("'").append(value).append("';");
+
+
+updateCompany
+
+String updatecomp_sql = "UPDATE companies "
+                    + "SET NAME = ?, "
+                    + "ESTABLISHMENT_DATE = ?, "
+                    + "EMAIL = ?, "
+                    + "ADDRESS = ?, "
+                    + "PHONE = ?, "
+                    + "AMOUNT_DUE = ?, "
+                    + "CREDIT_LIMIT = ?, "
+                    + "CREDIT_BALANCE = ?, "
+                    + "ACCOUNT_DUE_DATE = ? "
+                    + "WHERE USERID = ? ;";
+
+getAllCompanies
+
+            String sql = "SELECT * FROM companies";
+
+
+getGoodCompanies
+
+	            String sql_getmer = "SELECT * FROM companies "
+                    + "WHERE AMOUNT_DUE = 0;";
+
+
+getBadCompanies
+
+            String sql_getmer = "SELECT * FROM companies "
+                    + "WHERE AMOUNT_DUE > 0;";
+
+
+
+
+Table Name cm_traffics
+AD
+ADD COMPANY TRADE
+
+            preparedStatement = con.prepareStatement("INSERT INTO cm_traffics "
+                    + "( `EMPLOYEE_ID`, `COMPANY_USERID`, `MERCHANT_USERID` ,`TRANSACTION_ID` )"
+                    + " VALUES (? ,? ,?, ?)");
+
+
+
+get Company Trades
+
+            insQuery.append("SELECT * FROM cm_traffics ")
+                    .append(" WHERE").append(" ").append(columnToSearch).append(" = ")
+                    .append("'").append(value).append("';");
+
+
+getTradesByEmployees
+
+	            String sql = "SELECT * FROM `cm_traffics` WHERE"
+                    + "`EMPLOYEE_ID` IN " + "(id1, id2, id3, .. )";
+
+
+getTrade by transaction id
+
+            insQuery.append("SELECT * FROM cm_traffics ")
+                    .append(" WHERE TRANSACTION_ID = ")
+                    .append("'").append(transaction_id).append("';");
+
+
+
+delete trade
+
+            String del = "DELETE FROM cm_traffics WHERE TRANSACTION_ID = ?";
+
+
+
+delete trades by company or merchant id
+
+		            insQuery.append("DELETE FROM cm_traffics ")
+                    .append(" WHERE").append(" ").append(column).append(" = ")
+                    .append("'").append(value).append("';");
+
+
+table_name : employees
+
+addEmployee
+
+            preparedStatement = con.prepareStatement("INSERT INTO employees ( "
+                    + " FIRST_NAME, LAST_NAME, BIRTH_DATE, GENDER,"
+                    + " EMAIL, ADDRESS, PHONE, COMPANY_USERID) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+
+
+
+deleteEmployees by company Id
+
+            String del_employee = "UPDATE employees SET DELETED = ? WHERE COMPANY_USERID = ?";
+
+
+deleteEmployee by employee id 
+
+            String del_employee = "UPDATE employees SET DELETED = ? WHERE EMPLOYEE_ID = ?";
+
+update Employee 
+
+ String updateemployee_sql = "UPDATE employees "
+                    + "SET FIRST_NAME = ?, "
+                    + " LAST_NAME = ?, "
+                    + " BIRTH_DATE = ?, "
+                    + " GENDER = ?, "
+                    + " EMAIL = ?, "
+                    + " ADDRESS = ?, "
+                    + " PHONE = ?, "
+                    + "WHERE EMPLOYEE_ID = ? ;";
+
+getEmployee
+
+	            String sql_getemployee = "SELECT * FROM employees WHERE EMPLOYEE_ID = ?";
+
+
+get All The Employees
+
+            String sql_getemployees = "SELECT * FROM employees";
+
+getNonDeletedEmployees
+
+			String sql_getemployees = "SELECT * FROM employees WHERE DELETED = 0;";
+
+
+getNonDeletesEmployeesByProp column is company id
+
+
+            insQuery.append("SELECT * FROM employees")
+                .append(" WHERE").append(" ").append(columnToSearch).append(" = ")
+                .append("'").append(value).append("'").append(" AND DELETED = 0 ;");
+
+
+
+Table name : merchant
+
+
+addMerchant
+
+"INSERT INTO merchants "
+			+ "(`USERID`, `FIRST_NAME`, `LAST_NAME`, `BIRTH_DATE`, `GENDER`, `SUPPLY`, `GAIN`, "
+			+ " `PURCHASES_TOTAL`, `EMAIL`, `ADDRESS`, `PHONE`, `AMOUNT_DUE`)"
+		+ " VALUES (? ,? ,? ,? ,? ,? , ?, ?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS)
+
+update merchant
+
+
+UPDATE merchants "
+                    + "SET FIRST_NAME = ?, "
+                    + "LAST_NAME = ?, "
+                    + "BIRTH_DATE = ?, "
+                    + "GENDER = ?, "
+                    + "SUPPLY = ?, "
+                    + "GAIN = ?, "
+                    + "PURCHASES_TOTAL = ?, "
+                    + "EMAIL = ?, "
+                    + "ADDRESS = ?, "
+                    + "PHONE = ?, "
+                    + "AMOUNT_DUE = ?"
+                    + "WHERE USERID = ? ;";
+
+
+Search merchant by column USERID
+
+
+            insQuery.append("SELECT * FROM merchants ")
+                    .append(" WHERE").append(" ").append(columnToSearch).append(" = ")
+                    .append("'").append(value).append("';");
+
+
+
+
+getGoodMerchants
+
+	SELECT * FROM merchants"
+                    + " WHERE AMOUNT_DUE = 0 ;";
+getBadMerchants
+
+	SELECT * FROM merchants"
+                    + " WHERE AMOUNT_DUE > 0 ;";
+
+
+
+
+
+SET EVENT MERCHANT OF THE MONTH 
+
+ SET GLOBAL event_scheduler = 1;
+
+ String mer_event = "CREATE EVENT IF NOT EXISTS merchant_of_the_month 
+	ON SCHEDULE EVERY '1' MONTH STARTS '2022-1-24 18:03:00' DO 
+	
+		UPDATE merchants SET AMOUNT_DUE = AMOUNT_DUE * 0.95 WHERE PURCHASES_TOTAL >= 
+						( SELECT MAX(PURCHASES_TOTAL) FROM merchants )";
+
+
+
+TABLE NAME products
+
+addProduct
+
+            preparedStatement = con.prepareStatement("INSERT INTO products "
+                    + "( `NAME`, `PRICE`, `QUANTITY`, `MERCHANT_USERID` )"
+                    + " VALUES (? ,? ,? ,?)", PreparedStatement.RETURN_GENERATED_KEYS);
+
+delete Product
+
+            String del = "UPDATE products SET DELETED = ? WHERE PROUCT_ID = ?";
+
+
+update Product 
+
+            String mer_sql = "UPDATE products "
+                    + "SET NAME = ?, "
+                    + "PRICE = ?, "
+                    + "DELETED = ?, "
+                    + "QUANTITY = ? "
+                    + "WHERE PRODUCT_ID = ?";
+
+
+getProduct
+
+            String sql_getmer = "SELECT * FROM products WHERE PRODUCT_ID = ? ";
+
+
+getProductsByMerchantId
+
+            String sql_getmer = "SELECT * FROM products WHERE MERCHANT_USERID = ?";
+
+
+delete products by merchant id
+
+            String sql_getmer = "UPDATE products SET DELETED = 1 WHERE MERCHANT_USERID = ? ;";
+
+get All the products that are not deleted in the db
+
+            String sql_getmer = "SELECT * FROM products WHERE DELETED = ? ;";
+
+
+table name : transactions
+
+
+add transaction 
+
+            preparedStatement = con.prepareStatement("INSERT INTO transactions "
+                    + "( `TRANSACTION_TYPE`, `AMOUNT`, `DATE` )"
+                    + " VALUES (? ,? ,?)", PreparedStatement.RETURN_GENERATED_KEYS);
+
+update transaction            
+
+
+		String sql = "UPDATE transactions "
+                    + " SET TRANSACTION_TYPE = ?, "
+                    + " AMOUNT = ?, "
+                    + " DATE = ? "
+                    + "WHERE TRANSACTION_ID = ? ";
+
+
+get Transaction
+
+            String sql_getmer = "SELECT * FROM transactions WHERE TRANSACTION_ID = ?";
+
+
+getTransactionByDates(min_date, max_date)
+
+            String sql_getmer = "SELECT * FROM transactions T "
+                    + "WHERE T.DATE >= ? AND T.DATE <= ?";
+
+
+table name users:
+
+addUser
+            preparedStatement = con.prepareStatement("INSERT INTO users "
+                    + "( `USERNAME`, `PASSWORD`, `ACCOUNT_NUMBER`, `USER_TYPE`)"
+                    + " VALUES (? ,? ,? ,? )", PreparedStatement.RETURN_GENERATED_KEYS);
+
+getUser username by USERID USERNAME OR ACCOUNT_NUMBER
+
+            insQuery.append("SELECT * FROM users ")
+                    .append(" WHERE").append(" ").append(columnToSearch).append(" = ")
+                    .append("'").append(value).append("';");
+
+
+deleteUser 
+
+	            String del = "UPDATE users SET DELETED = 1 WHERE USERID = ? ;";
+
+updateUser
+
+            String updateemployee_sql = "UPDATE users "
+                    + "SET PASSWORD = ? "
+                    + "WHERE USERID = ? ;";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
